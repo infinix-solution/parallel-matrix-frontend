@@ -62,7 +62,7 @@ body.loaded #intro{display:none}
 .burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
 .hero{padding:120px 0 80px;background:var(--pm-grad);color:#fff;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:0;background:url('assets/hero-bg.jpg') center/cover;opacity:.35;mix-blend-mode:screen}
+/* .hero::before{content:"";position:absolute;inset:0;background:url('assets/hero-bg.jpg') center/cover;opacity:.35;mix-blend-mode:screen} */
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,var(--bg) 100%)}
 .hero-inner{position:relative;z-index:2;text-align:center;padding:60px 0 40px}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;backdrop-filter:blur(10px);animation:floaty 3s ease-in-out infinite}
