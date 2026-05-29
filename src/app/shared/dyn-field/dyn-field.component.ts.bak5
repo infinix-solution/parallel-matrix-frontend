@@ -1,0 +1,58 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormGroup, AbstractControl } from '@angular/forms';
+import { DynamicFormField } from '../../core/models';
+
+@Component({
+  selector: 'app-dyn-field',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  template: `
+    <div class="field" [formGroup]="group">
+      <label *ngIf="showLabel">
+        {{ field.label }}
+        <span *ngIf="field.required" style="color:#dc2626">*</span>
+      </label>
+
+      <ng-container [ngSwitch]="field.type">
+        <textarea *ngSwitchCase="'textarea'"
+                  [formControlName]="field.id"
+                  [placeholder]="field.placeholder || field.label"
+                  rows="4"></textarea>
+
+        <select *ngSwitchCase="'dropdown'" [formControlName]="field.id">
+          <option value="" disabled>{{ field.placeholder || ('Select ' + field.label) }}</option>
+          <option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</option>
+        </select>
+
+        <input *ngSwitchDefault
+               [type]="field.type"
+               [formControlName]="field.id"
+               [placeholder]="field.placeholder || field.label"
+               [attr.maxlength]="field.maxLength || null"
+               [attr.minlength]="field.minLength || null"
+               [attr.min]="field.min ?? null"
+               [attr.max]="field.max ?? null">
+      </ng-container>
+
+      <div class="err" *ngIf="ctrl && ctrl.touched && ctrl.errors as e">
+        <ng-container *ngIf="e['required']">{{ field.label }} is required.</ng-container>
+        <ng-container *ngIf="e['email']">Please enter a valid email address.</ng-container>
+        <ng-container *ngIf="e['minlength']">Minimum {{ e['minlength'].requiredLength }} characters required.</ng-container>
+        <ng-container *ngIf="e['maxlength']">Maximum {{ e['maxlength'].requiredLength }} characters allowed.</ng-container>
+        <ng-container *ngIf="e['min']">Value must be at least {{ e['min'].min }}.</ng-container>
+        <ng-container *ngIf="e['max']">Value must be at most {{ e['max'].max }}.</ng-container>
+        <ng-container *ngIf="e['pattern']">{{ field.patternMessage || 'Invalid format.' }}</ng-container>
+      </div>
+    </div>
+  `
+})
+export class DynFieldComponent {
+  @Input({ required: true }) field!: DynamicFormField;
+  @Input({ required: true }) group!: FormGroup;
+  @Input() showLabel = false;
+
+  get ctrl(): AbstractControl | null {
+    return this.group.get(this.field.id);
+  }
+}

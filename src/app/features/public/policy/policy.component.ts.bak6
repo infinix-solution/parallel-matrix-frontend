@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-policy',
+  standalone: true,
+  template: `
+    <section id="policy" style="background:linear-gradient(180deg,#eef2f9,var(--bg))">
+      <div class="container">
+        <div class="s-head reveal in">
+          <span class="eyebrow">Our Policies</span>
+          <h2 class="s-title">Built on trust, governed by ethics.</h2>
+        </div>
+        <div class="pol-grid">
+          <div class="pol reveal in"><h4>&#128274; Privacy Policy</h4><p>Your data is treated with the highest standard of confidentiality and never shared without consent.</p></div>
+          <div class="pol reveal in"><h4>&#9878; Equal Opportunity</h4><p>We hire purely on skill, attitude and fit &mdash; never on gender, age, caste or background.</p></div>
+          <div class="pol reveal in"><h4>&#8617; Refund Policy</h4><p>Transparent replacement &amp; refund terms aligned with industry-best recruitment practices.</p></div>
+          <div class="pol reveal in"><h4>&#128203; Code of Conduct</h4><p>Every team member operates by our published code of conduct &mdash; for clients and candidates alike.</p></div>
+        </div>
+      </div>
+    </section>
+  `
+})
+export class PolicyComponent {}

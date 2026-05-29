@@ -1,0 +1,86 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+interface Svc { id: string; icon: string; title: string; lead: string; items: string[]; open?: boolean; }
+
+@Component({
+  selector: 'app-services',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <section id="services" style="background:linear-gradient(180deg,var(--bg),#eef2f9)">
+      <div class="container">
+        <div class="s-head reveal in">
+          <span class="eyebrow">Our Services</span>
+          <h2 class="s-title">Four pillars. One promise.</h2>
+          <p class="s-sub">Tap any service for the full breakdown.</p>
+        </div>
+        <div class="svc-grid">
+          <div *ngFor="let s of services"
+               class="svc reveal in"
+               [id]="s.id"
+               [class.open]="s.open"
+               (click)="s.open = !s.open">
+            <div class="ic">{{ s.icon }}</div>
+            <h3>{{ s.title }}</h3>
+            <p class="lead">{{ s.lead }}</p>
+            <span class="more">Read more
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+            <div class="det">
+              <ul><li *ngFor="let it of s.items">{{ it }}</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `
+})
+export class ServicesComponent {
+  services: Svc[] = [
+    {
+      id: 'svc-recruitment', icon: '\u{1F3AF}', title: 'Recruitment',
+      lead: 'Strategic talent acquisition across IT, Engineering, BFSI, Healthcare and Manufacturing.',
+      items: [
+        'Executive search & leadership hiring',
+        'Bulk & volume recruitment campaigns',
+        'Domain-specific technical screening',
+        'Background verification & reference checks',
+        'Offer management & joining support'
+      ]
+    },
+    {
+      id: 'svc-staffing', icon: '\u{1F465}', title: 'Staffing',
+      lead: 'Contract, contract-to-hire, payrolling and managed teams \u2014 flexible models for every need.',
+      items: [
+        'Contract & temporary staffing',
+        'Third-party payroll & compliance',
+        'Onsite project teams',
+        'Statutory & labour-law compliance',
+        'Timesheet, leave & attendance management'
+      ]
+    },
+    {
+      id: 'svc-immigration', icon: '\u{1F30D}', title: 'Immigration',
+      lead: 'Work permits, visas & relocation support across the Gulf, Europe, UK, Canada & APAC.',
+      items: [
+        'Work visa processing & documentation',
+        'PR / skilled migration consulting',
+        'Family & dependent visas',
+        'Pre-departure orientation',
+        'Post-arrival settlement support'
+      ]
+    },
+    {
+      id: 'svc-manpower', icon: '\u{1F3D7}\u{FE0F}', title: 'Manpower Supply',
+      lead: 'Skilled and semi-skilled workforce for construction, infra, oil & gas, hospitality and logistics.',
+      items: [
+        'Trade-tested skilled workers',
+        'Semi-skilled & general workers',
+        'Site supervisors & QA/QC inspectors',
+        'Mobilization & demobilization handling',
+        'Camp, food & logistics coordination'
+      ]
+    }
+  ];
+}

@@ -1,0 +1,68 @@
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { ToastHostComponent } from '../../../shared/toast-host/toast-host.component';
+
+@Component({
+  selector: 'app-admin-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, ToastHostComponent],
+  template: `
+    <div class="adm-login">
+      <div class="card">
+        <h2>Admin Login</h2>
+        <p>Restricted area &mdash; authorized personnel only.</p>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <div class="field">
+            <label>Email</label>
+            <input type="email" formControlName="email" placeholder="admin@parallelmatrixcorp.com">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" formControlName="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" [disabled]="loading">
+            {{ loading ? 'Signing in...' : 'Sign In \u2192' }}
+          </button>
+        </form>
+      </div>
+    </div>
+    <app-toast-host></app-toast-host>
+  `
+})
+export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
+  private router = inject(Router);
+  private toast = inject(ToastService);
+
+  loading = false;
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
+  });
+
+  submit() {
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    this.loading = true;
+    const { email, password } = this.form.value;
+    this.auth.login(email!, password!).subscribe({
+      next: res => {
+        this.loading = false;
+        if (res?.success) {
+          this.toast.show('Welcome back, admin.');
+          this.router.navigate(['/admin']);
+        } else {
+          this.toast.show(res?.message || 'Login failed.', 'err');
+        }
+      },
+      error: err => {
+        this.loading = false;
+        this.toast.show(err?.error?.message || 'Invalid credentials.', 'err');
+      }
+    });
+  }
+}
