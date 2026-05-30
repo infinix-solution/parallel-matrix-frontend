@@ -44,7 +44,6 @@ type TabKey = 'sliders' | 'team' | 'forms' | 'builder' | 'content' | 'security';
         <div class="adm-tabs">
           <button [class.active]="tab==='sliders'" (click)="tab='sliders'">🖼 Image Slider</button>
           <button [class.active]="tab==='team'" (click)="tab='team'">👥 Leadership Team</button>
-          <button [class.active]="tab==='forms'" (click)="tab='forms'">📝 Forms Config</button>
           <button [class.active]="tab==='builder'" (click)="tab='builder'">🧩 Page Builder</button>
           <button *ngIf="auth.isSuperAdmin()" [class.active]="tab==='content'" (click)="tab='content'">
             🎨 Site Content

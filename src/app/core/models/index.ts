@@ -184,18 +184,7 @@ export interface ContactSection {
   email: string;
   mapQuery: string;
   directionsUrl: string;
-}
-
-export interface FooterSection {
-  eyebrow: string;
-  title: string;
-  sub: string;
-  address: string;
-  phone: string;
-  emergency: string;
-  email: string;
-  mapQuery: string;
-  directionsUrl: string;
+  linkdnUrl: string;
   whatsapp: string;
 }
 
@@ -207,5 +196,4 @@ export interface SiteContent {
   sisterCompany: SisterCompanySection;
   policySection: PolicySection;
   contactSection: ContactSection;
-  footerSection: FooterSection;
 }

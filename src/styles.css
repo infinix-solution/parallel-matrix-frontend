@@ -79,7 +79,7 @@ body.loaded #intro{display:none}
 .hero-slides .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
 .hero-slides .slide.active{opacity:.35}
 
-section{padding:90px 0;position:relative}
+section{padding:70px 0;position:relative}
 .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--blue2);margin-bottom:14px}
 .s-title{font-size:clamp(28px,4vw,44px);margin-bottom:16px}
 .s-sub{color:var(--mute);max-width:640px;font-size:16px}

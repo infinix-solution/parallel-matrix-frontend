@@ -65,11 +65,11 @@ import { SisterCompanySection } from '../../../core/models';
         <div class="reveal in" style="margin-top:50px;padding:34px;border-radius:24px;background:#fff;box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;text-align:center">
           <div *ngIf="d.email">
             <div style="font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.1em">EMAIL</div>
-            <div style="font-weight:700;color:var(--navy);margin-top:4px;word-break:break-word">{{ d.email }}</div>
+            <a href="mailto:{{ d.email }}" style="font-weight:700;color:var(--navy);margin-top:4px;word-break:break-word">{{ d.email }}</a>
           </div>
           <div *ngIf="d.phone">
             <div style="font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.1em">PHONE</div>
-            <div style="font-weight:700;color:var(--navy);margin-top:4px">{{ d.phone }}</div>
+            <a href="tel:{{ d.phone }}" style="font-weight:700;color:var(--navy);margin-top:4px">{{ d.phone }}</a>
           </div>
           <div *ngIf="d.locations">
             <div style="font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.1em">LOCATIONS</div>

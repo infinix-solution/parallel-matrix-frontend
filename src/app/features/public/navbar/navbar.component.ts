@@ -39,10 +39,11 @@ import { Router, RouterLink } from '@angular/router';
             <div class="dd-menu">
               <a (click)="goHomeAnchor('team')">👤 Our Team</a>
               <a (click)="goHomeAnchor('career')">📈 Career Growth</a>
-              <a routerLink="/matrix-enterprises" (click)="closeMenu()">🧱 Matrix Enterprises</a>
               <a (click)="goHomeAnchor('policy')">📜 Policies</a>
             </div>
           </div>
+          
+          <a routerLink="/matrix-enterprises">Matrix Enterprises</a>
           <a (click)="goHomeAnchor('contact')" [class.active]="active==='contact'">Contact</a>
         </div>
         <div class="nav-cta">

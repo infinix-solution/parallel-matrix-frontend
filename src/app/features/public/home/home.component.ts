@@ -31,8 +31,8 @@ export class HomeComponent implements OnInit {
   private content = inject(ContentService);
 
   ngOnInit() {
-    this.content.load().subscribe({
-      error: err => console.warn('[Home] Could not load site content:', err)
-    });
+      this.content.ensureLoaded().subscribe({
+        error: err => console.warn('[Home] Could not load site content:', err)
+      });
   }
 }

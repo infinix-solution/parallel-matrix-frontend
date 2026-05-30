@@ -258,6 +258,7 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
               <div class="field"><label>Office Phone</label><input formControlName="phone"></div>
               <div class="field"><label>Emergency Phone</label><input formControlName="emergency"></div>
               <div class="field"><label>WhatsApp Number</label><input formControlName="whatsapp"></div>
+               <div class="field"><label>LinkedIn url</label><input formControlName="linkdnUrl"></div>
             </div>
             <div class="field"><label>Email</label><input formControlName="email"></div>
             <div class="field"><label>Map Query (for Google Maps embed)</label><input formControlName="mapQuery"></div>
@@ -301,8 +302,7 @@ export class TabSiteContentComponent implements OnInit {
       serviceCards: this.fb.array([]),
       visionTitle: [''], visionText: [''], missionTitle: [''], missionText: [''],
       industriesTitle: [''], industries: this.fb.array([]),
-      email: [''], phone: [''], locations: [''],
-      whatsapp: ['']
+      email: [''], phone: [''], locations: ['']
     }),
     policySection: this.fb.group({
       eyebrow: [''], title: [''],
@@ -311,7 +311,8 @@ export class TabSiteContentComponent implements OnInit {
     contactSection: this.fb.group({
       eyebrow: [''], title: [''], sub: [''],
       address: [''], phone: [''], emergency: [''], email: [''],
-      mapQuery: [''], directionsUrl: ['']
+      mapQuery: [''], directionsUrl: [''],
+      whatsapp: [''], linkdnUrl: ['']
     })
   });
 

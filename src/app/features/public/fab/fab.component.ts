@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ContentService } from 'src/app/core/services/content.service';
+import { ContactSection } from 'src/app/core/models';
 
 @Component({
   selector: 'app-fab',
@@ -10,7 +12,7 @@ import { CommonModule } from '@angular/common';
       <input type="checkbox" id="pm-fab-toggle" class="pm-fab-toggle" hidden>
 
       <!-- Sub-icons -->
-      <a href="https://wa.me/917887855530"
+      <a href="https://wa.me/{{data()?.whatsapp}}"
          target="_blank"
          rel="noopener"
          class="pm-fab-sub pm-fab-wa"
@@ -20,35 +22,12 @@ import { CommonModule } from '@angular/common';
         </svg>
       </a>
 
-      <a href="https://www.facebook.com/parallelmatrixcorp"
+      <a href="{{data()?.linkdnUrl}}"
          target="_blank"
          rel="noopener"
          class="pm-fab-sub pm-fab-fb"
          aria-label="Facebook">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.5 2.9h-2.4v7A10 10 0 0 0 22 12Z"/>
-        </svg>
-      </a>
-
-       <a href="https://www.facebook.com/parallelmatrixcorp"
-         target="_blank"
-         rel="noopener"
-         class="pm-fab-sub pm-fab-fb"
-         aria-label="Facebook">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.5 2.9h-2.4v7A10 10 0 0 0 22 12Z"/>
-        </svg>
-      </a>
-
-
-       <a href="https://www.facebook.com/parallelmatrixcorp"
-         target="_blank"
-         rel="noopener"
-         class="pm-fab-sub pm-fab-fb"
-         aria-label="Facebook">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.5 2.9h-2.4v7A10 10 0 0 0 22 12Z"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14M8.34 18V10.5H6V18h2.34M7.17 9.43a1.36 1.36 0 1 0 0-2.72 1.36 1.36 0 0 0 0 2.72M18 18v-4.1c0-2.17-1.17-3.18-2.73-3.18-1.26 0-1.82.69-2.13 1.18V10.5H10.8c.03.66 0 7.5 0 7.5h2.34v-4.19c0-.21.01-.42.08-.57.18-.42.57-.86 1.23-.86.87 0 1.21.66 1.21 1.62V18H18Z"/></svg>
       </a>
 
       <!-- Main toggle button -->
@@ -216,4 +195,10 @@ import { CommonModule } from '@angular/common';
 export class FabComponent {
   /** 'left' (default, fans up-left) or 'right' (fans up-right) */
   @Input() direction: 'left' | 'right' = 'left';
+
+   private content = inject(ContentService);
+    
+      data = computed<ContactSection | null>(() => this.content.content()?.contactSection ?? null);
+    
+      ngOnInit() { this.content.ensureLoaded().subscribe(); }
 }
