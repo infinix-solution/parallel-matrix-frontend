@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../../core/services/content.service';
 import { CareerSection } from '../../../core/models';
@@ -8,14 +8,14 @@ import { CareerSection } from '../../../core/models';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section id="career" *ngIf="data">
+    <section id="career" *ngIf="data() as d">
       <div class="container">
         <div class="career reveal in">
-          <span class="eyebrow" style="color:#bcd0ff">{{ data.eyebrow }}</span>
-          <h2>{{ data.title }}</h2>
-          <p class="lead">{{ data.lead }}</p>
+          <span class="eyebrow" style="color:#bcd0ff">{{ d.eyebrow }}</span>
+          <h2>{{ d.title }}</h2>
+          <p class="lead">{{ d.lead }}</p>
           <div class="stats">
-            <div *ngFor="let s of data.stats" class="stat">
+            <div *ngFor="let s of d.stats" class="stat">
               <div class="n">{{ s.number }}</div>
               <div class="l">{{ s.label }}</div>
             </div>
@@ -27,13 +27,8 @@ import { CareerSection } from '../../../core/models';
 })
 export class CareerComponent implements OnInit {
   private content = inject(ContentService);
-  data: CareerSection | null = null;
 
-  ngOnInit() {
-    const cached = this.content.content();
-    if (cached?.careerSection) this.data = cached.careerSection;
-    this.content.get().subscribe({
-      next: r => { if (r?.data?.careerSection) this.data = r.data.careerSection; }
-    });
-  }
+  data = computed<CareerSection | null>(() => this.content.content()?.careerSection ?? null);
+
+  ngOnInit() { this.content.ensureLoaded().subscribe(); }
 }

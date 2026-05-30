@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../../core/services/content.service';
 import { PolicySection } from '../../../core/models';
@@ -13,11 +13,11 @@ interface PolWithState {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section id="policy" style="background:linear-gradient(180deg,#eef2f9,var(--bg))" *ngIf="data">
+    <section id="policy" style="background:linear-gradient(180deg,#eef2f9,var(--bg))" *ngIf="data() as d">
       <div class="container">
         <div class="s-head reveal in">
-          <span class="eyebrow">{{ data.eyebrow }}</span>
-          <h2 class="s-title">{{ data.title }}</h2>
+          <span class="eyebrow">{{ d.eyebrow }}</span>
+          <h2 class="s-title">{{ d.title }}</h2>
         </div>
         <div class="pol-grid">
           <div *ngFor="let p of items" class="pol reveal in">
@@ -37,21 +37,15 @@ interface PolWithState {
 })
 export class PolicyComponent implements OnInit {
   private content = inject(ContentService);
-  data: PolicySection | null = null;
   items: PolWithState[] = [];
 
-  ngOnInit() {
-    const cached = this.content.content();
-    if (cached?.policySection) this.setData(cached.policySection);
-    this.content.get().subscribe({
-      next: r => { if (r?.data?.policySection) this.setData(r.data.policySection); }
-    });
-  }
+  data = computed<PolicySection | null>(() => {
+    const d = this.content.content()?.policySection ?? null;
+    if (d) this.items = (d.items || []).map(p => ({ ...p, expanded: false }));
+    return d;
+  });
 
-  setData(d: PolicySection) {
-    this.data = d;
-    this.items = (d.items || []).map(p => ({ ...p, expanded: false }));
-  }
+  ngOnInit() { this.content.ensureLoaded().subscribe(); }
 
   needsToggle(p: PolWithState): boolean {
     return !!p.maxLength && p.description.length > p.maxLength;

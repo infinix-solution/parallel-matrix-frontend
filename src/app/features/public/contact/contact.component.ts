@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ContentService } from '../../../core/services/content.service';
@@ -9,38 +9,38 @@ import { ContactSection } from '../../../core/models';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section id="contact" style="background:linear-gradient(180deg,var(--bg),#eef2f9)" *ngIf="data">
+    <section id="contact" style="background:linear-gradient(180deg,var(--bg),#eef2f9)" *ngIf="data() as d">
       <div class="container">
         <div class="s-head reveal in">
-          <span class="eyebrow">{{ data.eyebrow }}</span>
-          <h2 class="s-title">{{ data.title }}</h2>
-          <p class="s-sub">{{ data.sub }}</p>
+          <span class="eyebrow">{{ d.eyebrow }}</span>
+          <h2 class="s-title">{{ d.title }}</h2>
+          <p class="s-sub">{{ d.sub }}</p>
         </div>
         <div class="contact-grid">
           <div class="map-wrap reveal in">
             <iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
-              [src]="mapUrl"></iframe>
+              [src]="mapUrl(d)"></iframe>
           </div>
           <div class="addr-card reveal in">
             <h3>Office Address</h3>
-            <div class="addr-row" *ngIf="data.address">
+            <div class="addr-row" *ngIf="d.address">
               <div class="ic">\u{1F4CD}</div>
-              <div><div class="t">Address</div><div class="v">{{ data.address }}</div></div>
+              <div><div class="t">Address</div><div class="v">{{ d.address }}</div></div>
             </div>
-            <div class="addr-row" *ngIf="data.phone">
+            <div class="addr-row" *ngIf="d.phone">
               <div class="ic">\u{1F4DE}</div>
-              <div><div class="t">Office Contact</div><div class="v">{{ data.phone }}</div></div>
+              <div><div class="t">Office Contact</div><div class="v">{{ d.phone }}</div></div>
             </div>
-            <div class="addr-row" *ngIf="data.emergency">
+            <div class="addr-row" *ngIf="d.emergency">
               <div class="ic">\u{1F6A8}</div>
-              <div><div class="t">Emergency</div><div class="v">{{ data.emergency }}</div></div>
+              <div><div class="t">Emergency</div><div class="v">{{ d.emergency }}</div></div>
             </div>
-            <div class="addr-row" *ngIf="data.email">
+            <div class="addr-row" *ngIf="d.email">
               <div class="ic">\u2709</div>
-              <div><div class="t">Email</div><div class="v">{{ data.email }}</div></div>
+              <div><div class="t">Email</div><div class="v">{{ d.email }}</div></div>
             </div>
             <a class="btn btn-ghost" target="_blank" rel="noopener"
-               [href]="data.directionsUrl || 'https://maps.google.com'">Open in Google Maps \u2192</a>
+               [href]="d.directionsUrl || 'https://maps.google.com'">Open in Google Maps \u2192</a>
           </div>
         </div>
       </div>
@@ -50,21 +50,14 @@ import { ContactSection } from '../../../core/models';
 export class ContactComponent implements OnInit {
   private content = inject(ContentService);
   private sanitizer = inject(DomSanitizer);
-  data: ContactSection | null = null;
-  mapUrl: SafeResourceUrl = '';
 
-  ngOnInit() {
-    const cached = this.content.content();
-    if (cached?.contactSection) this.setData(cached.contactSection);
-    this.content.get().subscribe({
-      next: r => { if (r?.data?.contactSection) this.setData(r.data.contactSection); }
-    });
-  }
+  data = computed<ContactSection | null>(() => this.content.content()?.contactSection ?? null);
 
-  setData(d: ContactSection) {
-    this.data = d;
+  ngOnInit() { this.content.ensureLoaded().subscribe(); }
+
+  mapUrl(d: ContactSection): SafeResourceUrl {
     const q = encodeURIComponent(d.mapQuery || d.address || 'Pune');
-    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
       `https://www.google.com/maps?q=${q}&output=embed`
     );
   }

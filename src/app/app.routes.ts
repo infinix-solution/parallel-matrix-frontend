@@ -7,7 +7,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/public/public-layout/public-layout.component').then(m => m.PublicLayoutComponent),
     children: [
-      { path: '', loadComponent: () => import('./features/public/home/home.component').then(m => m.HomeComponent) }
+      {
+        path: '',
+        loadComponent: () => import('./features/public/home/home.component').then(m => m.HomeComponent)
+      },
+      {
+        path: 'matrix-enterprises',
+        loadComponent: () => import('./features/public/sister-page/sister-page.component').then(m => m.SisterPageComponent)
+      }
     ]
   },
   {
