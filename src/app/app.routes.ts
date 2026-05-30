@@ -11,11 +11,6 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'test-form',
-    loadComponent: () =>
-      import('./features/public/test-form/test-form.component').then(m => m.TestFormComponent)
-  },
-  {
     path: 'admin/login',
     loadComponent: () =>
       import('./features/admin/login/login.component').then(m => m.LoginComponent)
