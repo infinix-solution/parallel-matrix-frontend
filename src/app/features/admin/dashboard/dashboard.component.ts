@@ -5,7 +5,6 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ToastHostComponent } from '../../../shared/toast-host/toast-host.component';
 import { TabSlidersComponent } from '../tabs/tab-sliders.component';
 import { TabTeamComponent } from '../tabs/tab-team.component';
-import { TabFormsConfigComponent } from '../tabs/tab-forms-config.component';
 import { TabPasswordComponent } from '../tabs/tab-password.component';
 import { TabPageBuilderComponent } from '../tabs/tab-page-builder.component';
 import { TabSiteContentComponent } from '../tabs/tab-site-content.component';
@@ -15,7 +14,7 @@ type TabKey = 'sliders' | 'team' | 'forms' | 'builder' | 'content' | 'security';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, ToastHostComponent, TabSlidersComponent, TabTeamComponent, TabFormsConfigComponent, TabPasswordComponent, TabPageBuilderComponent, TabSiteContentComponent],
+  imports: [CommonModule, ToastHostComponent, TabSlidersComponent, TabTeamComponent, TabPasswordComponent, TabPageBuilderComponent, TabSiteContentComponent],
   template: `
     <div class="adm-shell">
       <div class="adm-top">
@@ -38,7 +37,6 @@ type TabKey = 'sliders' | 'team' | 'forms' | 'builder' | 'content' | 'security';
         <div class="adm-tabs">
           <button [class.active]="tab==='sliders'" (click)="tab='sliders'">&#128247; Image Slider</button>
           <button [class.active]="tab==='team'" (click)="tab='team'">&#128101; Leadership Team</button>
-          <button [class.active]="tab==='forms'" (click)="tab='forms'">&#128221; Forms Config</button>
           <button [class.active]="tab==='builder'" (click)="tab='builder'">&#129513; Page Builder</button>
           <button [class.active]="tab==='content'" (click)="tab='content'">&#127912; Site Content</button>
           <button [class.active]="tab==='security'" (click)="tab='security'">&#128274; Security</button>
@@ -46,7 +44,6 @@ type TabKey = 'sliders' | 'team' | 'forms' | 'builder' | 'content' | 'security';
 
         <app-tab-sliders *ngIf="tab==='sliders'"></app-tab-sliders>
         <app-tab-team *ngIf="tab==='team'"></app-tab-team>
-        <app-tab-forms-config *ngIf="tab==='forms'"></app-tab-forms-config>
         <app-tab-page-builder *ngIf="tab==='builder'"></app-tab-page-builder>
         <app-tab-site-content *ngIf="tab==='content'"></app-tab-site-content>
         <app-tab-password *ngIf="tab==='security'"></app-tab-password>

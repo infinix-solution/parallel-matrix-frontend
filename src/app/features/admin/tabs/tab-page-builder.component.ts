@@ -21,7 +21,6 @@ type SubTab = 'header' | 'hr' | 'candidate' | 'layout';
           <button type="button" [class.active]="sub==='header'"    (click)="sub='header'">📝 Section Header</button>
           <button type="button" [class.active]="sub==='hr'"        (click)="sub='hr'">🏢 HR Form</button>
           <button type="button" [class.active]="sub==='candidate'" (click)="sub='candidate'">🎓 Candidate Form</button>
-          <button type="button" [class.active]="sub==='layout'"    (click)="sub='layout'">🖼 Test Page Layout</button>
         </div>
 
         <div *ngIf="sub==='header'" class="adm-card" formGroupName="sectionHeader">
@@ -84,16 +83,6 @@ type SubTab = 'header' | 'hr' | 'candidate' | 'layout';
             </div>
           </div>
         </ng-container>
-
-        <div *ngIf="sub==='layout'" class="adm-card" formGroupName="pageLayout">
-          <strong style="display:block;margin-bottom:10px;color:var(--navy)">/test-form Page Layout</strong>
-          <div class="field"><label>Title</label><input formControlName="title"></div>
-          <div class="field"><label>Description</label><textarea formControlName="description" rows="3"></textarea></div>
-          <div class="grid2">
-            <div class="field"><label>Hero Image URL</label><input formControlName="heroImage"></div>
-            <div class="field"><label>Sidebar Image URL</label><input formControlName="sidebarImage"></div>
-          </div>
-        </div>
 
         <div class="adm-actions" style="margin-top:18px;position:sticky;bottom:0;background:#fff;padding:14px;border-radius:12px;box-shadow:0 -8px 20px -10px rgba(10,31,68,.15);z-index:5">
           <button type="submit" class="adm-btn primary" [disabled]="loading">
