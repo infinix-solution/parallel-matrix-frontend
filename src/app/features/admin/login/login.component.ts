@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ToastHostComponent } from '../../../shared/toast-host/toast-host.component';
@@ -9,7 +9,7 @@ import { ToastHostComponent } from '../../../shared/toast-host/toast-host.compon
 @Component({
   selector: 'app-admin-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ToastHostComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ToastHostComponent],
   template: `
     <div class="adm-login">
       <div class="card">
@@ -22,11 +22,14 @@ import { ToastHostComponent } from '../../../shared/toast-host/toast-host.compon
           </div>
           <div class="field">
             <label>Password</label>
-            <input type="password" formControlName="password" placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022">
+            <input type="password" formControlName="password" placeholder="••••••••">
           </div>
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" [disabled]="loading">
-            {{ loading ? 'Signing in...' : 'Sign In \u2192' }}
+            {{ loading ? 'Signing in...' : 'Sign In →' }}
           </button>
+          <div style="text-align:center;margin-top:18px">
+            <a routerLink="/admin/forgot-password" style="color:var(--blue2);font-weight:600;font-size:13.5px;cursor:pointer">Forgot password?</a>
+          </div>
         </form>
       </div>
     </div>
@@ -53,7 +56,7 @@ export class LoginComponent {
       next: res => {
         this.loading = false;
         if (res?.success) {
-          this.toast.show('Welcome back, admin.');
+          this.toast.show('Welcome back, ' + (res.data?.role === 'superadmin' ? 'super admin' : 'admin') + '.');
           this.router.navigate(['/admin']);
         } else {
           this.toast.show(res?.message || 'Login failed.', 'err');

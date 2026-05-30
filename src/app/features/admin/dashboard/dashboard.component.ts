@@ -14,7 +14,11 @@ type TabKey = 'sliders' | 'team' | 'forms' | 'builder' | 'content' | 'security';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, ToastHostComponent, TabSlidersComponent, TabTeamComponent, TabPasswordComponent, TabPageBuilderComponent, TabSiteContentComponent],
+  imports: [
+    CommonModule, ToastHostComponent,
+    TabSlidersComponent, TabTeamComponent, TabPasswordComponent,
+    TabPageBuilderComponent, TabSiteContentComponent
+  ],
   template: `
     <div class="adm-shell">
       <div class="adm-top">
@@ -22,7 +26,10 @@ type TabKey = 'sliders' | 'team' | 'forms' | 'builder' | 'content' | 'security';
           <div style="display:flex;align-items:center;gap:12px">
             <img src="assets/logo.jpeg" alt="" style="width:42px;height:42px;border-radius:10px;padding:3px;background:#fff;box-shadow:var(--shadow-sm)">
             <div>
-              <div style="font-family:'Sora',sans-serif;font-weight:800;color:var(--navy)">Admin Dashboard</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:800;color:var(--navy)">
+                Admin Dashboard
+                <span *ngIf="auth.isSuperAdmin()" style="font-size:10px;background:linear-gradient(135deg,#d4a84c,#f5cb6f);color:#0a1f44;padding:2px 8px;border-radius:999px;margin-left:8px;letter-spacing:.1em;vertical-align:middle">SUPER</span>
+              </div>
               <div style="font-size:12px;color:var(--mute)">Signed in as {{ auth.email() }}</div>
             </div>
           </div>
@@ -35,17 +42,21 @@ type TabKey = 'sliders' | 'team' | 'forms' | 'builder' | 'content' | 'security';
 
       <div class="container">
         <div class="adm-tabs">
-          <button [class.active]="tab==='sliders'" (click)="tab='sliders'">&#128247; Image Slider</button>
-          <button [class.active]="tab==='team'" (click)="tab='team'">&#128101; Leadership Team</button>
-          <button [class.active]="tab==='builder'" (click)="tab='builder'">&#129513; Page Builder</button>
-          <button [class.active]="tab==='content'" (click)="tab='content'">&#127912; Site Content</button>
-          <button [class.active]="tab==='security'" (click)="tab='security'">&#128274; Security</button>
+          <button [class.active]="tab==='sliders'" (click)="tab='sliders'">🖼 Image Slider</button>
+          <button [class.active]="tab==='team'" (click)="tab='team'">👥 Leadership Team</button>
+          <button [class.active]="tab==='forms'" (click)="tab='forms'">📝 Forms Config</button>
+          <button [class.active]="tab==='builder'" (click)="tab='builder'">🧩 Page Builder</button>
+          <button *ngIf="auth.isSuperAdmin()" [class.active]="tab==='content'" (click)="tab='content'">
+            🎨 Site Content
+            <span style="font-size:9px;background:#d4a84c;color:#0a1f44;padding:1px 6px;border-radius:999px;margin-left:4px;vertical-align:middle">SUPER</span>
+          </button>
+          <button [class.active]="tab==='security'" (click)="tab='security'">🔐 Security</button>
         </div>
 
         <app-tab-sliders *ngIf="tab==='sliders'"></app-tab-sliders>
         <app-tab-team *ngIf="tab==='team'"></app-tab-team>
         <app-tab-page-builder *ngIf="tab==='builder'"></app-tab-page-builder>
-        <app-tab-site-content *ngIf="tab==='content'"></app-tab-site-content>
+        <app-tab-site-content *ngIf="tab==='content' && auth.isSuperAdmin()"></app-tab-site-content>
         <app-tab-password *ngIf="tab==='security'"></app-tab-password>
       </div>
     </div>
