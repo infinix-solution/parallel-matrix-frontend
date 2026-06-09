@@ -197,3 +197,23 @@ export interface SiteContent {
   policySection: PolicySection;
   contactSection: ContactSection;
 }
+
+export interface SocialLinks {
+  linkedin: string;
+  whatsapp: string;
+  email: string;
+}
+
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  mailFrom: string;
+  mailTo: string;
+  hasPassword?: boolean;
+}
+
+export interface SmtpConfigPayload extends SmtpConfig {
+  pass?: string;
+}

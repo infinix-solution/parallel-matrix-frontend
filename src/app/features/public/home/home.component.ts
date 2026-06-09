@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HeroComponent } from '../hero/hero.component';
+import { MediaShowcaseComponent } from '../media-showcase/media-showcase.component';
 import { AboutComponent } from '../about/about.component';
 import { ServicesComponent } from '../services/services.component';
 import { CareerComponent } from '../career/career.component';
@@ -13,11 +14,12 @@ import { ContentService } from '../../../core/services/content.service';
   selector: 'app-home',
   standalone: true,
   imports: [
-    HeroComponent, AboutComponent, ServicesComponent, CareerComponent,
-    TeamComponent, PolicyComponent, FormsComponent, ContactComponent
+    HeroComponent, MediaShowcaseComponent, AboutComponent, ServicesComponent,
+    CareerComponent, TeamComponent, PolicyComponent, FormsComponent, ContactComponent
   ],
   template: `
     <app-hero></app-hero>
+    <app-media-showcase></app-media-showcase>
     <app-about></app-about>
     <app-services></app-services>
     <app-career></app-career>
@@ -31,8 +33,8 @@ export class HomeComponent implements OnInit {
   private content = inject(ContentService);
 
   ngOnInit() {
-      this.content.ensureLoaded().subscribe({
-        error: err => console.warn('[Home] Could not load site content:', err)
-      });
+    this.content.ensureLoaded().subscribe({
+      error: err => console.warn('[Home] Could not load site content:', err)
+    });
   }
 }

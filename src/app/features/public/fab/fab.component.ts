@@ -1,7 +1,7 @@
-import { Component, computed, inject, Input } from '@angular/core';
+import { Component, OnInit, inject, Input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SocialLinksService } from 'src/app/core/services/social-links.service';
 import { ContentService } from 'src/app/core/services/content.service';
-import { ContactSection } from 'src/app/core/models';
 
 @Component({
   selector: 'app-fab',
@@ -11,8 +11,8 @@ import { ContactSection } from 'src/app/core/models';
     <div class="pm-fab-wrapper" [class.expand-left]="direction === 'left'" [class.expand-right]="direction === 'right'">
       <input type="checkbox" id="pm-fab-toggle" class="pm-fab-toggle" hidden>
 
-      <!-- Sub-icons -->
-      <a href="https://wa.me/{{data()?.whatsapp}}"
+      <!-- WhatsApp -->
+      <a [href]="social.whatsappHref"
          target="_blank"
          rel="noopener"
          class="pm-fab-sub pm-fab-wa"
@@ -22,12 +22,15 @@ import { ContactSection } from 'src/app/core/models';
         </svg>
       </a>
 
-      <a href="{{data()?.linkdnUrl}}"
+      <!-- LinkedIn -->
+      <a [href]="social.linkedinHref"
          target="_blank"
          rel="noopener"
          class="pm-fab-sub pm-fab-fb"
-         aria-label="Facebook">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14M8.34 18V10.5H6V18h2.34M7.17 9.43a1.36 1.36 0 1 0 0-2.72 1.36 1.36 0 0 0 0 2.72M18 18v-4.1c0-2.17-1.17-3.18-2.73-3.18-1.26 0-1.82.69-2.13 1.18V10.5H10.8c.03.66 0 7.5 0 7.5h2.34v-4.19c0-.21.01-.42.08-.57.18-.42.57-.86 1.23-.86.87 0 1.21.66 1.21 1.62V18H18Z"/></svg>
+         aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14M8.34 18V10.5H6V18h2.34M7.17 9.43a1.36 1.36 0 1 0 0-2.72 1.36 1.36 0 0 0 0 2.72M18 18v-4.1c0-2.17-1.17-3.18-2.73-3.18-1.26 0-1.82.69-2.13 1.18V10.5H10.8c.03.66 0 7.5 0 7.5h2.34v-4.19c0-.21.01-.42.08-.57.18-.42.57-.86 1.23-.86.87 0 1.21.66 1.21 1.62V18H18Z"/>
+        </svg>
       </a>
 
       <!-- Main toggle button -->
@@ -38,11 +41,11 @@ import { ContactSection } from 'src/app/core/models';
     </div>
   `,
   styles: [`
-    /* ===== Wrapper ===== */
     .pm-fab-wrapper {
       position: fixed;
       right: 22px;
       bottom: 22px;
+      bottom: calc(22px + env(safe-area-inset-bottom));
       z-index: 90;
       width: 60px;
       height: 60px;
@@ -50,7 +53,6 @@ import { ContactSection } from 'src/app/core/models';
 
     .pm-fab-toggle { position: absolute; opacity: 0; pointer-events: none; }
 
-    /* ===== Main circular button ===== */
     .pm-fab-main {
       position: absolute;
       inset: 0;
@@ -71,7 +73,6 @@ import { ContactSection } from 'src/app/core/models';
     }
     .pm-fab-main:hover { transform: scale(1.06); }
 
-    /* Pulse ring */
     .pm-fab-main::after {
       content: "";
       position: absolute;
@@ -86,7 +87,6 @@ import { ContactSection } from 'src/app/core/models';
       100% { transform: scale(1.4); opacity: 0; }
     }
 
-    /* ===== Plus / X lines ===== */
     .pm-fab-line {
       position: absolute;
       width: 22px;
@@ -98,13 +98,10 @@ import { ContactSection } from 'src/app/core/models';
     .pm-fab-line:nth-child(1) { transform: rotate(0deg); }
     .pm-fab-line:nth-child(2) { transform: rotate(90deg); }
 
-    /* ===== Sub-icon buttons ===== */
     .pm-fab-sub {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 56px;
-      height: 56px;
+      top: 0; left: 0;
+      width: 56px; height: 56px;
       border-radius: 50%;
       background: #fff;
       color: #0a1f44;
@@ -123,11 +120,9 @@ import { ContactSection } from 'src/app/core/models';
       z-index: 1;
     }
 
-    /* Brand-colored hover (preserves the open position via CSS vars) */
     .pm-fab-wa:hover { background: #25D366; color: #fff; }
-    .pm-fab-fb:hover { background: #1877F2; color: #fff; }
+    .pm-fab-fb:hover { background: #0a66c2; color: #fff; }
 
-    /* ===== OPEN STATE — main button ===== */
     .pm-fab-toggle:checked ~ .pm-fab-main {
       background: linear-gradient(135deg, #dc2626, #ef4444);
       box-shadow: 0 12px 30px -6px rgba(220, 38, 38, 0.5);
@@ -136,54 +131,26 @@ import { ContactSection } from 'src/app/core/models';
     .pm-fab-toggle:checked ~ .pm-fab-main .pm-fab-line:nth-child(1) { transform: rotate(45deg); }
     .pm-fab-toggle:checked ~ .pm-fab-main .pm-fab-line:nth-child(2) { transform: rotate(-45deg); }
 
-    /* Sub-icons appear */
     .pm-fab-toggle:checked ~ .pm-fab-sub {
       opacity: 1;
       pointer-events: auto;
     }
 
-    /* ===========================================================
-       TRIANGLE FAN-OUT
-       - WhatsApp:  diagonally up + sideways  (the "tip" of triangle)
-       - Facebook:  straight up
-       Together with the main button, they form a triangle.
-       =========================================================== */
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-wa { transform: translate(-70px, -70px) scale(1); }
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-fb { transform: translate(0, -85px) scale(1); }
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-wa:hover { transform: translate(-70px, -70px) scale(1.12); }
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-fb:hover { transform: translate(0, -85px) scale(1.12); }
 
-    /* ----- Expand LEFT (default — for bottom-right corner) ----- */
-    .expand-left .pm-fab-toggle:checked ~ .pm-fab-wa {
-      transform: translate(-70px, -70px) scale(1);
-    }
-    .expand-left .pm-fab-toggle:checked ~ .pm-fab-fb {
-      transform: translate(0, -85px) scale(1);
-    }
-    .expand-left .pm-fab-toggle:checked ~ .pm-fab-wa:hover {
-      transform: translate(-70px, -70px) scale(1.12);
-    }
-    .expand-left .pm-fab-toggle:checked ~ .pm-fab-fb:hover {
-      transform: translate(0, -85px) scale(1.12);
-    }
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-wa { transform: translate(70px, -70px) scale(1); }
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-fb { transform: translate(0, -85px) scale(1); }
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-wa:hover { transform: translate(70px, -70px) scale(1.12); }
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-fb:hover { transform: translate(0, -85px) scale(1.12); }
 
-    /* ----- Expand RIGHT (mirror) ----- */
-    .expand-right .pm-fab-toggle:checked ~ .pm-fab-wa {
-      transform: translate(70px, -70px) scale(1);
-    }
-    .expand-right .pm-fab-toggle:checked ~ .pm-fab-fb {
-      transform: translate(0, -85px) scale(1);
-    }
-    .expand-right .pm-fab-toggle:checked ~ .pm-fab-wa:hover {
-      transform: translate(70px, -70px) scale(1.12);
-    }
-    .expand-right .pm-fab-toggle:checked ~ .pm-fab-fb:hover {
-      transform: translate(0, -85px) scale(1.12);
-    }
-
-    /* Stagger the appearance slightly so they pop one after the other */
     .pm-fab-toggle:checked ~ .pm-fab-fb { transition-delay: 0.05s; }
     .pm-fab-toggle:checked ~ .pm-fab-wa { transition-delay: 0.12s; }
 
-    /* ===== Mobile tweak ===== */
     @media (max-width: 560px) {
-      .pm-fab-wrapper { right: 16px; bottom: 16px; }
+      .pm-fab-wrapper { right: 16px; bottom: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -192,13 +159,11 @@ import { ContactSection } from 'src/app/core/models';
     }
   `]
 })
-export class FabComponent {
-  /** 'left' (default, fans up-left) or 'right' (fans up-right) */
+export class FabComponent implements OnInit {
   @Input() direction: 'left' | 'right' = 'left';
 
-   private content = inject(ContentService);
-    
-      data = computed<ContactSection | null>(() => this.content.content()?.contactSection ?? null);
-    
-      ngOnInit() { this.content.ensureLoaded().subscribe(); }
+  social = inject(SocialLinksService);
+  private content = inject(ContentService);
+
+  ngOnInit() { this.content.ensureLoaded().subscribe(); }
 }

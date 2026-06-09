@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { SliderImage, TeamMember, FormsConfig, ApiResponse, PageConfig } from '../models';
+import { SliderImage, TeamMember, FormsConfig, ApiResponse, PageConfig, SmtpConfig, SmtpConfigPayload } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -60,5 +60,18 @@ export class ApiService {
 
   updatePageConfig(cfg: Partial<PageConfig>): Observable<ApiResponse<PageConfig>> {
     return this.http.put<ApiResponse<PageConfig>>(`${this.base}/admin/page-config`, cfg);
+  }
+
+  // ----- SMTP System Configuration (Super Admin only) -----
+  getSmtpConfig(): Observable<ApiResponse<SmtpConfig>> {
+    return this.http.get<ApiResponse<SmtpConfig>>(`${this.base}/admin/system-config`);
+  }
+
+  saveSmtpConfig(payload: SmtpConfigPayload): Observable<ApiResponse<null>> {
+    return this.http.put<ApiResponse<null>>(`${this.base}/admin/system-config`, payload);
+  }
+
+  clearSmtpConfig(): Observable<ApiResponse<null>> {
+    return this.http.delete<ApiResponse<null>>(`${this.base}/admin/system-config`);
   }
 }
