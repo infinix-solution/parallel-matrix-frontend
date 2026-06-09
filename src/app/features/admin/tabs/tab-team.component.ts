@@ -17,57 +17,77 @@ import { TeamMember } from '../../../core/models';
 
       <div class="adm-list" [formGroup]="form">
         <div formArrayName="members">
-          <div *ngFor="let m of members.controls; let i = index" [formGroupName]="i" class="adm-card" style="margin-bottom:14px">
-            <div class="grid2">
-              <div class="field">
-                <label>Full Name *</label>
-                <input formControlName="name" maxlength="50" placeholder="Full name">
-                <div class="err" *ngIf="m.get('name')?.touched && m.get('name')?.invalid">Required, max 50 chars.</div>
-              </div>
-              <div class="field">
-                <label>Role *</label>
-                <input formControlName="role" placeholder="e.g. Founder">
-              </div>
-              <div class="field">
-                <label>Email *</label>
-                <input formControlName="email" type="email" placeholder="name@parallelmatrixcorp.com">
-                <div class="err" *ngIf="m.get('email')?.touched && m.get('email')?.invalid">Valid email required.</div>
-              </div>
-              <div class="field">
-                <label>Phone *</label>
-                <input formControlName="phone" placeholder="+91 ...">
-                <div class="err" *ngIf="m.get('phone')?.touched && m.get('phone')?.invalid">Valid phone required.</div>
-              </div>
-              <div class="field">
-                <label>LinkedIn URL</label>
-                <input formControlName="linkedin" placeholder="https://linkedin.com/in/...">
-              </div>
-              <div class="field">
-                <label>Badge label</label>
-                <input formControlName="badge" placeholder="Founder">
-              </div>
-              <div class="field">
-                <label>Order</label>
-                <input formControlName="order" type="number" min="0">
-              </div>
-              <div class="field">
-                <label>Photo</label>
-                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-                  <img *ngIf="m.get('photoUrl')?.value" [src]="resolve(m.get('photoUrl')?.value)" alt=""
-                       style="width:64px;height:64px;border-radius:12px;object-fit:cover;border:1.5px solid #e5ecf6">
-                  <label class="adm-btn ghost" style="cursor:pointer;margin:0">
-                    📁 Upload Photo
-                    <input type="file" accept="image/*" hidden (change)="uploadPhoto($event, i)">
-                  </label>
-                  <button *ngIf="m.get('photoUrl')?.value" type="button" class="adm-btn danger" (click)="clearPhoto(i)" style="padding:6px 12px">Clear</button>
+          <div *ngFor="let m of members.controls; let i = index" [formGroupName]="i" class="adm-card" style="margin-bottom:14px;padding:0;overflow:hidden">
+            <!-- Card header with member name preview -->
+            <div style="padding:14px 20px 0;background:#f0f4ff;border-bottom:1px solid #e5ecf6;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+              <span style="font-weight:700;color:var(--navy);font-size:14px">
+                <i class="fa-solid fa-user" style="margin-right:6px;opacity:.6" aria-hidden="true"></i>
+                {{ m.get('name')?.value || ('Member #' + (i + 1)) }}
+              </span>
+              <span *ngIf="m.get('_id')?.value" style="font-size:11px;color:var(--mute);font-weight:500">ID: {{ m.get('_id')?.value }}</span>
+            </div>
+
+            <div style="padding:20px">
+              <div class="grid2">
+                <div class="field">
+                  <label>Full Name *</label>
+                  <input formControlName="name" maxlength="50" placeholder="Full name">
+                  <div class="err" *ngIf="m.get('name')?.touched && m.get('name')?.invalid">Required, max 50 chars.</div>
                 </div>
-                <small style="color:var(--mute);font-size:11.5px;display:block;margin-top:6px">{{ m.get('photoUrl')?.value || 'No photo uploaded — UI will fall back to placeholder.' }}</small>
+                <div class="field">
+                  <label>Role *</label>
+                  <input formControlName="role" placeholder="e.g. Founder">
+                </div>
+                <div class="field">
+                  <label>Email *</label>
+                  <input formControlName="email" type="email" placeholder="name@parallelmatrixcorp.com">
+                  <div class="err" *ngIf="m.get('email')?.touched && m.get('email')?.invalid">Valid email required.</div>
+                </div>
+                <div class="field">
+                  <label>Phone *</label>
+                  <input formControlName="phone" placeholder="+91 ...">
+                  <div class="err" *ngIf="m.get('phone')?.touched && m.get('phone')?.invalid">Valid phone required.</div>
+                </div>
+                <div class="field">
+                  <label>LinkedIn URL</label>
+                  <input formControlName="linkedin" placeholder="https://linkedin.com/in/...">
+                </div>
+                <div class="field">
+                  <label>Badge label</label>
+                  <input formControlName="badge" placeholder="Founder">
+                </div>
+                <div class="field">
+                  <label>Order</label>
+                  <input formControlName="order" type="number" min="0">
+                </div>
+                <div class="field">
+                  <label>Photo</label>
+                  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <img *ngIf="m.get('photoUrl')?.value" [src]="resolve(m.get('photoUrl')?.value)" alt=""
+                         style="width:64px;height:64px;border-radius:12px;object-fit:cover;border:1.5px solid #e5ecf6">
+                    <label class="adm-btn ghost" style="cursor:pointer;margin:0">
+                      <i class="fa-solid fa-folder-open" style="margin-right:4px" aria-hidden="true"></i>Upload Photo
+                      <input type="file" accept="image/*" hidden (change)="uploadPhoto($event, i)">
+                    </label>
+                    <button *ngIf="m.get('photoUrl')?.value" type="button" class="adm-btn danger" (click)="clearPhoto(i)" style="padding:6px 12px">Clear</button>
+                  </div>
+                  <small style="color:var(--mute);font-size:11.5px;display:block;margin-top:6px">{{ m.get('photoUrl')?.value || 'No photo — UI will fall back to placeholder.' }}</small>
+                </div>
               </div>
             </div>
-            <div class="adm-actions">
-              <button type="button" class="adm-btn primary" (click)="save(i)">{{ m.get('_id')?.value ? 'Update' : 'Create' }}</button>
-              <button type="button" class="adm-btn danger" (click)="remove(i)" *ngIf="m.get('_id')?.value">Delete</button>
-              <button type="button" class="adm-btn ghost" (click)="discard(i)" *ngIf="!m.get('_id')?.value">Discard</button>
+
+            <!-- Sticky action footer — always visible at bottom of card -->
+            <div style="padding:14px 20px;background:#f8fafd;border-top:1.5px solid #e5ecf6;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <button type="button" class="adm-btn primary" (click)="save(i)" style="flex:1;min-width:120px;justify-content:center;display:flex;align-items:center;gap:6px">
+                <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+                {{ m.get('_id')?.value ? 'Update Member' : 'Create Member' }}
+              </button>
+              <button type="button" class="adm-btn danger" (click)="remove(i)" *ngIf="m.get('_id')?.value">
+                <i class="fa-solid fa-trash" aria-hidden="true"></i> Delete
+              </button>
+              <button type="button" class="adm-btn ghost" (click)="discard(i)" *ngIf="!m.get('_id')?.value">
+                Discard
+              </button>
             </div>
           </div>
         </div>

@@ -1,9 +1,12 @@
 // ===== Existing models =====
+export type SliderCategory = 'hero' | 'career' | 'growth';
+
 export interface SliderImage {
   _id?: string;
   url: string;
   filename?: string;
   order?: number;
+  category?: SliderCategory;
 }
 
 export interface TeamMember {
@@ -180,7 +183,6 @@ export interface ContactSection {
   sub: string;
   address: string;
   phone: string;
-  emergency: string;
   email: string;
   mapQuery: string;
   directionsUrl: string;

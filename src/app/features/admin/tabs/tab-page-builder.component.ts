@@ -38,7 +38,16 @@ type SubTab = 'header' | 'hr' | 'candidate' | 'layout';
             <div class="grid2">
               <div class="field"><label>Title</label><input formControlName="title"></div>
               <div class="field"><label>Subtitle</label><input formControlName="subtitle"></div>
-              <div class="field"><label>Icon (emoji)</label><input formControlName="icon" maxlength="4"></div>
+              <div class="field">
+                <label>FA Icon Class</label>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <input formControlName="icon" placeholder="fa-solid fa-building-user" style="flex:1">
+                  <span *ngIf="form.get('hrForm.icon')?.value?.startsWith('fa')"
+                        style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:16px">
+                    <i [class]="form.get('hrForm.icon')?.value" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
               <div class="field"><label>Submit Button Label</label><input formControlName="submitLabel"></div>
             </div>
           </div>
@@ -64,7 +73,16 @@ type SubTab = 'header' | 'hr' | 'candidate' | 'layout';
             <div class="grid2">
               <div class="field"><label>Title</label><input formControlName="title"></div>
               <div class="field"><label>Subtitle</label><input formControlName="subtitle"></div>
-              <div class="field"><label>Icon (emoji)</label><input formControlName="icon" maxlength="4"></div>
+              <div class="field">
+                <label>FA Icon Class</label>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <input formControlName="icon" placeholder="fa-solid fa-graduation-cap" style="flex:1">
+                  <span *ngIf="form.get('candidateForm.icon')?.value?.startsWith('fa')"
+                        style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:16px">
+                    <i [class]="form.get('candidateForm.icon')?.value" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
               <div class="field"><label>Submit Button Label</label><input formControlName="submitLabel"></div>
             </div>
           </div>

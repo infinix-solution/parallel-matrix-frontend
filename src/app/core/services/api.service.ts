@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { SliderImage, TeamMember, FormsConfig, ApiResponse, PageConfig, SmtpConfig, SmtpConfigPayload } from '../models';
+import { SliderImage, SliderCategory, TeamMember, FormsConfig, ApiResponse, PageConfig, SmtpConfig, SmtpConfigPayload, SiteContent } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -33,6 +33,16 @@ export class ApiService {
   }
   deleteSlider(id: string): Observable<ApiResponse<null>> {
     return this.http.delete<ApiResponse<null>>(`${this.base}/admin/sliders/${id}`);
+  }
+
+  // ----- Category Sliders (career / growth — Super Admin only) -----
+  getCategorySliders(category: SliderCategory): Observable<ApiResponse<SliderImage[]>> {
+    return this.http.get<ApiResponse<SliderImage[]>>(`${this.base}/admin/sliders/category/${category}`);
+  }
+  uploadCategorySlider(category: SliderCategory, file: File): Observable<ApiResponse<SliderImage>> {
+    const fd = new FormData();
+    fd.append('image', file);
+    return this.http.post<ApiResponse<SliderImage>>(`${this.base}/admin/sliders/category/${category}`, fd);
   }
 
   createTeam(m: Partial<TeamMember>): Observable<ApiResponse<TeamMember>> {

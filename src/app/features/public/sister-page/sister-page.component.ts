@@ -1,16 +1,17 @@
 import {
-  Component, OnInit, AfterViewInit, OnDestroy,
-  computed, inject, signal, ElementRef, effect
+  Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy,
+  computed, inject, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ContentService } from '../../../core/services/content.service';
 import { SisterCompanySection } from '../../../core/models';
+import { FaIconPipe } from '../../../shared/pipes/fa-icon.pipe';
 
 @Component({
   selector: 'app-sister-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FaIconPipe],
   styles: [`
     :host { display: block; }
 
@@ -158,7 +159,7 @@ import { SisterCompanySection } from '../../../core/models';
       border-radius: 14px;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
+      font-size: 20px; color: #fff;
       flex-shrink: 0;
       box-shadow: 0 8px 20px -6px rgba(37,99,235,.5);
     }
@@ -229,7 +230,7 @@ import { SisterCompanySection } from '../../../core/models';
       border: 1px solid #e2e8f0;
     }
     .me-img-inner { text-align: center; padding: 40px; }
-    .me-img-icon { font-size: 68px; display: block; margin-bottom: 16px; }
+    .me-img-icon { font-size: 68px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: rgba(255,255,255,.88); }
     .me-img-caption { color: rgba(255,255,255,.75); font-size: 15px; font-weight: 500; line-height: 1.5; }
     .me-eyebrow {
       display: inline-block;
@@ -269,7 +270,7 @@ import { SisterCompanySection } from '../../../core/models';
       width: 72px; height: 72px; border-radius: 20px;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       display: flex; align-items: center; justify-content: center;
-      font-size: 32px; flex-shrink: 0;
+      font-size: 28px; flex-shrink: 0; color: #fff;
       box-shadow: 0 12px 30px -8px rgba(37,99,235,.45);
     }
     .me-primary-title {
@@ -304,7 +305,7 @@ import { SisterCompanySection } from '../../../core/models';
       width: 50px; height: 50px; border-radius: 14px;
       background: #eff6ff;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px; margin-bottom: 18px;
+      font-size: 20px; margin-bottom: 18px; color: #2563eb;
     }
     .me-card h3 {
       font-family: 'Sora', sans-serif;
@@ -411,8 +412,10 @@ import { SisterCompanySection } from '../../../core/models';
     <div class="me-page" *ngIf="data() as d; else loading">
 
       <!-- ═══ 1. HERO HEADER ═══════════════════════════════════════════ -->
-      <section class="me-hero">
-        <div class="me-container">
+      <section class="me-hero"
+               style="background-image:url('https://images.unsplash.com/photo-1590859808308-3d2d9c515b1a?w=1400&q=80');background-size:cover;background-position:center top;position:relative">
+        <div style="position:absolute;inset:0;background:linear-gradient(145deg,rgba(248,250,252,.97) 0%,rgba(239,246,255,.95) 55%,rgba(240,253,244,.93) 100%)"></div>
+        <div class="me-container" style="position:relative">
           <div class="me-hero-inner">
 
             <!-- Left column -->
@@ -420,13 +423,13 @@ import { SisterCompanySection } from '../../../core/models';
               <nav class="me-breadcrumb" aria-label="Breadcrumb">
                 <a routerLink="/">Home</a>
                 <span>›</span>
-                <span>Sister Concerns</span>
-                <span>›</span>
                 <span style="color:#0f172a;font-weight:600">Matrix Enterprises</span>
               </nav>
-              <div class="me-hero-eyebrow">🏢 Sister Concern</div>
+              <div class="me-hero-eyebrow">
+                <i class="fa-solid fa-building" aria-hidden="true"></i>&nbsp;Sister Concern
+              </div>
               <h1 class="me-hero-title">
-                Matrix Enterprises —<br>
+                Parallel Matrix Ventures —<br>
                 <em>Scale with Certainty.</em>
               </h1>
               <p class="me-hero-desc">
@@ -443,10 +446,12 @@ import { SisterCompanySection } from '../../../core/models';
               <div class="me-blob me-blob-2"></div>
               <div class="me-glass-card">
                 <div class="me-glass-header">
-                  <div class="me-glass-icon">🏗️</div>
+                  <div class="me-glass-icon">
+                  <i class="fa-solid fa-hard-hat" aria-hidden="true"></i>
+                </div>
                   <div>
-                    <div class="me-glass-name">Matrix Enterprises</div>
-                    <div class="me-glass-sub">Infrastructure &amp; Corporate Services</div>
+                    <div class="me-glass-name">Parallel Matrix Ventures</div>
+                    <div class="me-glass-sub">Infrastructure &amp; Enterprise Services</div>
                   </div>
                 </div>
                 <div class="me-mini-stats">
@@ -470,7 +475,9 @@ import { SisterCompanySection } from '../../../core/models';
                   <span class="me-svc-tag">Corporate Services</span>
                 </div>
               </div>
-              <div class="me-float-badge">✓ Trusted Enterprise</div>
+              <div class="me-float-badge">
+                <i class="fa-solid fa-circle-check" style="color:#059669;margin-right:5px" aria-hidden="true"></i>Trusted Enterprise
+              </div>
             </div>
 
           </div>
@@ -483,7 +490,9 @@ import { SisterCompanySection } from '../../../core/models';
           <div class="me-about-grid">
             <div class="me-img-wrap reveal-me">
               <div class="me-img-inner">
-                <span class="me-img-icon">{{ d.primaryServiceIcon || '🏛️' }}</span>
+                <span class="me-img-icon"
+                      [innerHTML]="(d.primaryServiceIcon || 'fa-solid fa-building-columns') | faIcon">
+                </span>
                 <p class="me-img-caption">{{ d.primaryServiceTitle || 'Enterprise Infrastructure' }}</p>
               </div>
             </div>
@@ -498,11 +507,13 @@ import { SisterCompanySection } from '../../../core/models';
         </div>
       </section>
 
-      <!-- ═══ 3. PRIMARY SERVICE ════════════════════════════════════════ -->
-      <section class="me-primary" *ngIf="d.primaryServiceTitle">
-        <div class="me-container">
+      <!-- ═══ 3. PRIMARY SERVICE — with construction background ════════ -->
+      <section class="me-primary" *ngIf="d.primaryServiceTitle"
+               style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1400&q=80');background-size:cover;background-position:center;position:relative">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(239,246,255,.96) 0%,rgba(240,253,244,.94) 100%)"></div>
+        <div class="me-container" style="position:relative">
           <div class="me-primary-card reveal-me">
-            <div class="me-primary-icon">{{ d.primaryServiceIcon }}</div>
+            <div class="me-primary-icon" [innerHTML]="d.primaryServiceIcon | faIcon"></div>
             <div>
               <h2 class="me-primary-title">{{ d.primaryServiceTitle }}</h2>
               <p class="me-primary-lead">{{ d.primaryServiceLead }}</p>
@@ -525,7 +536,7 @@ import { SisterCompanySection } from '../../../core/models';
                  [class.d1]="i % 3 === 0"
                  [class.d2]="i % 3 === 1"
                  [class.d3]="i % 3 === 2">
-              <div class="me-card-icon-wrap">{{ card.icon }}</div>
+              <div class="me-card-icon-wrap" [innerHTML]="card.icon | faIcon"></div>
               <h3>{{ card.title }}</h3>
               <p>{{ card.description }}</p>
             </div>
@@ -559,7 +570,7 @@ import { SisterCompanySection } from '../../../core/models';
           <h3 class="me-industries-title reveal-me">{{ d.industriesTitle }}</h3>
           <div class="me-chips reveal-me d1">
             <span *ngFor="let chip of d.industries" class="me-chip">
-              {{ chip.icon }} {{ chip.label }}
+              <span [innerHTML]="chip.icon | faIcon"></span> {{ chip.label }}
             </span>
           </div>
         </div>
@@ -594,8 +605,10 @@ import { SisterCompanySection } from '../../../core/models';
     <ng-template #loading>
       <div style="min-height:80vh;display:flex;align-items:center;justify-content:center;background:#f8fafc;padding-top:80px">
         <div style="text-align:center;color:#64748b">
-          <div style="font-size:32px;margin-bottom:12px">🏗️</div>
-          <p style="font-size:15px;font-weight:500">Loading Matrix Enterprises…</p>
+          <div style="font-size:32px;margin-bottom:12px">
+            <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
+          </div>
+          <p style="font-size:15px;font-weight:500">Loading Parallel Matrix Ventures…</p>
         </div>
       </div>
     </ng-template>
@@ -609,30 +622,23 @@ export class SisterPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private observer?: IntersectionObserver;
   private revealSetup = false;
-  private viewReady = false;
 
-  constructor() {
-    // When data arrives after the view is ready, set up scroll reveals.
-    effect(() => {
-      if (this.data() && this.viewReady && !this.revealSetup) {
-        this.revealSetup = true;
-        // One frame delay lets Angular render the *ngIf blocks before we query.
-        setTimeout(() => this.setupReveal(), 16);
+  ngOnInit() {
+    this.content.ensureLoaded().subscribe({
+      next: () => {
+        // Content loaded — if view is already rendered, set up reveals now.
+        if (this.el.nativeElement.isConnected && !this.revealSetup) {
+          setTimeout(() => this.setupReveal(), 32);
+        }
       }
     });
   }
 
-  ngOnInit() {
-    this.content.ensureLoaded().subscribe();
-  }
-
   ngAfterViewInit() {
-    this.viewReady = true;
-    // If data was already loaded (e.g. navigating from home), set up immediately.
-    if (this.data() && !this.revealSetup) {
-      this.revealSetup = true;
-      setTimeout(() => this.setupReveal(), 16);
-    }
+    // Give *ngIf one tick to render, then set up reveals.
+    setTimeout(() => {
+      if (!this.revealSetup) this.setupReveal();
+    }, 80);
   }
 
   ngOnDestroy() {
@@ -645,6 +651,7 @@ export class SisterPageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setupReveal() {
+    this.revealSetup = true;
     const host = this.el.nativeElement as HTMLElement;
     const els = host.querySelectorAll<HTMLElement>('.reveal-me');
     if (!els.length) return;

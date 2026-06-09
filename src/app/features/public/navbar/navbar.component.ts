@@ -13,7 +13,6 @@ import { Router, RouterLink } from '@angular/router';
           <img src="assets/logo.jpeg" alt="Parallel Matrix Logo">
           <div>
             <div class="bt">Parallel Matrix</div>
-            <div class="bs">MANAGEMENT SERVICES</div>
           </div>
         </a>
         <div class="nav-links" [class.open]="menuOpen">
@@ -43,7 +42,7 @@ import { Router, RouterLink } from '@angular/router';
             </div>
           </div>
           
-          <a routerLink="/matrix-enterprises">Matrix Enterprises</a>
+          <a routerLink="/matrix-enterprises">Parallel Matrix Ventures</a>
           <a (click)="goHomeAnchor('contact')" [class.active]="active==='contact'">Contact</a>
         </div>
         <div class="nav-cta">

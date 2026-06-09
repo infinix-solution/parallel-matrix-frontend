@@ -4,7 +4,10 @@ import { MediaShowcaseComponent } from '../media-showcase/media-showcase.compone
 import { AboutComponent } from '../about/about.component';
 import { ServicesComponent } from '../services/services.component';
 import { CareerComponent } from '../career/career.component';
+import { CareerSliderComponent } from '../career-slider/career-slider.component';
+import { GrowthSliderComponent } from '../growth-slider/growth-slider.component';
 import { TeamComponent } from '../team/team.component';
+import { VisionMissionComponent } from '../vision-mission/vision-mission.component';
 import { PolicyComponent } from '../policy/policy.component';
 import { FormsComponent } from '../forms/forms.component';
 import { ContactComponent } from '../contact/contact.component';
@@ -15,7 +18,8 @@ import { ContentService } from '../../../core/services/content.service';
   standalone: true,
   imports: [
     HeroComponent, MediaShowcaseComponent, AboutComponent, ServicesComponent,
-    CareerComponent, TeamComponent, PolicyComponent, FormsComponent, ContactComponent
+    CareerComponent, CareerSliderComponent, GrowthSliderComponent,
+    TeamComponent, VisionMissionComponent, PolicyComponent, FormsComponent, ContactComponent
   ],
   template: `
     <app-hero></app-hero>
@@ -23,7 +27,10 @@ import { ContentService } from '../../../core/services/content.service';
     <app-about></app-about>
     <app-services></app-services>
     <app-career></app-career>
+    <app-career-slider></app-career-slider>
+    <app-growth-slider></app-growth-slider>
     <app-team></app-team>
+    <app-vision-mission></app-vision-mission>
     <app-policy></app-policy>
     <app-forms></app-forms>
     <app-contact></app-contact>

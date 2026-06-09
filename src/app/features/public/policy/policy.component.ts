@@ -1,7 +1,8 @@
-import { Component, OnInit, computed, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../../core/services/content.service';
 import { PolicySection } from '../../../core/models';
+import { FaIconPipe } from '../../../shared/pipes/fa-icon.pipe';
 
 interface PolWithState {
   icon: string; title: string; description: string; maxLength: number;
@@ -11,7 +12,8 @@ interface PolWithState {
 @Component({
   selector: 'app-policy',
   standalone: true,
-  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, FaIconPipe],
   template: `
     <section id="policy" style="background:linear-gradient(180deg,#eef2f9,var(--bg))" *ngIf="data() as d">
       <div class="container">
@@ -21,7 +23,9 @@ interface PolWithState {
         </div>
         <div class="pol-grid">
           <div *ngFor="let p of items" class="pol reveal in">
-            <h4>{{ p.icon }} {{ p.title }}</h4>
+            <h4>
+              <span *ngIf="p.icon" [innerHTML]="p.icon | faIcon" style="margin-right:8px"></span>{{ p.title }}
+            </h4>
             <p>
               {{ truncated(p) }}
               <a *ngIf="needsToggle(p)" (click)="p.expanded = !p.expanded"

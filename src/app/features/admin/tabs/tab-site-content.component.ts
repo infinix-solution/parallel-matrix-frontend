@@ -17,12 +17,12 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
 
       <form [formGroup]="form" (ngSubmit)="save()">
         <div class="adm-tabs" style="margin:0 0 18px">
-          <button type="button" [class.active]="sub==='about'"    (click)="sub='about'">ℹ About</button>
-          <button type="button" [class.active]="sub==='services'" (click)="sub='services'">🎯 Services</button>
-          <button type="button" [class.active]="sub==='career'"   (click)="sub='career'">📈 Career Stats</button>
-          <button type="button" [class.active]="sub==='sister'"   (click)="sub='sister'">🏗 Sister Concern</button>
-          <button type="button" [class.active]="sub==='policy'"   (click)="sub='policy'">📜 Policies</button>
-          <button type="button" [class.active]="sub==='contact'"  (click)="sub='contact'">📍 Contact</button>
+          <button type="button" [class.active]="sub==='about'"    (click)="sub='about'"><i class="fa-solid fa-circle-info" style="margin-right:5px"></i>About</button>
+          <button type="button" [class.active]="sub==='services'" (click)="sub='services'"><i class="fa-solid fa-briefcase" style="margin-right:5px"></i>Services</button>
+          <button type="button" [class.active]="sub==='career'"   (click)="sub='career'"><i class="fa-solid fa-chart-line" style="margin-right:5px"></i>Career Stats</button>
+          <button type="button" [class.active]="sub==='sister'"   (click)="sub='sister'"><i class="fa-solid fa-city" style="margin-right:5px"></i>Sister Concern</button>
+          <button type="button" [class.active]="sub==='policy'"   (click)="sub='policy'"><i class="fa-solid fa-scroll" style="margin-right:5px"></i>Policies</button>
+          <button type="button" [class.active]="sub==='contact'"  (click)="sub='contact'"><i class="fa-solid fa-location-dot" style="margin-right:5px"></i>Contact</button>
         </div>
 
         <!-- ABOUT -->
@@ -56,7 +56,16 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
             <div formArrayName="highlights">
               <div *ngFor="let h of aboutHighlights.controls; let i = index" [formGroupName]="i" class="adm-card" style="background:#fff;border:1.5px solid #e5ecf6;margin-bottom:10px">
                 <div class="grid2">
-                  <div class="field"><label>Icon (emoji)</label><input formControlName="icon" maxlength="4"></div>
+                  <div class="field">
+                    <label>FA Icon Class</label>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <input formControlName="icon" placeholder="fa-solid fa-bolt" style="flex:1">
+                      <span *ngIf="h.get('icon')?.value?.startsWith('fa')"
+                            style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:16px">
+                        <i [class]="h.get('icon')?.value" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>
                   <div class="field"><label>Title</label><input formControlName="title"></div>
                 </div>
                 <div class="field"><label>Description</label><textarea formControlName="description" rows="2"></textarea></div>
@@ -87,7 +96,16 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
   <ng-container *ngIf="asGroup(s) as sg">
     <div class="grid2">
       <div class="field"><label>ID</label><input formControlName="id"></div>
-      <div class="field"><label>Icon (emoji)</label><input formControlName="icon" maxlength="4"></div>
+      <div class="field">
+        <label>FA Icon Class</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input formControlName="icon" placeholder="fa-solid fa-bullseye" style="flex:1">
+          <span *ngIf="sg.get('icon')?.value?.startsWith('fa')"
+                style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:16px">
+            <i [class]="sg.get('icon')?.value" aria-hidden="true"></i>
+          </span>
+        </div>
+      </div>
       <div class="field"><label>Title</label><input formControlName="title"></div>
       <div class="field"><label>Lead</label><input formControlName="lead"></div>
     </div>
@@ -162,7 +180,16 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
           <div class="adm-card" style="margin-top:14px">
             <strong style="color:var(--navy);display:block;margin-bottom:10px">Primary Service Card</strong>
             <div class="grid2">
-              <div class="field"><label>Icon</label><input formControlName="primaryServiceIcon" maxlength="4"></div>
+              <div class="field">
+                <label>FA Icon Class</label>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <input formControlName="primaryServiceIcon" placeholder="fa-solid fa-hard-hat" style="flex:1">
+                  <span *ngIf="form.get('sisterCompany.primaryServiceIcon')?.value?.startsWith('fa')"
+                        style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:16px">
+                    <i [class]="form.get('sisterCompany.primaryServiceIcon')?.value" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
               <div class="field"><label>Title</label><input formControlName="primaryServiceTitle"></div>
             </div>
             <div class="field"><label>Lead</label><input formControlName="primaryServiceLead"></div>
@@ -176,7 +203,16 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
             <div formArrayName="serviceCards">
               <div *ngFor="let c of sisterCards.controls; let i = index" [formGroupName]="i" class="adm-card" style="background:#fff;border:1.5px solid #e5ecf6;margin-bottom:10px">
                 <div class="grid2">
-                  <div class="field"><label>Icon</label><input formControlName="icon" maxlength="4"></div>
+                  <div class="field">
+                    <label>FA Icon Class</label>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <input formControlName="icon" placeholder="fa-solid fa-hammer" style="flex:1">
+                      <span *ngIf="c.get('icon')?.value?.startsWith('fa')"
+                            style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:16px">
+                        <i [class]="c.get('icon')?.value" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>
                   <div class="field"><label>Title</label><input formControlName="title"></div>
                 </div>
                 <div class="field"><label>Description</label><textarea formControlName="description" rows="2"></textarea></div>
@@ -200,8 +236,14 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
             </div>
             <div class="field"><label>Industries Title</label><input formControlName="industriesTitle"></div>
             <div formArrayName="industries">
-              <div *ngFor="let it of industries.controls; let i = index" [formGroupName]="i" style="display:grid;grid-template-columns:80px 1fr auto;gap:10px;margin-bottom:8px;align-items:center">
-                <input formControlName="icon" maxlength="4" placeholder="🏭" style="padding:10px;border-radius:10px;border:1.5px solid #e5ecf6">
+              <div *ngFor="let it of industries.controls; let i = index" [formGroupName]="i" style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:8px;align-items:center">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <input formControlName="icon" placeholder="fa-solid fa-industry" style="padding:10px;border-radius:10px;border:1.5px solid #e5ecf6;flex:1">
+                  <span *ngIf="it.get('icon')?.value?.startsWith('fa')"
+                        style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:14px">
+                    <i [class]="it.get('icon')?.value" aria-hidden="true"></i>
+                  </span>
+                </div>
                 <input formControlName="label" placeholder="Industry name" style="padding:10px;border-radius:10px;border:1.5px solid #e5ecf6">
                 <button type="button" class="adm-btn danger" (click)="removeIndustry(i)" style="padding:8px 12px">×</button>
               </div>
@@ -234,7 +276,16 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
             <div formArrayName="items">
               <div *ngFor="let p of policyItems.controls; let i = index" [formGroupName]="i" class="adm-card" style="background:#fff;border:1.5px solid #e5ecf6;margin-bottom:10px">
                 <div class="grid2">
-                  <div class="field"><label>Icon (emoji)</label><input formControlName="icon" maxlength="4"></div>
+                  <div class="field">
+                    <label>FA Icon Class</label>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <input formControlName="icon" placeholder="fa-solid fa-lock" style="flex:1">
+                      <span *ngIf="p.get('icon')?.value?.startsWith('fa')"
+                            style="width:36px;height:36px;background:var(--grad2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-size:16px">
+                        <i [class]="p.get('icon')?.value" aria-hidden="true"></i>
+                      </span>
+                    </div>
+                  </div>
                   <div class="field"><label>Title</label><input formControlName="title"></div>
                   <div class="field"><label>Max Length (truncate after)</label><input type="number" formControlName="maxLength" min="50"></div>
                 </div>
@@ -256,7 +307,6 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
             <div class="field"><label>Address</label><textarea formControlName="address" rows="2"></textarea></div>
             <div class="grid2">
               <div class="field"><label>Office Phone</label><input formControlName="phone"></div>
-              <div class="field"><label>Emergency Phone</label><input formControlName="emergency"></div>
               <div class="field"><label>WhatsApp Number</label><input formControlName="whatsapp"></div>
                <div class="field"><label>LinkedIn url</label><input formControlName="linkdnUrl"></div>
             </div>
@@ -310,7 +360,7 @@ export class TabSiteContentComponent implements OnInit {
     }),
     contactSection: this.fb.group({
       eyebrow: [''], title: [''], sub: [''],
-      address: [''], phone: [''], emergency: [''], email: [''],
+      address: [''], phone: [''], email: [''],
       mapQuery: [''], directionsUrl: [''],
       whatsapp: [''], linkdnUrl: ['']
     })

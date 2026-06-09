@@ -1,19 +1,21 @@
-import { 
-  Component, 
-  OnInit, 
-  computed, 
-  inject, 
-  ViewChildren, 
-  QueryList, 
-  ElementRef, 
-  AfterViewInit, 
-  OnDestroy, 
-  ChangeDetectorRef, 
-  effect 
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  effect
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../../core/services/content.service';
 import { AboutSection } from '../../../core/models';
+import { FaIconPipe } from '../../../shared/pipes/fa-icon.pipe';
 
 const FALLBACK: AboutSection = {
   eyebrow: 'About Us',
@@ -29,7 +31,7 @@ const FALLBACK: AboutSection = {
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FaIconPipe],
   template: `
     <section id="about" class="about" *ngIf="data() as d">
       <div class="container">
@@ -40,7 +42,7 @@ const FALLBACK: AboutSection = {
             <p class="s-sub">{{ d.sub }}</p>
             
             <div class="b" *ngFor="let h of d.highlights; let i = index">
-              <div class="bi" *ngIf="h.icon">{{ h.icon }}</div>
+              <div class="bi" *ngIf="h.icon" [innerHTML]="h.icon | faIcon"></div>
               <div>
                 <h4>{{ h.title }}</h4>
                 

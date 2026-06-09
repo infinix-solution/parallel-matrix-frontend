@@ -19,5 +19,5 @@ import { CommonModule } from '@angular/common';
 })
 export class IntroLoaderComponent implements OnInit {
   letters: string[] = [];
-  ngOnInit() { this.letters = 'PARALLEL MATRIX'.split(''); }
+  ngOnInit() { this.letters = 'Parallel Matrix'.split(''); }
 }

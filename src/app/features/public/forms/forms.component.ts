@@ -6,10 +6,97 @@ import { ToastService } from '../../../core/services/toast.service';
 import { DynamicFormField, FormSection, PageConfig, SectionHeader } from '../../../core/models';
 import { DynFieldComponent } from '../../../shared/dyn-field/dyn-field.component';
 
+type ActiveTab = 'hr' | 'candidate' | null;
+
 @Component({
   selector: 'app-forms',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DynFieldComponent],
+  styles: [`
+    /* ── Tab switcher ── */
+    .form-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .form-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .25s, color .25s, border-color .25s, transform .2s, box-shadow .2s;
+      min-height: 52px;
+      background: #fff;
+      color: var(--navy);
+      border-color: #e5ecf6;
+      box-shadow: 0 4px 12px -4px rgba(10,31,68,.1);
+    }
+    .form-tab:hover {
+      border-color: var(--blue3);
+      color: var(--blue2);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px -8px rgba(24,87,196,.2);
+    }
+    .form-tab.active {
+      background: var(--grad2);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 12px 30px -8px rgba(24,87,196,.5);
+      transform: translateY(-2px);
+    }
+    .form-tab .tab-ic {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .form-tab:not(.active) .tab-ic {
+      background: var(--sky);
+    }
+
+    /* ── Form entry animation ── */
+    .form-enter {
+      animation: formSlideIn .35s cubic-bezier(.2,.9,.3,1) both;
+    }
+    @keyframes formSlideIn {
+      from { opacity: 0; transform: translateY(18px) }
+      to   { opacity: 1; transform: none }
+    }
+
+    /* ── Prompt banner (shown before any tab is selected) ── */
+    .form-prompt {
+      text-align: center;
+      padding: 48px 24px;
+      background: #fff;
+      border-radius: 24px;
+      border: 2px dashed #e5ecf6;
+      color: var(--mute);
+    }
+    .form-prompt .prompt-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .form-prompt h3 {
+      font-size: 20px;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .form-prompt p {
+      font-size: 14.5px;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+  `],
   template: `
     <section id="forms">
       <div class="container">
@@ -23,8 +110,37 @@ import { DynFieldComponent } from '../../../shared/dyn-field/dyn-field.component
           ⚠ Could not load form configuration. Configure it under <a href="/admin" style="font-weight:700">/admin</a> → Page Builder.
         </div>
 
-        <div class="forms-grid" *ngIf="!loading">
-          <form class="form-card reveal in" [formGroup]="hrForm" (ngSubmit)="submitHr()" *ngIf="hrSection && hrSection.fields.length > 0">
+        <div *ngIf="!loading">
+          <!-- ── Tab selector ── -->
+          <div class="form-tabs">
+            <button class="form-tab"
+                    [class.active]="activeTab === 'hr'"
+                    (click)="selectTab('hr')"
+                    *ngIf="hrSection && hrSection.fields.length > 0">
+              <span class="tab-ic">{{ hrSection.icon || '🏢' }}</span>
+              {{ hrSection.title || 'HR Enquiry' }}
+            </button>
+            <button class="form-tab"
+                    [class.active]="activeTab === 'candidate'"
+                    (click)="selectTab('candidate')"
+                    *ngIf="candSection && candSection.fields.length > 0">
+              <span class="tab-ic">{{ candSection.icon || '🎓' }}</span>
+              {{ candSection.title || 'Candidate Application' }}
+            </button>
+          </div>
+
+          <!-- ── Prompt before selection ── -->
+          <div class="form-prompt reveal in" *ngIf="!activeTab">
+            <div class="prompt-icon">👆</div>
+            <h3>Select a tab to get started</h3>
+            <p>Choose <strong>HR Enquiry</strong> if you're hiring, or <strong>Candidate Application</strong> if you're looking for opportunities. We'll respond within 24 hours.</p>
+          </div>
+
+          <!-- ── HR Form ── -->
+          <form class="form-card form-enter"
+                [formGroup]="hrForm"
+                (ngSubmit)="submitHr()"
+                *ngIf="activeTab === 'hr' && hrSection">
             <div class="top">
               <div class="ic">{{ hrSection.icon || '🏢' }}</div>
               <div>
@@ -41,7 +157,11 @@ import { DynFieldComponent } from '../../../shared/dyn-field/dyn-field.component
             </button>
           </form>
 
-          <form class="form-card reveal in" [formGroup]="candForm" (ngSubmit)="submitCand()" *ngIf="candSection && candSection.fields.length > 0">
+          <!-- ── Candidate Form ── -->
+          <form class="form-card form-enter"
+                [formGroup]="candForm"
+                (ngSubmit)="submitCand()"
+                *ngIf="activeTab === 'candidate' && candSection">
             <div class="top">
               <div class="ic">{{ candSection.icon || '🎓' }}</div>
               <div>
@@ -73,11 +193,12 @@ export class FormsComponent implements OnInit {
   candLoading = false;
   loading = true;
   loadError = false;
+  activeTab: ActiveTab = null;
 
   header: SectionHeader = {
     eyebrow: 'Get in touch',
     title: 'Two doors. One mission.',
-    sub: "Hiring? Applying? Pick your form and we'll respond within 24 hours."
+    sub: "Hiring? Applying? Pick your tab and we'll respond within 24 hours."
   };
 
   hrSection: FormSection | null = null;
@@ -110,6 +231,10 @@ export class FormsComponent implements OnInit {
     });
   }
 
+  selectTab(tab: ActiveTab) {
+    this.activeTab = this.activeTab === tab ? null : tab;
+  }
+
   private buildForm(fields: DynamicFormField[]): FormGroup {
     const group: { [k: string]: any } = {};
     for (const f of fields) {
@@ -124,7 +249,6 @@ export class FormsComponent implements OnInit {
         try { validators.push(Validators.pattern(new RegExp(f.pattern))); }
         catch (e) { console.warn('Invalid regex pattern for', f.id); }
       }
-      // File fields start as null (not empty string)
       const initial = f.type === 'file' ? null : '';
       group[f.id] = [initial, validators];
     }
@@ -141,7 +265,7 @@ export class FormsComponent implements OnInit {
     const fd = this.buildFormData(this.hrForm, this.hrSection!.fields);
     this.api.submitHrEnquiry(fd).subscribe({
       next: () => {
-        this.toast.show('Enquiry sent — we\u2019ll respond within 24 hours.');
+        this.toast.show('Enquiry sent — we’ll respond within 24 hours.');
         this.hrForm.reset();
         this.hrLoading = false;
       },
@@ -167,10 +291,6 @@ export class FormsComponent implements OnInit {
     });
   }
 
-  /**
-   * Build FormData honoring file fields. Files are appended under their field id
-   * (and also under 'resume' for backward-compat with the existing backend route).
-   */
   private buildFormData(form: FormGroup, fields: DynamicFormField[]): FormData {
     const fd = new FormData();
     for (const f of fields) {
@@ -178,7 +298,6 @@ export class FormsComponent implements OnInit {
       if (v == null || v === '') continue;
       if (f.type === 'file' && v instanceof File) {
         fd.append(f.id, v, v.name);
-        // Back-compat: existing /api/enquiries/candidate route expects 'resume'
         if (f.id !== 'resume') fd.append('resume', v, v.name);
       } else {
         fd.append(f.id, String(v));

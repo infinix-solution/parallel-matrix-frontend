@@ -31,10 +31,6 @@ import { ContactSection } from '../../../core/models';
               <div class="ic">\u{1F4DE}</div>
               <div><div class="t">Office Contact</div><div class="v">{{ d.phone }}</div></div>
             </div>
-            <div class="addr-row" *ngIf="d.emergency">
-              <div class="ic">\u{1F6A8}</div>
-              <div><div class="t">Emergency</div><div class="v">{{ d.emergency }}</div></div>
-            </div>
             <div class="addr-row" *ngIf="d.email">
               <div class="ic">\u2709</div>
               <div><div class="t">Email</div><div class="v">{{ d.email }}</div></div>

@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, OnDestroy, AfterViewChecked,
+  Component, OnInit, OnDestroy, AfterViewChecked, ChangeDetectionStrategy,
   computed, inject, signal, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,51 @@ function easeOutQuart(t: number): number { return 1 - Math.pow(1 - t, 4); }
 @Component({
   selector: 'app-career',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
+  styles: [`
+    .career-graph-wrap {
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+    .career-graph-label {
+      font-size: 12px; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: #bcd0ff; margin-bottom: 14px;
+    }
+    .career-graph-img-wrap {
+      border-radius: 16px; overflow: hidden;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      min-height: 180px; position: relative;
+    }
+    .career-graph-shimmer {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,.04) 25%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.04) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s infinite;
+    }
+    @keyframes shimmer { to { background-position: -200% 0 } }
+    .career-graph-img {
+      width: 100%; display: block;
+      opacity: 0; transition: opacity .5s ease;
+    }
+    .career-graph-img-wrap.loaded .career-graph-img { opacity: 1; }
+    .career-graph-fallback {
+      display: flex; align-items: flex-end; gap: 12px;
+      padding: 24px 28px; height: 180px; justify-content: center;
+    }
+    .cgf-bar {
+      flex: 1; max-width: 48px; border-radius: 8px 8px 0 0;
+      background: rgba(255,255,255,.18);
+      display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 6px; font-size: 10px; color: rgba(255,255,255,.6);
+      font-weight: 700; letter-spacing: .04em;
+      animation: barGrow .9s cubic-bezier(.2,.9,.3,1) both;
+    }
+    .cgf-bar--accent { background: linear-gradient(180deg,#f0d97a,#c9a227); color: #0a1f44; }
+    @keyframes barGrow { from { transform: scaleY(0); transform-origin: bottom } to { transform: scaleY(1) } }
+  `],
   template: `
     <section id="career" *ngIf="data() as d">
       <div class="container">
@@ -31,6 +75,33 @@ function easeOutQuart(t: number): number { return 1 - Math.pow(1 - t, 4); }
             <div *ngFor="let s of displayStats(); let i = index" class="stat">
               <div class="n">{{ s }}</div>
               <div class="l">{{ statLabels()[i] }}</div>
+            </div>
+          </div>
+
+          <!-- Career growth graph visual -->
+          <div class="career-graph-wrap">
+            <div class="career-graph-label">
+              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>&nbsp;Growth Trajectory
+            </div>
+            <div class="career-graph-img-wrap" [class.loaded]="graphLoaded()">
+              <div class="career-graph-shimmer" *ngIf="!graphLoaded()"></div>
+              <img
+                src="assets/career-growth.gif"
+                alt="Career growth graph"
+                class="career-graph-img"
+                loading="lazy"
+                (load)="graphLoaded.set(true)"
+                (error)="onGraphError($event)"
+                *ngIf="!graphError()"
+              >
+              <!-- Fallback CSS chart when GIF is unavailable -->
+              <div class="career-graph-fallback" *ngIf="graphError()">
+                <div class="cgf-bar" style="height:35%"><span>Y1</span></div>
+                <div class="cgf-bar" style="height:55%"><span>Y2</span></div>
+                <div class="cgf-bar" style="height:70%"><span>Y3</span></div>
+                <div class="cgf-bar" style="height:88%"><span>Y4</span></div>
+                <div class="cgf-bar cgf-bar--accent" style="height:100%"><span>Now</span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -50,6 +121,13 @@ export class CareerComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   displayStats = signal<string[]>([]);
   statLabels   = signal<string[]>([]);
+  graphLoaded  = signal(false);
+  graphError   = signal(false);
+
+  onGraphError(e: Event) {
+    (e.target as HTMLImageElement).style.display = 'none';
+    this.graphError.set(true);
+  }
 
   private observer?: IntersectionObserver;
   private animating        = false;
