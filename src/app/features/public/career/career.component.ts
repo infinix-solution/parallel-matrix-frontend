@@ -1,12 +1,17 @@
-import {
-  Component, OnInit, OnDestroy, AfterViewChecked, ChangeDetectionStrategy,
-  computed, inject, signal, ElementRef
+import { 
+  Component, OnInit, OnDestroy, ChangeDetectionStrategy, 
+  computed, inject, signal, ElementRef, ViewChild, effect, untracked 
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../../core/services/content.service';
 import { CareerSection } from '../../../core/models';
 
-interface ParsedStat { numeric: number; suffix: string; prefix: string; }
+// ─── MATHEMATICAL & PARSING UTILITIES ───
+interface ParsedStat { 
+  numeric: number; 
+  suffix: string; 
+  prefix: string; 
+}
 
 function parseStat(raw: string): ParsedStat {
   const m = raw.trim().match(/^([^\d]*)(\d[\d,]*)([^\d]*)$/);
@@ -14,7 +19,9 @@ function parseStat(raw: string): ParsedStat {
   return { numeric: parseInt(m[2].replace(/,/g, ''), 10), prefix: m[1] || '', suffix: m[3] || '' };
 }
 
-function easeOutQuart(t: number): number { return 1 - Math.pow(1 - t, 4); }
+function easeOutQuart(t: number): number { 
+  return 1 - Math.pow(1 - t, 4); 
+}
 
 @Component({
   selector: 'app-career',
@@ -22,96 +29,210 @@ function easeOutQuart(t: number): number { return 1 - Math.pow(1 - t, 4); }
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   styles: [`
-    .career-graph-wrap {
-      margin-top: 36px;
+    :host {
+      display: block;
+      background: #0a1f44;
+      color: #ffffff;
+    }
+
+    .container {
+      width: min(100%, 1280px);
+      margin: 0 auto;
+      padding: clamp(40px, 6vw, 80px) 20px;
+    }
+
+    /* ── DUAL LAYER SHOWCASE BACKDROP ── */
+    .career-showcase-wrapper {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #0e254e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 40px 90px -30px rgba(4, 12, 30, 0.5);
+      min-height: 380px;
+      display: grid;
+      align-items: center;
+    }
+
+    /* Layer 1: Animated Asset Backdrop Canvas */
+    .showcase-bg-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .showcase-bg-canvas img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.22; /* Retains clarity of the graph trend without over-powering typography */
+      filter: saturate(1.2) contrast(1.1);
+      transition: opacity 0.4s ease;
+    }
+
+    /* Gradient Mask creating deep contrast for overlapping foreground copy text */
+    .showcase-bg-canvas::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0a1f44 30%, rgba(10, 31, 68, 0.85) 70%, rgba(20, 50, 110, 0.4) 100%);
+      z-index: 2;
+    }
+
+    /* Layer 2: Transparent Foreground Interface Panel */
+    .career-foreground-panel {
+      position: relative;
+      z-index: 3;
+      padding: clamp(24px, 5vw, 56px);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #bcd0ff;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: #ffffff;
+    }
+
+    .lead {
+      margin: 0 0 36px;
+      color: #94a3b8;
+      font-size: clamp(15px, 1.2vw, 17px);
+      line-height: 1.6;
+      max-width: 54ch;
+    }
+
+    /* ── STATS TRACK ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
       padding-top: 28px;
-      border-top: 1px solid rgba(255,255,255,.12);
     }
-    .career-graph-label {
-      font-size: 12px; font-weight: 700; letter-spacing: .18em;
-      text-transform: uppercase; color: #bcd0ff; margin-bottom: 14px;
+
+    .stat .n {
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 800;
+      color: #f0d97a;
+      line-height: 1;
+      margin-bottom: 4px;
+      font-feature-settings: "tnum";
     }
-    .career-graph-img-wrap {
-      border-radius: 16px; overflow: hidden;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      min-height: 180px; position: relative;
+
+    .stat .l {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    .career-graph-shimmer {
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,.04) 25%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.04) 75%);
+
+    /* ── SHIMMER ENGINE ── */
+    .shimmer-mask {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      background: linear-gradient(90deg, rgba(14,37,78,0) 0%, rgba(255,255,255,0.04) 50%, rgba(14,37,78,0) 100%);
       background-size: 200% 100%;
-      animation: shimmer 1.6s infinite;
+      animation: moveShimmer 1.5s infinite linear;
     }
-    @keyframes shimmer { to { background-position: -200% 0 } }
-    .career-graph-img {
-      width: 100%; display: block;
-      opacity: 0; transition: opacity .5s ease;
+
+    @keyframes moveShimmer { to { background-position: -200% 0; } }
+
+    /* ── FALLBACK BACKUP TIMELINE CHART ── */
+    .career-fallback-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 40px;
+      opacity: 0.07;
+      pointer-events: none;
     }
-    .career-graph-img-wrap.loaded .career-graph-img { opacity: 1; }
-    .career-graph-fallback {
-      display: flex; align-items: flex-end; gap: 12px;
-      padding: 24px 28px; height: 180px; justify-content: center;
+
+    .fallback-bar {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 4px 4px 0 0;
+      transform-origin: bottom;
+      animation: graphGrow 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    .cgf-bar {
-      flex: 1; max-width: 48px; border-radius: 8px 8px 0 0;
-      background: rgba(255,255,255,.18);
-      display: flex; align-items: flex-end; justify-content: center;
-      padding-bottom: 6px; font-size: 10px; color: rgba(255,255,255,.6);
-      font-weight: 700; letter-spacing: .04em;
-      animation: barGrow .9s cubic-bezier(.2,.9,.3,1) both;
-    }
-    .cgf-bar--accent { background: linear-gradient(180deg,#f0d97a,#c9a227); color: #0a1f44; }
-    @keyframes barGrow { from { transform: scaleY(0); transform-origin: bottom } to { transform: scaleY(1) } }
+    
+    .fallback-bar.accent { background: #f0d97a; }
+
+    @keyframes graphGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
   `],
   template: `
     <section id="career" *ngIf="data() as d">
       <div class="container">
-        <div class="career">
-          <span class="eyebrow" style="color:#bcd0ff">{{ d.eyebrow }}</span>
-          <h2>{{ d.title }}</h2>
-          <p class="lead">{{ d.lead }}</p>
-          <div class="stats">
-            <div *ngFor="let s of displayStats(); let i = index" class="stat">
-              <div class="n">{{ s }}</div>
-              <div class="l">{{ statLabels()[i] }}</div>
-            </div>
+        
+        <div #careerBlock class="career-showcase-wrapper">
+          <div class="shimmer-mask" *ngIf="!graphLoaded() && !graphError()"></div>
+          
+          <div class="showcase-bg-canvas" *ngIf="!graphError()">
+            <img
+              [src]="gifUrl()"
+              alt="Background growth metrics graph"
+              (load)="graphLoaded.set(true)"
+              (error)="graphError.set(true)"
+              [style.opacity]="graphLoaded() ? '0.22' : '0'"
+              loading="lazy"
+            />
           </div>
 
-          <!-- Career growth graph visual -->
-          <div class="career-graph-wrap">
-            <div class="career-graph-label">
-              <i class="fa-solid fa-chart-line" aria-hidden="true"></i>&nbsp;Growth Trajectory
-            </div>
-            <div class="career-graph-img-wrap" [class.loaded]="graphLoaded()">
-              <div class="career-graph-shimmer" *ngIf="!graphLoaded()"></div>
-              <img
-                src="assets/career-growth.gif"
-                alt="Career growth graph"
-                class="career-graph-img"
-                loading="lazy"
-                (load)="graphLoaded.set(true)"
-                (error)="onGraphError($event)"
-                *ngIf="!graphError()"
-              >
-              <!-- Fallback CSS chart when GIF is unavailable -->
-              <div class="career-graph-fallback" *ngIf="graphError()">
-                <div class="cgf-bar" style="height:35%"><span>Y1</span></div>
-                <div class="cgf-bar" style="height:55%"><span>Y2</span></div>
-                <div class="cgf-bar" style="height:70%"><span>Y3</span></div>
-                <div class="cgf-bar" style="height:88%"><span>Y4</span></div>
-                <div class="cgf-bar cgf-bar--accent" style="height:100%"><span>Now</span></div>
+          <div class="career-fallback-canvas" *ngIf="graphError()">
+            <div class="fallback-bar" style="height: 25%"></div>
+            <div class="fallback-bar" style="height: 45%"></div>
+            <div class="fallback-bar" style="height: 65%"></div>
+            <div class="fallback-bar accent" style="height: 90%"></div>
+          </div>
+
+          <div class="career-foreground-panel">
+            <span class="eyebrow">{{ d.eyebrow }}</span>
+            <h2>{{ d.title }}</h2>
+            <p class="lead">{{ d.lead }}</p>
+            
+            <div class="stats">
+              <div *ngFor="let label of statLabels(); let i = index" class="stat">
+                <div class="n">{{ displayStats()[i] || '0' }}</div>
+                <div class="l">{{ label }}</div>
               </div>
             </div>
           </div>
+
         </div>
+
       </div>
     </section>
   `
 })
-export class CareerComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class CareerComponent implements OnInit, OnDestroy {
   private content = inject(ContentService);
-  private el     = inject(ElementRef);
+
+  // Capitalized ViewChild setter supports multi-version structural bindings safely
+  @ViewChild('careerBlock', { static: false }) set careerBlockContent(content: ElementRef<HTMLElement>) {
+    if (content) {
+      this.attachIntersectionObserver(content.nativeElement);
+    }
+  }
 
   data = computed<CareerSection | null>(() => this.content.content()?.careerSection ?? null);
 
@@ -123,81 +244,69 @@ export class CareerComponent implements OnInit, AfterViewChecked, OnDestroy {
   statLabels   = signal<string[]>([]);
   graphLoaded  = signal(false);
   graphError   = signal(false);
-
-  onGraphError(e: Event) {
-    (e.target as HTMLImageElement).style.display = 'none';
-    this.graphError.set(true);
-  }
+  gifUrl       = signal<string>('assets/career-growth.gif');
 
   private observer?: IntersectionObserver;
-  private animating        = false;
-  private observerAttached = false;
+  private isCounting = false;
 
-  ngOnInit() { this.content.ensureLoaded().subscribe(); }
+  constructor() {
+    effect(() => {
+      const currentData = this.data();
+      if (!currentData?.stats) return;
 
-  /**
-   * Fires after EVERY change-detection cycle, including after *ngIf renders
-   * new nodes. This is the only reliable hook to detect when .career appears.
-   *
-   * The three guards make each call trivially cheap after the first success.
-   */
-  ngAfterViewChecked() {
-    if (this.observerAttached) return;                 // done — fast exit
-    if (!this.data()?.stats?.length) return;           // data not ready
-    const block = (this.el.nativeElement as HTMLElement)
-      .querySelector<HTMLElement>('.career');
-    if (!block) return;                                // DOM not ready
-
-    // Mark attached synchronously so re-entrant calls are no-ops.
-    this.observerAttached = true;
-
-    // Defer signal writes to avoid ExpressionChangedAfterItHasBeenChecked.
-    // Promise.resolve() is a microtask — zone.js will schedule one more CD
-    // cycle after this, which picks up the updated displayStats/statLabels.
-    Promise.resolve().then(() => {
-      const d = this.data();
-      if (!d) return;
-      this.statLabels.set(d.stats.map(s => s.label));
-      this.displayStats.set(
-        this.parsedStats().map(p => p.prefix + '0' + p.suffix)
-      );
+      untracked(() => {
+        this.statLabels.set(currentData.stats.map(s => s.label));
+        this.displayStats.set(this.parsedStats().map(p => p.prefix + '0' + p.suffix));
+        
+        // Cache buster enforces fresh asset rendering frames on router changes
+        this.gifUrl.set(`assets/career-growth.gif?t=${Date.now()}`);
+      });
     });
-
-    this.attachObserver(block);
   }
 
-  ngOnDestroy() { this.observer?.disconnect(); }
+  ngOnInit() {
+    this.content.ensureLoaded().subscribe();
+  }
 
-  private attachObserver(block: HTMLElement) {
+  ngOnDestroy() {
+    this.observer?.disconnect();
+  }
+
+  private attachIntersectionObserver(element: HTMLElement) {
+    this.observer?.disconnect();
     this.observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !this.animating) {
-          this.animating = true;
-          this.runCountUp();
+        if (entry.isIntersecting && !this.isCounting) {
+          this.isCounting = true;
+          this.runCountUpSequence();
           this.observer?.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
-    this.observer.observe(block);
+    this.observer.observe(element);
   }
 
-  private runCountUp() {
+  private runCountUpSequence() {
     const parsed = this.parsedStats();
     if (!parsed.length) return;
 
-    const DURATION = 1500;
-    const start    = performance.now();
+    const DURATION = 1400;
+    const startTime = performance.now();
 
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / DURATION, 1);
-      const e = easeOutQuart(t);
+    const frame = (now: number) => {
+      const elapsed = Math.min((now - startTime) / DURATION, 1);
+      const ease = easeOutQuart(elapsed);
+
       this.displayStats.set(
-        parsed.map(p => p.prefix + Math.round(p.numeric * e).toLocaleString() + p.suffix)
+        parsed.map(p => p.prefix + Math.round(p.numeric * ease).toLocaleString() + p.suffix)
       );
-      if (t < 1) requestAnimationFrame(tick);
+
+      if (elapsed < 1) {
+        requestAnimationFrame(frame);
+      }
     };
 
-    requestAnimationFrame(tick);
+    requestAnimationFrame(frame);
   }
 }

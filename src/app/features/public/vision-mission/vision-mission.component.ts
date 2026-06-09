@@ -52,6 +52,23 @@ import { Component } from '@angular/core';
       margin-bottom: 20px;
       position: relative;
     }
+    
+    /* Center-aligned global styling token match */
+    .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(240, 217, 122, 0.15);
+      color: #eab308;
+      font-size: clamp(10px, 1vw, 11px);
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
     .vm-eyebrow {
       font-size: 11px; font-weight: 700;
       letter-spacing: .28em; text-transform: uppercase;
@@ -88,14 +105,13 @@ import { Component } from '@angular/core';
   template: `
     <section class="vm-section" id="vision-mission">
       <div class="container">
-        <div class="s-head reveal in" style="margin-bottom:40px">
-          <span class="eyebrow">Our Purpose</span>
+        <div class="s-head reveal in" style="margin-bottom:40px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <span class="eyebrow-tag">Our Purpose</span>
           <h2 class="s-title">Our Vision and Mission</h2>
           <p class="s-sub">The principles that guide every placement, every partnership, every decision we make.</p>
         </div>
 
         <div class="vm-grid">
-          <!-- Vision -->
           <div class="vm-card vm-vision reveal in">
             <div class="vm-icon">🔭</div>
             <div class="vm-eyebrow">Vision</div>
@@ -108,7 +124,6 @@ import { Component } from '@angular/core';
             </p>
           </div>
 
-          <!-- Mission -->
           <div class="vm-card vm-mission reveal in">
             <div class="vm-icon">🎯</div>
             <div class="vm-eyebrow">Mission</div>

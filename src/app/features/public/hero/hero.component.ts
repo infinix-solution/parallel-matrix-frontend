@@ -28,7 +28,7 @@ import { environment } from '../../../../environments/environment';
         </div>
       </div>
     </section>
-  `
+  `,
 })
 export class HeroComponent implements OnInit, OnDestroy {
   private api = inject(ApiService);

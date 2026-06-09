@@ -12,7 +12,7 @@ import { ContactSection } from '../../../core/models';
     <section id="contact" style="background:linear-gradient(180deg,var(--bg),#eef2f9)" *ngIf="data() as d">
       <div class="container">
         <div class="s-head reveal in">
-          <span class="eyebrow">{{ d.eyebrow }}</span>
+          <span class="eyebrow-tag">{{ d.eyebrow }}</span>
           <h2 class="s-title">{{ d.title }}</h2>
           <p class="s-sub">{{ d.sub }}</p>
         </div>
@@ -41,7 +41,24 @@ import { ContactSection } from '../../../core/models';
         </div>
       </div>
     </section>
-  `
+  `,
+  styles: [`
+
+   .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(240, 217, 122, 0.15);
+      color: #eab308;
+      font-size: clamp(10px, 1vw, 11px);
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 20px;
+    }`
+    ]
 })
 export class ContactComponent implements OnInit {
   private content = inject(ContentService);

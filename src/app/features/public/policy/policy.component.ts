@@ -17,8 +17,8 @@ interface PolWithState {
   template: `
     <section id="policy" style="background:linear-gradient(180deg,#eef2f9,var(--bg))" *ngIf="data() as d">
       <div class="container">
-        <div class="s-head reveal in">
-          <span class="eyebrow">{{ d.eyebrow }}</span>
+          <div class="s-head reveal in" style="margin-bottom:40px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <span class="eyebrow-tag">{{ d.eyebrow }}</span>
           <h2 class="s-title">{{ d.title }}</h2>
         </div>
         <div class="pol-grid">
@@ -37,7 +37,24 @@ interface PolWithState {
         </div>
       </div>
     </section>
-  `
+  `,
+  styles: [`
+    .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(240, 217, 122, 0.15);
+      color: #eab308;
+      font-size: clamp(10px, 1vw, 11px);
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+    `]
+
 })
 export class PolicyComponent implements OnInit {
   private content = inject(ContentService);

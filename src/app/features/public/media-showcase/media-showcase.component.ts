@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, OnDestroy, inject, signal, ElementRef, AfterViewInit
+  Component, OnInit, OnDestroy, inject, signal, ElementRef, AfterViewInit, ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -7,7 +7,6 @@ import { environment } from '../../../../environments/environment';
 import { ApiResponse, SliderImage } from '../../../core/models';
 import { ContentService } from '../../../core/services/content.service';
 
-/** Local fallback images — used when the API returns no slides */
 const FALLBACK_IMAGES: string[] = [
   'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80',
   'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80',
@@ -22,113 +21,134 @@ const FALLBACK_IMAGES: string[] = [
 @Component({
   selector: 'app-media-showcase',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
     <section class="ms-section" #sectionRef>
-      <div class="ms-eyebrow fade-in-up">
-        <span class="eyebrow">Our Work &amp; Culture</span>
+      <div class="ms-header-block">
+        <span class="eyebrow-tag">Our Work &amp; Culture</span>
       </div>
 
       <div class="ms-track-wrapper" *ngIf="images().length">
-        <!-- Two identical strips for seamless loop -->
         <div class="ms-track">
+          
           <div class="ms-slide" *ngFor="let img of images()">
-            <img [src]="img" alt="Showcase" loading="lazy">
+            <img [src]="img" alt="Showcase Image" loading="lazy">
           </div>
-          <!-- Duplicate for infinite loop -->
-          <div class="ms-slide" *ngFor="let img of images()">
-            <img [src]="img" alt="Showcase" loading="lazy">
+          
+          <div class="ms-slide" *ngFor="let img of images()" aria-hidden="true">
+            <img [src]="img" alt="Showcase Image Duplicate" loading="lazy">
           </div>
+          
         </div>
       </div>
 
-      <!-- Gradient edge fades -->
-      <div class="ms-fade-left"></div>
-      <div class="ms-fade-right"></div>
+      <div class="ms-fade-mask ms-fade-left"></div>
+      <div class="ms-fade-mask ms-fade-right"></div>
     </section>
   `,
   styles: [`
-    .ms-section {
-      padding: 48px 0;
-      overflow: hidden;
-      position: relative;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .8s cubic-bezier(.2,.9,.3,1), transform .8s cubic-bezier(.2,.9,.3,1);
-    }
-    .ms-section.visible {
-      opacity: 1;
-      transform: none;
-    }
-    .ms-eyebrow {
-      text-align: center;
-      margin-bottom: 28px;
+    :host {
+      display: block;
+      --navy: #0a1f44;
+      --gold-light: rgba(201, 162, 39, 0.1);
+      --bg-surface: #ffffff; /* Matches your white page background seamlessly */
+      --track-gap: 20px;
     }
 
-    /* ===== Marquee Track ===== */
-    .ms-track-wrapper {
+    .ms-section {
+      padding: 54px 0;
       overflow: hidden;
-      width: 100%;
+      position: relative;
+      background: var(--bg-surface);
     }
+
+    /* ── HEADER STYLING ── */
+    .ms-header-block {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    /* ── BUTTERY SMOOTH LIQUID MARQUEE ENGINE ── */
+    .ms-track-wrapper {
+      display: flex;
+      width: max-content;
+      overflow: hidden;
+    }
+
     .ms-track {
       display: flex;
-      gap: 16px;
-      width: max-content;
-      animation: msMarquee 40s linear infinite;
+      gap: var(--track-gap);
+      /* 45 seconds creates a slow, elegant, premium glide */
+      animation: smoothGlider 45s linear infinite; 
       will-change: transform;
     }
-    .ms-track:hover {
+
+    /* Soft pause behavior on interaction */
+    .ms-track-wrapper:hover .ms-track {
       animation-play-state: paused;
     }
-    @keyframes msMarquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+
+    /* translate3d tells the browser to process animation frames via GPU hardware acceleration */
+    @keyframes smoothGlider {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        transform: translate3d(calc(-100% - var(--track-gap)), 0, 0);
+      }
     }
 
-    /* ===== Individual slides ===== */
+    /* ── SLIDE CARDS ── */
     .ms-slide {
       flex-shrink: 0;
-      width: 320px;
-      height: 200px;
-      border-radius: 20px;
+      width: clamp(250px, 20vw, 340px);
+      aspect-ratio: 16 / 10;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 12px 32px -10px rgba(10,31,68,.18);
-      position: relative;
-      transition: transform .4s cubic-bezier(.2,.9,.3,1), box-shadow .4s ease;
+      box-shadow: 0 8px 24px rgba(10, 31, 68, 0.07);
+      background: #f8fafc;
+      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
     }
+
+    /* Clean subtle micro-raise on hover */
     .ms-slide:hover {
-      transform: scale(1.04) translateY(-4px);
-      box-shadow: 0 24px 48px -12px rgba(10,31,68,.28);
+      transform: translateY(-4px);
     }
+
     .ms-slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform .6s ease;
       display: block;
+      transition: transform 0.6s ease;
     }
-    .ms-slide:hover img { transform: scale(1.06); }
 
-    /* Edge gradient fades */
-    .ms-fade-left, .ms-fade-right {
+    /* ── GRADIENT OVERLAY SHIELDS ── */
+    .ms-fade-mask {
       position: absolute;
-      top: 0; bottom: 0;
-      width: 120px;
-      z-index: 2;
+      top: 0;
+      bottom: 0;
+      width: clamp(60px, 12vw, 180px);
+      z-index: 5;
       pointer-events: none;
     }
-    .ms-fade-left  { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
-    .ms-fade-right { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
-
-    @media (max-width: 560px) {
-      .ms-slide { width: 220px; height: 140px; border-radius: 14px; }
-      .ms-fade-left, .ms-fade-right { width: 60px; }
+    
+    .ms-fade-left { 
+      left: 0; 
+      background: linear-gradient(to right, var(--bg-surface) 15%, transparent 100%); 
     }
+    
+    .ms-fade-right { 
+      right: 0; 
+      background: linear-gradient(to left, var(--bg-surface) 15%, transparent 100%); 
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .ms-track { animation: none; }
-      .ms-section { opacity: 1; transform: none; transition: none; }
     }
-  `]
+  `
+  ]
 })
 export class MediaShowcaseComponent implements OnInit, AfterViewInit, OnDestroy {
   private http = inject(HttpClient);
@@ -160,7 +180,7 @@ export class MediaShowcaseComponent implements OnInit, AfterViewInit, OnDestroy 
           this.observer?.disconnect();
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.05 }
     );
     this.observer.observe(this.el.nativeElement);
   }

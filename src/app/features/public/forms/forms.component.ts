@@ -13,6 +13,21 @@ type ActiveTab = 'hr' | 'candidate' | null;
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DynFieldComponent],
   styles: [`
+
+   .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(240, 217, 122, 0.15);
+      color: #eab308;
+      font-size: clamp(10px, 1vw, 11px);
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
     /* ── Tab switcher ── */
     .form-tabs {
       display: flex;
@@ -101,7 +116,7 @@ type ActiveTab = 'hr' | 'candidate' | null;
     <section id="forms">
       <div class="container">
         <div class="s-head reveal in">
-          <span class="eyebrow">{{ header.eyebrow }}</span>
+          <span class="eyebrow-tag">{{ header.eyebrow }}</span>
           <h2 class="s-title">{{ header.title }}</h2>
           <p class="s-sub">{{ header.sub }}</p>
         </div>
