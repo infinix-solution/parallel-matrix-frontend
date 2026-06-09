@@ -1,15 +1,15 @@
 import {
-  Component, OnInit, OnDestroy, inject, signal, computed, NgZone, ChangeDetectionStrategy
+  Component, OnInit, OnDestroy, inject, signal, NgZone, ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
 const FALLBACK_IMAGES = [
-  { url: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80', caption: 'Building careers with purpose' },
-  { url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80', caption: 'Every role, a new chapter' },
-  { url: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80', caption: 'Your ambition, our network' },
-  { url: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80', caption: 'Talent meets opportunity' },
+  { url: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80', caption: 'Building careers with clear structural purpose.' },
+  { url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80', caption: 'Every role represents a new milestone chapter.' },
+  { url: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80', caption: 'Connecting corporate ambition with a global network.' },
+  { url: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80', caption: 'Where elite industry talent meets true opportunity.' },
 ];
 
 @Component({
@@ -18,168 +18,313 @@ const FALLBACK_IMAGES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   styles: [`
-    :host { display: block; }
+    :host {
+      display: block;
+      --pm-navy: #0a1f44;
+      --pm-gold: #c9a227;
+      --pm-gold-light: rgba(201, 162, 39, 0.12);
+      --pm-text-mute: #64748b;
+    }
 
-    .cslider-section {
-      padding: 80px 0;
-      background: var(--pm-grad);
-      color: #fff;
+    .career-section {
+      position: relative;
+      padding: clamp(40px, 7vw, 110px) 0;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f9fd 100%);
       overflow: hidden;
-      position: relative;
-    }
-    .cslider-section::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 80px;
-      background: linear-gradient(180deg, transparent, rgba(10,18,38,.3));
-      pointer-events: none;
     }
 
-    .cslider-head {
-      text-align: center;
-      margin-bottom: 44px;
-      position: relative;
+    .career-container {
+      width: min(100%, 1280px);
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 32px);
+    }
+
+    .career-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(24px, 5vw, 70px);
+      align-items: center;
+
+      @media (min-width: 1024px) {
+        grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+      }
+    }
+
+    /* ── Typography Column ── */
+    .career-content {
+      display: flex;
+      flex-direction: column;
       z-index: 2;
+      
+      @media (max-width: 1023px) {
+        text-align: center;
+        align-items: center;
+      }
     }
-    .cslider-eyebrow {
-      display: inline-block;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: .3em; text-transform: uppercase;
-      color: #bcd0ff; margin-bottom: 12px;
+
+    .career-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--pm-gold-light);
+      color: #927314;
+      font-size: clamp(10px, 1vw, 11px);
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: clamp(12px, 2vw, 20px);
     }
-    .cslider-title {
+
+    .career-title {
       font-family: 'Sora', sans-serif;
-      font-size: clamp(26px, 3.5vw, 40px);
-      font-weight: 800; margin: 0 0 12px;
-      color: #fff;
-    }
-    .cslider-sub {
-      color: #cfd9f0; font-size: 15px;
-      max-width: 520px; margin: 0 auto;
-      line-height: 1.6;
+      font-size: clamp(1.75rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--pm-navy);
+      margin: 0 0 14px 0;
+      letter-spacing: -0.03em;
     }
 
-    /* ── Carousel ── */
-    .cslider-track-wrap {
-      position: relative;
-      border-radius: 24px;
-      overflow: hidden;
-      aspect-ratio: 21/9;
-      max-height: 440px;
-      box-shadow: 0 30px 70px -20px rgba(0,0,0,.5);
-      z-index: 2;
+    .career-title span {
+      background: linear-gradient(90deg, #1857c4, var(--pm-gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    .cslider-slide {
+
+    .career-description {
+      font-size: clamp(14px, 1.1vw, 16.5px);
+      line-height: 1.55;
+      color: var(--pm-text-mute);
+      margin: 0 0 clamp(20px, 3vw, 32px) 0;
+      max-width: 540px;
+    }
+
+    /* ── Mobile-Optimized Swiper Tabs ── */
+    .career-steps {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      margin-top: 4px;
+      
+      @media (max-width: 1023px) {
+        /* CHANGED: Hide the workspace step tabs on mobile/tablet views layout entirely */
+        display: none !important;
+      }
+    }
+
+    .career-step-pill {
+      padding: 10px 18px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid rgba(10, 31, 68, 0.07);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--pm-navy);
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(10, 31, 68, 0.02);
+      white-space: nowrap;
+      scroll-snap-align: start;
+      transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .career-step-pill.active {
+      background: var(--pm-navy);
+      color: #ffffff;
+      box-shadow: 0 8px 18px -6px rgba(10, 31, 68, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* ── Visual Frame Column ── */
+    .career-visual-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .career-display-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: clamp(24px, 4vw, 48px) 14px clamp(24px, 4vw, 48px) 14px;
+      overflow: hidden;
+      box-shadow: 0 25px 55px -20px rgba(10, 31, 68, 0.2);
+      background: #020813;
+
+      @media (min-width: 640px) {
+        aspect-ratio: 16/10;
+      }
+    }
+
+    .career-img-layer {
       position: absolute;
       inset: 0;
       background-size: cover;
       background-position: center;
       opacity: 0;
-      transition: opacity .9s cubic-bezier(.4,0,.2,1);
+      transform: scale(1.05);
+      transition: opacity 0.75s cubic-bezier(0.25, 1, 0.5, 1), transform 0.75s ease;
     }
-    .cslider-slide.active { opacity: 1; }
-    .cslider-slide::after {
+
+    .career-img-layer.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .career-img-layer::after {
       content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(10,18,38,.65) 100%);
-    }
-    .cslider-caption {
       position: absolute;
-      bottom: 22px; left: 24px; right: 80px;
-      color: #fff;
-      font-size: 15px; font-weight: 600;
-      z-index: 3;
-      text-shadow: 0 2px 8px rgba(0,0,0,.5);
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 31, 68, 0.8) 100%);
     }
 
-    /* ── Navigation dots ── */
-    .cslider-dots {
+    /* Floating Adaptive Caption Box */
+    .career-glass-card {
+      position: absolute;
+      bottom: clamp(12px, 3vw, 24px);
+      left: clamp(12px, 3vw, 24px);
+      right: clamp(12px, 3vw, 24px);
+      padding: clamp(14px, 2.5vw, 20px);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      z-index: 3;
       display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .career-glass-tag {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--pm-gold);
+    }
+
+    .career-glass-text {
+      font-size: clamp(12px, 1.1vw, 14.5px);
+      font-weight: 600;
+      color: var(--pm-navy);
+      line-height: 1.4;
+    }
+
+    /* Navigation Controls Row */
+    .career-action-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 18px;
+      gap: 16px;
+      
+      @media (max-width: 480px) {
+        margin-top: 14px;
+      }
+    }
+
+    .career-arrows-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .career-nav-btn {
+      width: clamp(42px, 5vw, 46px);
+      height: clamp(42px, 5vw, 46px);
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid rgba(10, 31, 68, 0.08);
+      color: var(--pm-navy);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-top: 20px;
-      position: relative; z-index: 2;
-    }
-    .cslider-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.35);
-      border: none; cursor: pointer;
-      padding: 0; transition: background .25s, transform .25s;
-      min-height: 8px; min-width: 8px;
-    }
-    .cslider-dot.active {
-      background: #fff;
-      transform: scale(1.35);
+      box-shadow: 0 4px 12px rgba(10, 31, 68, 0.04);
+      transition: all 0.2s ease;
     }
 
-    /* ── Prev/Next arrows ── */
-    .cslider-arrows {
-      position: absolute;
-      top: 50%; right: 16px;
-      transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 8px;
-      z-index: 3;
+    .career-nav-btn:hover {
+      background: var(--pm-navy);
+      color: #ffffff;
+      transform: translateY(-2px);
     }
-    .cslider-arrow {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.3);
-      color: #fff; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s; min-height: 36px;
+    
+    .career-nav-btn:active {
+      transform: scale(0.95);
     }
-    .cslider-arrow:hover { background: rgba(255,255,255,.35); }
 
-    @media (max-width: 768px) {
-      .cslider-track-wrap { aspect-ratio: 4/3; max-height: 300px; }
-      .cslider-section { padding: 56px 0; }
-      .cslider-head { margin-bottom: 28px; }
-    }
-    @media (max-width: 480px) {
-      .cslider-track-wrap { aspect-ratio: 1/1; max-height: 260px; border-radius: 16px; }
-      .cslider-section { padding: 44px 0; }
+    .career-counter {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--pm-navy);
+      background: rgba(10, 31, 68, 0.04);
+      padding: 6px 14px;
+      border-radius: 999px;
     }
   `],
   template: `
-    <section class="cslider-section" id="career-slider">
-      <div class="container">
-        <div class="cslider-head reveal in">
-          <div class="cslider-eyebrow">Life at Parallel Matrix</div>
-          <h2 class="cslider-title">Career in Parallel Matrix</h2>
-          <p class="cslider-sub">Join a team that grows together. See what a career at Parallel Matrix looks like.</p>
-        </div>
+    <section class="career-section" id="career-slider">
+      <div class="career-container">
+        <div class="career-grid">
+          
+          <div class="career-content">
+            <div class="career-eyebrow">Life at Parallel Matrix</div>
+            <h2 class="career-title">Career in <span>Parallel Matrix</span></h2>
+            <p class="career-description">
+              Join a team that grows together. See what a career at Parallel Matrix looks like.
+            </p>
 
-        <div style="position:relative" *ngIf="images().length > 0">
-          <div class="cslider-track-wrap">
-            <div *ngFor="let img of images(); let i = index"
-                 class="cslider-slide"
-                 [class.active]="current() === i"
-                 [style.background-image]="'url(' + img.url + ')'">
-            </div>
-            <div class="cslider-caption" *ngIf="images()[current()]?.caption">
-              {{ images()[current()].caption }}
-            </div>
-            <div class="cslider-arrows" *ngIf="images().length > 1">
-              <button class="cslider-arrow" (click)="prev()" aria-label="Previous slide">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
-              </button>
-              <button class="cslider-arrow" (click)="next()" aria-label="Next slide">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+            <div class="career-steps" *ngIf="images().length > 1">
+              <button 
+                *ngFor="let img of images(); let i = index"
+                type="button"
+                class="career-step-pill"
+                [class.active]="current() === i"
+                (click)="goTo(i)">
+                Workspace {{ i + 1 }}
               </button>
             </div>
           </div>
 
-          <div class="cslider-dots" *ngIf="images().length > 1">
-            <button *ngFor="let img of images(); let i = index"
-                    class="cslider-dot"
-                    [class.active]="current() === i"
-                    (click)="goTo(i)"
-                    [attr.aria-label]="'Go to slide ' + (i+1)">
-            </button>
+          <div class="career-visual-wrapper" *ngIf="images().length > 0">
+            <div class="career-display-frame">
+              <div *ngFor="let img of images(); let i = index"
+                   class="career-img-layer"
+                   [class.active]="current() === i"
+                   [style.background-image]="'url(' + img.url + ')'">
+              </div>
+
+              <div class="career-glass-card" *ngIf="images()[current()]?.caption">
+                <span class="career-glass-tag">Corporate Environment</span>
+                <span class="career-glass-text">{{ images()[current()].caption }}</span>
+              </div>
+            </div>
+
+            <div class="career-action-controls" *ngIf="images().length > 1">
+              <div class="career-arrows-row">
+                <button class="career-nav-btn" (click)="prev()" aria-label="Previous slide">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                </button>
+                <button class="career-nav-btn" (click)="next()" aria-label="Next slide">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="career-counter">
+                {{ current() + 1 }} &nbsp;/&nbsp; {{ images().length }}
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -199,7 +344,7 @@ export class CareerSliderComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: res => {
         const list = res?.data?.length
-          ? res.data.map(s => ({ url: this.resolveUrl(s.url) }))
+          ? res.data.map(s => ({ url: this.resolveUrl(s.url), caption: s.url.includes('unsplash') ? '' : 'Custom uploaded workspace asset' }))
           : FALLBACK_IMAGES;
         this.images.set(list);
         this.startAutoPlay();
@@ -213,20 +358,9 @@ export class CareerSliderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { this.stopAutoPlay(); }
 
-  goTo(index: number) {
-    this.current.set(index);
-    this.resetAutoPlay();
-  }
-
-  next() {
-    this.current.update(c => (c + 1) % this.images().length);
-    this.resetAutoPlay();
-  }
-
-  prev() {
-    this.current.update(c => (c - 1 + this.images().length) % this.images().length);
-    this.resetAutoPlay();
-  }
+  goTo(index: number) { this.current.set(index); this.resetAutoPlay(); }
+  next() { this.current.update(c => (c + 1) % this.images().length); this.resetAutoPlay(); }
+  prev() { this.current.update(c => (c - 1 + this.images().length) % this.images().length); this.resetAutoPlay(); }
 
   private startAutoPlay() {
     if (this.images().length <= 1) return;
@@ -237,14 +371,8 @@ export class CareerSliderComponent implements OnInit, OnDestroy {
     });
   }
 
-  private stopAutoPlay() {
-    if (this.timer) { clearInterval(this.timer); this.timer = null; }
-  }
-
-  private resetAutoPlay() {
-    this.stopAutoPlay();
-    this.startAutoPlay();
-  }
+  private stopAutoPlay() { if (this.timer) { clearInterval(this.timer); this.timer = null; } }
+  private resetAutoPlay() { this.stopAutoPlay(); this.startAutoPlay(); }
 
   private resolveUrl(url: string): string {
     if (!url) return '';

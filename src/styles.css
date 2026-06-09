@@ -53,18 +53,6 @@ button,a,[role="button"]{min-height:44px;min-width:44px}
   border-radius:0 2px 2px 0;
 }
 
-/* ===== Intro Loader ===== */
-#intro{position:fixed;inset:0;background:var(--pm-grad);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;animation:introOut .8s ease 2.6s forwards}
-#intro .lg{width:120px;height:120px;border-radius:24px;background:#fff;padding:14px;display:flex;align-items:center;justify-content:center;animation:pop .7s cubic-bezier(.2,1.6,.4,1) both;box-shadow:0 30px 80px -20px rgba(0,0,0,.45)}
-#intro .lg img{width:100%;height:100%;object-fit:contain}
-#intro .nm{display:flex;gap:6px;color:#fff;font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);letter-spacing:.04em}
-#intro .nm span{opacity:0;transform:translateY(20px);display:inline-block;animation:letter .55s cubic-bezier(.2,.9,.3,1) forwards}
-#intro .tag{color:#bcd0ff;font-size:13px;letter-spacing:.4em;opacity:0;animation:fade .6s ease 1.8s forwards}
-@keyframes pop{from{transform:scale(.4) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
-@keyframes letter{to{opacity:1;transform:translateY(0)}}
-@keyframes fade{to{opacity:1}}
-@keyframes introOut{to{opacity:0;visibility:hidden;transform:scale(1.05)}}
-body.loaded #intro{display:none}
 
 /* ===== Navbar ===== */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.78);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid rgba(10,31,68,.06);transition:padding .3s,box-shadow .3s}

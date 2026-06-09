@@ -4,10 +4,17 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
 const FALLBACK_IMAGES = [
-  { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80', caption: 'Grow beyond limits' },
+  { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80', caption: 'Onboard with clarity' },
   { url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80', caption: 'Scale with confidence' },
   { url: 'https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=1200&q=80', caption: 'Leadership starts here' },
   { url: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1200&q=80', caption: 'Your potential, amplified' },
+];
+
+const MILESTONE_MESSAGES = [
+  'Start with extreme clarity, personalized mentorship support, and a high-impact first sprint blueprint.',
+  'Build execution confidence early by contributing directly to core products and shipping production systems.',
+  'Take complete ownership of domain outcomes, cross-collaborate across lines, and push technical boundaries.',
+  'Own strategic initiatives, mentor engineering pods, and play a direct role in shaping architectural directions.'
 ];
 
 type TrajectoryStage = {
@@ -34,6 +41,12 @@ type TrajectoryHighlight = {
     `
       :host {
         display: block;
+        --navy: #0a1f44;
+        --mute: #64748b;
+        --gold: #c9a227;
+        --gold-dark: #927314;
+        --blue2: #1857c4;
+        --grad2: linear-gradient(135deg, #1857c4 0%, #0a1f44 100%);
       }
 
       .trajectory-section {
@@ -97,7 +110,7 @@ type TrajectoryHighlight = {
 
       .trajectory-title {
         margin: 0;
-        max-width: 12ch;
+        max-width: 15ch;
         color: var(--navy);
         font-family: 'Sora', sans-serif;
         font-size: clamp(2.1rem, 4.5vw, 4.6rem);
@@ -230,7 +243,7 @@ type TrajectoryHighlight = {
 
       .trajectory-canvas {
         display: grid;
-        grid-template-columns: minmax(170px, .82fr) minmax(0, 1.18fr);
+        grid-template-columns: minmax(190px, .85fr) minmax(0, 1.15fr);
         gap: 16px;
         align-items: stretch;
       }
@@ -241,7 +254,7 @@ type TrajectoryHighlight = {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        padding: 20px 8px 20px 10px;
+        padding: 20px 4px;
       }
 
       .trajectory-track::before {
@@ -293,7 +306,7 @@ type TrajectoryHighlight = {
         background: #fff;
         box-shadow: 0 0 0 6px rgba(24, 87, 196, .05);
         flex-shrink: 0;
-        transition: transform .25s ease, background .25s ease, box-shadow .25s ease, border-color .25s ease;
+        transition: all .25s ease;
       }
 
       .trajectory-node.active .trajectory-node-dot {
@@ -331,20 +344,21 @@ type TrajectoryHighlight = {
         overflow: hidden;
         display: flex;
         align-items: flex-end;
-        min-height: clamp(300px, 42vw, 480px);
+        min-height: clamp(340px, 42vw, 460px);
         border-radius: 26px;
         background-color: #0a1f44;
         background-position: center;
         background-size: cover;
         box-shadow: 0 24px 60px -20px rgba(10, 31, 68, .42);
         isolation: isolate;
+        transition: background-image 0.4s ease-in-out;
       }
 
       .trajectory-stage::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, rgba(10, 18, 38, .14) 0%, rgba(10, 18, 38, .32) 42%, rgba(10, 18, 38, .82) 100%);
+        background: linear-gradient(180deg, rgba(10, 18, 38, .1) 0%, rgba(10, 18, 38, .4) 45%, rgba(10, 18, 38, .88) 100%);
         z-index: 0;
       }
 
@@ -352,7 +366,7 @@ type TrajectoryHighlight = {
         position: relative;
         z-index: 1;
         width: 100%;
-        padding: 22px;
+        padding: 24px;
         color: #fff;
       }
 
@@ -373,15 +387,15 @@ type TrajectoryHighlight = {
       }
 
       .trajectory-stage-meta h3 {
-        margin: 10px 0 8px;
+        margin: 12px 0 8px;
         font-size: clamp(1.2rem, 2.35vw, 1.8rem);
-        line-height: 1.08;
+        line-height: 1.1;
         letter-spacing: -.03em;
       }
 
       .trajectory-stage-meta p {
         margin: 0;
-        max-width: 32ch;
+        max-width: 38ch;
         color: #d7e2fb;
         font-size: 14px;
         line-height: 1.6;
@@ -392,7 +406,7 @@ type TrajectoryHighlight = {
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        margin-top: 16px;
+        margin-top: 20px;
         flex-wrap: wrap;
       }
 
@@ -442,7 +456,7 @@ type TrajectoryHighlight = {
         justify-content: center;
         box-shadow: 0 12px 24px -16px rgba(10, 31, 68, .4);
         cursor: pointer;
-        transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+        transition: all .2s ease;
       }
 
       .trajectory-arrow:hover {
@@ -469,7 +483,7 @@ type TrajectoryHighlight = {
         border-radius: 999px;
         background: rgba(10, 31, 68, .18);
         cursor: pointer;
-        transition: width .25s ease, background .25s ease, transform .25s ease;
+        transition: width .25s ease, background .25s ease;
       }
 
       .trajectory-dot-btn.active {
@@ -477,141 +491,81 @@ type TrajectoryHighlight = {
         background: var(--grad2);
       }
 
-      @media (max-width: 1080px) {
+      /* ─────────────────────────────────────────────────────────
+         ── REBUILT HIGH-PERFORMANCE RESPONSIVE INFRASTRUCTURE ──
+         ───────────────────────────────────────────────────────── */
+      @media (max-width: 1140px) {
         .trajectory-grid {
           grid-template-columns: 1fr;
+          gap: 40px;
         }
-
-        .trajectory-board-shell {
-          padding: 16px;
+        .trajectory-title {
+          max-width: 100%;
+        }
+        .trajectory-description {
+          max-width: 100%;
         }
       }
 
+      /* Clean Responsive Breakpoint Layer */
       @media (max-width: 860px) {
         .trajectory-canvas {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr; /* Stack into neat mobile cards */
+          gap: 20px;
         }
 
+        /* FIX: Hide the sidebar stage track completely on small views */
         .trajectory-track {
-          order: 2;
-          padding-top: 14px;
-        }
-
-        .trajectory-stage {
-          order: 1;
-          min-height: 280px;
+          display: none !important;
         }
 
         .trajectory-insights {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
         }
       }
 
       @media (max-width: 640px) {
         .trajectory-section {
-          padding: 48px 0;
+          padding: 44px 0;
         }
 
         .trajectory-shell {
           padding: 0 16px;
         }
 
-        .trajectory-pill {
-          font-size: 10px;
-          letter-spacing: .18em;
-          padding: 7px 12px;
-        }
-
-        .trajectory-title {
-          max-width: 100%;
-          font-size: clamp(1.9rem, 9vw, 2.8rem);
-        }
-
-        .trajectory-description {
-          font-size: 14px;
-        }
-
         .trajectory-board-shell {
           border-radius: 24px;
-          padding: 12px;
-        }
-
-        .trajectory-board-top {
-          padding: 4px 4px 12px;
-          align-items: flex-start;
-        }
-
-        .trajectory-board-title {
-          font-size: 16px;
-        }
-
-        .trajectory-canvas {
-          gap: 12px;
-        }
-
-        .trajectory-track {
-          padding-left: 0;
-          padding-right: 0;
-        }
-
-        .trajectory-track::before {
-          left: 18px;
-        }
-
-        .trajectory-node {
-          grid-template-columns: 32px minmax(0, 1fr);
-          padding: 11px 10px 11px 0;
-        }
-
-        .trajectory-node-dot {
-          margin-left: 10px;
-        }
-
-        .trajectory-node-title {
-          font-size: 13px;
+          padding: 14px;
         }
 
         .trajectory-stage {
-          min-height: 240px;
+          min-height: 280px;
           border-radius: 20px;
         }
 
         .trajectory-stage-meta {
-          padding: 18px;
+          padding: 20px;
         }
 
         .trajectory-stage-meta p {
-          max-width: 100%;
-        }
-
-        .trajectory-controls {
-          padding: 12px 4px 4px;
+          font-size: 13.5px;
         }
       }
 
-      @media (max-width: 380px) {
-        .trajectory-section {
-          padding: 40px 0;
+      @media (max-width: 480px) {
+        .trajectory-insights {
+          grid-template-columns: 1fr;
+          gap: 12px;
         }
-
-        .trajectory-title {
-          font-size: clamp(1.7rem, 10vw, 2.4rem);
-          letter-spacing: -.03em;
+        
+        .trajectory-board-top {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
         }
-
-        .trajectory-board-shell {
-          padding: 10px;
-        }
-
-        .trajectory-stage {
-          min-height: 220px;
-        }
-
-        .trajectory-arrow {
-          width: 40px;
-          height: 40px;
-          min-width: 40px;
-          min-height: 40px;
+        
+        .trajectory-board-count {
+          align-self: flex-end;
         }
       }
 
@@ -620,7 +574,7 @@ type TrajectoryHighlight = {
         .trajectory-arrow,
         .trajectory-dot-btn,
         .trajectory-progress span {
-          transition-duration: .001ms !important;
+          transition: none !important;
         }
       }
     `
@@ -629,6 +583,7 @@ type TrajectoryHighlight = {
     <section class="trajectory-section" id="growth-slider">
       <div class="trajectory-shell">
         <div class="trajectory-grid">
+          
           <div class="trajectory-copy">
             <div class="trajectory-pill">Your Trajectory</div>
 
@@ -661,6 +616,7 @@ type TrajectoryHighlight = {
 
           <div class="trajectory-board" *ngIf="images().length > 0">
             <div class="trajectory-board-shell">
+              
               <div class="trajectory-board-top">
                 <div>
                   <span class="trajectory-board-label">Growth graph</span>
@@ -672,6 +628,7 @@ type TrajectoryHighlight = {
               </div>
 
               <div class="trajectory-canvas">
+                
                 <div class="trajectory-track" *ngIf="images().length > 1">
                   <button
                     *ngFor="let img of images(); let i = index"
@@ -692,9 +649,8 @@ type TrajectoryHighlight = {
                   <div class="trajectory-stage-meta">
                     <span class="trajectory-stage-badge">Leadership path</span>
                     <h3>{{ images()[current()]?.caption || 'Parallel growth' }}</h3>
-                    <p>
-                      A responsive visual track that shifts with each milestone and keeps the next move in view.
-                    </p>
+                    
+                    <p>{{ MILESTONE_MESSAGES[current()] }}</p>
 
                     <div class="trajectory-stage-foot">
                       <div class="trajectory-progress" [attr.aria-label]="'Progress ' + (current() + 1) + ' of ' + images().length">
@@ -706,18 +662,19 @@ type TrajectoryHighlight = {
                     </div>
                   </div>
                 </div>
+
               </div>
 
               <div class="trajectory-controls" *ngIf="images().length > 1">
                 <div class="trajectory-nav">
                   <button class="trajectory-arrow" type="button" (click)="prev()" aria-label="Previous stage">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                      <polyline points="18 15 12 9 6 15" />
+                      <polyline points="15 18 9 12 15 6" />
                     </svg>
                   </button>
                   <button class="trajectory-arrow" type="button" (click)="next()" aria-label="Next stage">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                      <polyline points="6 9 12 15 18 9" />
+                      <polyline points="9 18 13 12 9 6" />
                     </svg>
                   </button>
                 </div>
@@ -733,8 +690,10 @@ type TrajectoryHighlight = {
                   </button>
                 </div>
               </div>
+
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -744,47 +703,16 @@ export class GrowthSliderComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private zone = inject(NgZone);
 
+  readonly MILESTONE_MESSAGES = MILESTONE_MESSAGES;
   images = signal<{ url: string; caption?: string }[]>([]);
   current = signal(0);
   private timer: ReturnType<typeof setInterval> | null = null;
 
   readonly stageCards: TrajectoryStage[] = [
-    {
-      label: 'Day 1',
-      title: 'Join & Onboard',
-      summary: 'Start with clarity, support, and a guided first sprint.',
-      metric: 'Foundation',
-      x: 16,
-      y: 76,
-      align: 'end'
-    },
-    {
-      label: 'Quarter 1',
-      title: 'Skill Up & Contribute',
-      summary: 'Build confidence by shipping meaningful work early.',
-      metric: 'Momentum',
-      x: 39,
-      y: 50,
-      align: 'end'
-    },
-    {
-      label: 'Year 1',
-      title: 'Own Outcomes',
-      summary: 'Take wider responsibility and shape team-level results.',
-      metric: 'Ownership',
-      x: 63,
-      y: 34,
-      align: 'start'
-    },
-    {
-      label: 'Leadership',
-      title: 'Lead & Impact',
-      summary: 'Guide direction, lift others, and influence what comes next.',
-      metric: 'Impact',
-      x: 86,
-      y: 62,
-      align: 'start'
-    }
+    { label: 'Day 1', title: 'Join & Onboard', summary: 'Start with clarity, support, and a guided first sprint.', metric: 'Foundation', x: 16, y: 76, align: 'end' },
+    { label: 'Quarter 1', title: 'Skill Up & Contribute', summary: 'Build confidence by shipping meaningful work early.', metric: 'Momentum', x: 39, y: 50, align: 'end' },
+    { label: 'Year 1', title: 'Own Outcomes', summary: 'Take wider responsibility and shape team-level results.', metric: 'Ownership', x: 63, y: 34, align: 'start' },
+    { label: 'Leadership', title: 'Lead & Impact', summary: 'Guide direction, lift others, and influence what comes next.', metric: 'Impact', x: 86, y: 62, align: 'start' }
   ];
 
   readonly highlights: TrajectoryHighlight[] = [
@@ -794,13 +722,20 @@ export class GrowthSliderComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit() {
-    this.http.get<{ success: boolean; data: { url: string }[] }>(
+    this.http.get<{ success: boolean; data: { url: string; caption?: string }[] }>(
       `${environment.apiBaseUrl}/sliders/growth`
     ).subscribe({
-      next: res => {
-        const list = res?.data?.length
-          ? res.data.map(s => ({ url: this.resolveUrl(s.url) }))
-          : FALLBACK_IMAGES;
+      next: (res:any) => {
+        let list = FALLBACK_IMAGES;
+        if (res?.data?.length) {
+          list = Array.from({ length: 4 }, (_, idx) => {
+            const apiItem = res.data[idx % res.data.length];
+            return {
+              url: this.resolveUrl(apiItem.url),
+              caption: apiItem.caption || FALLBACK_IMAGES[idx].caption
+            };
+          });
+        }
         this.images.set(list);
         this.startAutoPlay();
       },
@@ -814,14 +749,14 @@ export class GrowthSliderComponent implements OnInit, OnDestroy {
   ngOnDestroy() { this.stopAutoPlay(); }
 
   goTo(index: number) { this.current.set(index); this.resetAutoPlay(); }
-  next() { this.current.update(c => (c + 1) % this.images().length); this.resetAutoPlay(); }
-  prev() { this.current.update(c => (c - 1 + this.images().length) % this.images().length); this.resetAutoPlay(); }
+  next() { this.current.update((c:number) => (c + 1) % this.images().length); this.resetAutoPlay(); }
+  prev() { this.current.update((c:number) => (c - 1 + this.images().length) % this.images().length); this.resetAutoPlay(); }
 
   private startAutoPlay() {
     if (this.images().length <= 1) return;
     this.zone.runOutsideAngular(() => {
       this.timer = setInterval(() => {
-        this.zone.run(() => this.current.update(c => (c + 1) % this.images().length));
+        this.zone.run(() => this.current.update((c:number) => (c + 1) % this.images().length));
       }, 5000);
     });
   }

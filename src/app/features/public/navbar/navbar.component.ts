@@ -13,6 +13,7 @@ import { Router, RouterLink } from '@angular/router';
           <img src="assets/logo.jpeg" alt="Parallel Matrix Logo">
           <div>
             <div class="bt">Parallel Matrix</div>
+            <div class="bs">MANAGEMENT SERVICES</div>
           </div>
         </a>
         <div class="nav-links" [class.open]="menuOpen">

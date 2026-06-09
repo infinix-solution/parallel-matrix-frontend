@@ -23,8 +23,8 @@ import { ContentService } from '../../../core/services/content.service';
   ],
   template: `
     <app-hero></app-hero>
-    <app-media-showcase></app-media-showcase>
     <app-about></app-about>
+    <app-media-showcase></app-media-showcase>
     <app-services></app-services>
     <app-career></app-career>
     <app-career-slider></app-career-slider>

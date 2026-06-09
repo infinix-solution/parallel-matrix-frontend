@@ -420,11 +420,6 @@ import { FaIconPipe } from '../../../shared/pipes/fa-icon.pipe';
 
             <!-- Left column -->
             <div>
-              <nav class="me-breadcrumb" aria-label="Breadcrumb">
-                <a routerLink="/">Home</a>
-                <span>›</span>
-                <span style="color:#0f172a;font-weight:600">Matrix Enterprises</span>
-              </nav>
               <div class="me-hero-eyebrow">
                 <i class="fa-solid fa-building" aria-hidden="true"></i>&nbsp;Sister Concern
               </div>
