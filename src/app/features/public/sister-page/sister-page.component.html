@@ -1,199 +1,191 @@
-    <div class="me-page" *ngIf="data() as d; else loading">
+<div class="me-page" *ngIf="data() as d; else loading">
 
-      <!-- ═══ 1. HERO HEADER ═══════════════════════════════════════════ -->
-      <section class="me-hero"
-               style="background-image:url('https://images.unsplash.com/photo-1590859808308-3d2d9c515b1a?w=1400&q=80');background-size:cover;background-position:center top;position:relative">
-        <div style="position:absolute;inset:0;background:linear-gradient(145deg,rgba(248,250,252,.97) 0%,rgba(239,246,255,.95) 55%,rgba(240,253,244,.93) 100%)"></div>
-        <div class="me-container" style="position:relative">
-          <div class="me-hero-inner">
+  <section class="me-hero"
+           style="background-image:url('https://images.unsplash.com/photo-1599707254554-027aeb4deacd?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fDB8fHww');background-size:cover;background-position:center;position:relative">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.65) 100%)"></div>
+    
+    <div class="me-container" style="position:relative; z-index: 2; color: #f8fafc;">
+      <div class="me-hero-inner">
 
-            <!-- Left column -->
-            <div>
-              <div class="me-hero-eyebrow">
-                <i class="fa-solid fa-building" aria-hidden="true"></i>&nbsp;Sister Concern
+        <div>
+          <div class="me-hero-eyebrow" style="color: #38bdf8;">
+            <i class="fa-solid fa-building" aria-hidden="true"></i>&nbsp;Sister Concern
+          </div>
+          <h1 class="me-hero-title" style="color: #ffffff;">
+            Parallel Matrix Ventures —<br>
+            <em style="color: #38bdf8; font-style: normal;">Scale with Certainty.</em>
+          </h1>
+          <p class="me-hero-desc" style="color: #cbd5e1;">
+            {{ d.sub || 'A diversified enterprise delivering infrastructure, corporate services, and supply chain solutions with precision and integrity.' }}
+          </p>
+          <button class="me-cta" (click)="scrollToContact()">
+            Get In Touch &rarr;
+          </button>
+        </div>
+
+        <div class="me-hero-visual">
+          <div class="me-blob me-blob-1"></div>
+          <div class="me-blob me-blob-2"></div>
+          <div class="me-glass-card">
+            <div class="me-glass-header">
+              <div class="me-glass-icon">
+                <i class="fa-solid fa-hard-hat" aria-hidden="true"></i>
               </div>
-              <h1 class="me-hero-title">
-                Parallel Matrix Ventures —<br>
-                <em>Scale with Certainty.</em>
-              </h1>
-              <p class="me-hero-desc">
-                {{ d.sub || 'A diversified enterprise delivering infrastructure, corporate services, and supply chain solutions with precision and integrity.' }}
-              </p>
-              <button class="me-cta" (click)="scrollToContact()">
-                Get In Touch &rarr;
-              </button>
-            </div>
-
-            <!-- Right column: glassmorphism visual -->
-            <div class="me-hero-visual">
-              <div class="me-blob me-blob-1"></div>
-              <div class="me-blob me-blob-2"></div>
-              <div class="me-glass-card">
-                <div class="me-glass-header">
-                  <div class="me-glass-icon">
-                  <i class="fa-solid fa-hard-hat" aria-hidden="true"></i>
-                </div>
-                  <div>
-                    <div class="me-glass-name">Parallel Matrix Ventures</div>
-                    <div class="me-glass-sub">Infrastructure &amp; Enterprise Services</div>
-                  </div>
-                </div>
-                <div class="me-mini-stats">
-                  <div class="me-mini-stat">
-                    <div class="me-mini-num">10+</div>
-                    <div class="me-mini-lbl">Projects</div>
-                  </div>
-                  <div class="me-mini-stat">
-                    <div class="me-mini-num">5+</div>
-                    <div class="me-mini-lbl">Years</div>
-                  </div>
-                  <div class="me-mini-stat">
-                    <div class="me-mini-num">100%</div>
-                    <div class="me-mini-lbl">Committed</div>
-                  </div>
-                </div>
-                <div class="me-svc-tags">
-                  <span class="me-svc-tag">Infrastructure</span>
-                  <span class="me-svc-tag">Trading</span>
-                  <span class="me-svc-tag">Supply Chain</span>
-                  <span class="me-svc-tag">Corporate Services</span>
-                </div>
-              </div>
-              <div class="me-float-badge">
-                <i class="fa-solid fa-circle-check" style="color:#059669;margin-right:5px" aria-hidden="true"></i>Trusted Enterprise
+              <div>
+                <div class="me-glass-name">Parallel Matrix Ventures</div>
+                <div class="me-glass-sub">Infrastructure &amp; Enterprise Services</div>
               </div>
             </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══ 2. ABOUT SPLIT ═══════════════════════════════════════════ -->
-      <section class="me-about">
-        <div class="me-container">
-          <div class="me-about-grid">
-            <div class="me-img-wrap reveal-me">
-              <div class="me-img-inner">
-                <span class="me-img-icon"
-                      [innerHTML]="(d.primaryServiceIcon || 'fa-solid fa-building-columns') | faIcon">
-                </span>
-                <p class="me-img-caption">{{ d.primaryServiceTitle || 'Enterprise Infrastructure' }}</p>
+            <div class="me-mini-stats">
+              <div class="me-mini-stat">
+                <div class="me-mini-num">10+</div>
+                <div class="me-mini-lbl">Projects</div>
+              </div>
+              <div class="me-mini-stat">
+                <div class="me-mini-num">5+</div>
+                <div class="me-mini-lbl">Years</div>
+              </div>
+              <div class="me-mini-stat">
+                <div class="me-mini-num">100%</div>
+                <div class="me-mini-lbl">Committed</div>
               </div>
             </div>
-            <div class="reveal-me d1">
-              <span class="me-eyebrow">{{ d.eyebrow }}</span>
-              <h2 class="me-section-title">{{ d.aboutTitle }}</h2>
-              <p class="me-body">{{ d.aboutText1 }}</p>
-              <p class="me-body" *ngIf="d.aboutText2">{{ d.aboutText2 }}</p>
-              <blockquote class="me-tagline" *ngIf="d.tagline">"{{ d.tagline }}"</blockquote>
+            <div class="me-svc-tags">
+              <span class="me-svc-tag">Infrastructure</span>
+              <span class="me-svc-tag">Trading</span>
+              <span class="me-svc-tag">Supply Chain</span>
+              <span class="me-svc-tag">Corporate Services</span>
             </div>
+          </div>
+          <div class="me-float-badge">
+            <i class="fa-solid fa-circle-check" style="color:#059669;margin-right:5px" aria-hidden="true"></i>Trusted Enterprise
           </div>
         </div>
-      </section>
 
-      <!-- ═══ 3. PRIMARY SERVICE — with construction background ════════ -->
-      <section class="me-primary" *ngIf="d.primaryServiceTitle"
-               style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1400&q=80');background-size:cover;background-position:center;position:relative">
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(239,246,255,.96) 0%,rgba(240,253,244,.94) 100%)"></div>
-        <div class="me-container" style="position:relative">
-          <div class="me-primary-card reveal-me">
-            <div class="me-primary-icon" [innerHTML]="d.primaryServiceIcon | faIcon"></div>
-            <div>
-              <h2 class="me-primary-title">{{ d.primaryServiceTitle }}</h2>
-              <p class="me-primary-lead">{{ d.primaryServiceLead }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══ 4. OPERATIONAL VERTICALS GRID ════════════════════════════ -->
-      <section class="me-verticals" *ngIf="d.serviceCards.length">
-        <div class="me-container">
-          <div class="me-section-head reveal-me">
-            <span class="me-eyebrow">What We Do</span>
-            <h2 class="me-section-title">Operational Verticals</h2>
-            <p class="me-section-sub">Delivering end-to-end value across every vertical we operate in — built on reliability and enterprise-grade execution.</p>
-          </div>
-          <div class="me-cards-grid">
-            <div *ngFor="let card of d.serviceCards; let i = index"
-                 class="me-card reveal-me"
-                 [class.d1]="i % 3 === 0"
-                 [class.d2]="i % 3 === 1"
-                 [class.d3]="i % 3 === 2">
-              <div class="me-card-icon-wrap" [innerHTML]="card.icon | faIcon"></div>
-              <h3>{{ card.title }}</h3>
-              <p>{{ card.description }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══ 5. VISION & MISSION ══════════════════════════════════════ -->
-      <section class="me-values" *ngIf="d.visionTitle || d.missionTitle">
-        <div class="me-container">
-          <div class="me-section-head reveal-me">
-            <span class="me-eyebrow">Core Principles</span>
-            <h2 class="me-section-title">Vision &amp; Mission</h2>
-          </div>
-          <div class="me-values-grid">
-            <div class="me-value-card me-vision reveal-me" *ngIf="d.visionTitle">
-              <span class="me-eyebrow">{{ d.visionTitle }}</span>
-              <p>{{ d.visionText }}</p>
-            </div>
-            <div class="me-value-card me-mission reveal-me d1" *ngIf="d.missionTitle">
-              <span class="me-eyebrow">{{ d.missionTitle }}</span>
-              <p>{{ d.missionText }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══ 6. INDUSTRIES ════════════════════════════════════════════ -->
-      <section class="me-industries" *ngIf="d.industries.length">
-        <div class="me-container">
-          <h3 class="me-industries-title reveal-me">{{ d.industriesTitle }}</h3>
-          <div class="me-chips reveal-me d1">
-            <span *ngFor="let chip of d.industries" class="me-chip">
-              <span [innerHTML]="chip.icon | faIcon"></span> {{ chip.label }}
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══ 7. CONTACT ═══════════════════════════════════════════════ -->
-      <section class="me-contact-sec" id="me-contact">
-        <div class="me-container">
-          <div class="me-section-head reveal-me" style="margin-bottom:36px">
-            <span class="me-eyebrow">Get In Touch</span>
-            <h2 class="me-section-title">Connect With Us</h2>
-          </div>
-          <div class="me-contact-card reveal-me d1">
-            <div *ngIf="d.email">
-              <div class="me-contact-lbl">Email</div>
-              <div class="me-contact-val"><a href="mailto:{{ d.email }}">{{ d.email }}</a></div>
-            </div>
-            <div *ngIf="d.phone">
-              <div class="me-contact-lbl">Phone</div>
-              <div class="me-contact-val"><a href="tel:{{ d.phone }}">{{ d.phone }}</a></div>
-            </div>
-            <div *ngIf="d.locations">
-              <div class="me-contact-lbl">Locations</div>
-              <div class="me-contact-val">{{ d.locations }}</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      </div>
     </div>
+  </section>
 
-    <ng-template #loading>
-      <div style="min-height:80vh;display:flex;align-items:center;justify-content:center;background:#f8fafc;padding-top:80px">
-        <div style="text-align:center;color:#64748b">
-          <div style="font-size:32px;margin-bottom:12px">
-            <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
+  <section class="me-about">
+    <div class="me-container">
+      <div class="me-about-grid">
+        <div class="me-img-wrap reveal-me">
+          <div class="me-img-inner">
+            <span class="me-img-icon"
+                  [innerHTML]="(d.primaryServiceIcon || 'fa-solid fa-building-columns') | faIcon">
+            </span>
+            <p class="me-img-caption">{{ d.primaryServiceTitle || 'Enterprise Infrastructure' }}</p>
           </div>
-          <p style="font-size:15px;font-weight:500">Loading Parallel Matrix Ventures…</p>
+        </div>
+        <div class="reveal-me d1">
+          <span class="me-eyebrow">{{ d.eyebrow }}</span>
+          <h2 class="me-section-title">{{ d.aboutTitle }}</h2>
+          <p class="me-body">{{ d.aboutText1 }}</p>
+          <p class="me-body" *ngIf="d.aboutText2">{{ d.aboutText2 }}</p>
+          <blockquote class="me-tagline" *ngIf="d.tagline">"{{ d.tagline }}"</blockquote>
         </div>
       </div>
-    </ng-template>
-  
+    </div>
+  </section>
+
+  <section class="me-primary" *ngIf="d.primaryServiceTitle"
+           style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80');background-size:cover;background-position:center;position:relative">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(240,253,244,0.35) 100%)"></div>
+    
+    <div class="me-container" style="position:relative; z-index:2;">
+      <div class="me-primary-card reveal-me" style="backdrop-filter: blur(8px); background: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);">
+        <div class="me-primary-icon" [innerHTML]="d.primaryServiceIcon | faIcon"></div>
+        <div>
+          <h2 class="me-primary-title" style="color:#0f172a">{{ d.primaryServiceTitle }}</h2>
+          <p class="me-primary-lead" style="color:#475569">{{ d.primaryServiceLead }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="me-verticals" *ngIf="d.serviceCards.length">
+    <div class="me-container">
+      <div class="me-section-head reveal-me">
+        <span class="me-eyebrow">What We Do</span>
+        <h2 class="me-section-title">Operational Verticals</h2>
+        <p class="me-section-sub">Delivering end-to-end value across every vertical we operate in — built on reliability and enterprise-grade execution.</p>
+      </div>
+      <div class="me-cards-grid">
+        <div *ngFor="let card of d.serviceCards; let i = index"
+             class="me-card reveal-me"
+             [class.d1]="i % 3 === 0"
+             [class.d2]="i % 3 === 1"
+             [class.d3]="i % 3 === 2">
+          <div class="me-card-icon-wrap" [innerHTML]="card.icon | faIcon"></div>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="me-values" *ngIf="d.visionTitle || d.missionTitle">
+    <div class="me-container">
+      <div class="me-section-head reveal-me">
+        <span class="me-eyebrow">Core Principles</span>
+        <h2 class="me-section-title">Vision &amp; Mission</h2>
+      </div>
+      <div class="me-values-grid">
+        <div class="me-value-card me-vision reveal-me" *ngIf="d.visionTitle">
+          <span class="me-eyebrow">{{ d.visionTitle }}</span>
+          <p>{{ d.visionText }}</p>
+        </div>
+        <div class="me-value-card me-mission reveal-me d1" *ngIf="d.missionTitle">
+          <span class="me-eyebrow">{{ d.missionTitle }}</span>
+          <p>{{ d.missionText }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="me-industries" *ngIf="d.industries.length">
+    <div class="me-container">
+      <h3 class="me-industries-title reveal-me">{{ d.industriesTitle }}</h3>
+      <div class="me-chips reveal-me d1">
+        <span *ngFor="let chip of d.industries" class="me-chip">
+          <span [innerHTML]="chip.icon | faIcon"></span> {{ chip.label }}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="me-contact-sec" id="me-contact">
+    <div class="me-container">
+      <div class="me-section-head reveal-me" style="margin-bottom:36px">
+        <span class="me-eyebrow">Get In Touch</span>
+        <h2 class="me-section-title">Connect With Us</h2>
+      </div>
+      <div class="me-contact-card reveal-me d1">
+        <div *ngIf="d.email">
+          <div class="me-contact-lbl">Email</div>
+          <div class="me-contact-val"><a href="mailto:{{ d.email }}">{{ d.email }}</a></div>
+        </div>
+        <div *ngIf="d.phone">
+          <div class="me-contact-lbl">Phone</div>
+          <div class="me-contact-val"><a href="tel:{{ d.phone }}">{{ d.phone }}</a></div>
+        </div>
+        <div *ngIf="d.locations">
+          <div class="me-contact-lbl">Locations</div>
+          <div class="me-contact-val">{{ d.locations }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<ng-template #loading>
+  <div style="min-height:80vh;display:flex;align-items:center;justify-content:center;background:#f8fafc;padding-top:80px">
+    <div style="text-align:center;color:#64748b">
+      <div style="font-size:32px;margin-bottom:12px">
+        <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
+      </div>
+      <p style="font-size:15px;font-weight:500">Loading Parallel Matrix Ventures…</p>
+    </div>
+  </div>
+</ng-template>
