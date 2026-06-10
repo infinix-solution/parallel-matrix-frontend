@@ -1,0 +1,17 @@
+    <div id="intro" aria-hidden="true">
+      <div class="lg">
+        <img src="assets/logo.jpeg" alt="Parallel Matrix MANAGEMENT SERVICES">
+      </div>
+      
+      <h1 class="nm">
+        <span *ngFor="let word of words; let wordIdx = index" class="word-group">
+          <span *ngFor="let letter of word.letters"
+                [style.animation-delay.s]="0.5 + (word.globalStartIdx + letter.idx) * 0.04">
+            {{ letter.char }}
+          </span>
+        </span>
+      </h1>
+      
+      <div class="tag">RECRUITMENT &middot; STAFFING &middot; IMMIGRATION &middot; MANPOWER</div>
+    </div>
+  

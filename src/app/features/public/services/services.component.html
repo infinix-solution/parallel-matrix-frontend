@@ -1,0 +1,87 @@
+    <!-- Skeleton: shown while ContentService awaits the first API response -->
+    <section id="services" class="services-section" *ngIf="isLoading()">
+      <div class="services-container">
+        <div class="s-head">
+          <div class="skel skel-eyebrow"></div>
+          <div class="skel skel-title"></div>
+          <div class="skel skel-sub"></div>
+        </div>
+        <div class="svc-grid">
+          <div class="svc-skel" *ngFor="let _ of [1,2,3,4]">
+            <div class="skel svc-skel-img"></div>
+            <div class="svc-body">
+              <div class="skel svc-skel-icon"></div>
+              <div class="skel svc-skel-h3"></div>
+              <div class="skel svc-skel-line"></div>
+              <div class="skel svc-skel-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resolved content -->
+    <section id="services" class="services-section" *ngIf="data() as d">
+      <div class="services-container">
+        
+        <div class="s-head">
+          <span class="eyebrow-tag">{{ d.eyebrow }}</span>
+          <h2 class="s-title">{{ d.title }}</h2>
+          <p class="s-sub">{{ d.sub }}</p>
+        </div>
+
+        <div class="svc-grid">
+          <div *ngFor="let s of items(); let i = index"
+               class="svc"
+               [id]="s.id">
+
+            <div class="svc-img">
+              <img [src]="s.resolvedImage" [alt]="s.title" loading="lazy">
+            </div>
+
+            <div class="svc-body">
+              <div class="ic" [innerHTML]="s.icon | faIcon"></div>
+              <h3>{{ s.title }}</h3>
+              <p class="lead">{{ s.lead }}</p>
+
+              <span class="more" *ngIf="s.items.length"
+                    (click)="$event.stopPropagation(); openModal(s)">
+                Learn more
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="3">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </span>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="svc-modal-backdrop" *ngIf="activeService()" (click)="closeModal()">
+      <div class="svc-modal" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+           [attr.aria-label]="activeService()?.title">
+
+        <button class="svc-modal-close" (click)="closeModal()" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+
+        <img *ngIf="activeService() as s" class="svc-modal-img"
+             [src]="s.resolvedImage" [alt]="s.title" loading="lazy" width="540" height="270">
+
+        <div class="svc-modal-body" *ngIf="activeService() as s">
+          <div class="svc-modal-icon" [innerHTML]="s.icon | faIcon"></div>
+          <h2 class="svc-modal-title">{{ s.title }}</h2>
+          <p class="svc-modal-lead">{{ s.lead }}</p>
+          <ul class="svc-modal-list">
+            <li *ngFor="let it of s.items">{{ it }}</li>
+          </ul>
+        </div>
+        
+      </div>
+    </div>
+  

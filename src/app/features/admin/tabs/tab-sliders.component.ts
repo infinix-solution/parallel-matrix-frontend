@@ -9,28 +9,7 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-tab-sliders',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="adm-panel">
-      <h3>Image Slider Assets</h3>
-      <p class="help">Upload up to 5 images (max 300KB each). They'll rotate as the hero background. If none, the default <code></code> is used.</p>
-
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <label class="adm-btn primary" style="cursor:pointer">
-          + Upload Image
-          <input type="file" accept="image/*" hidden (change)="upload($event)">
-        </label>
-        <span style="color:var(--mute);font-size:13px">{{ slides.length }} / 5 uploaded</span>
-      </div>
-
-      <div class="adm-slider-grid" *ngIf="slides.length > 0">
-        <div *ngFor="let s of slides" class="s">
-          <img [src]="resolveUrl(s.url)" [alt]="s.filename || ''">
-          <button (click)="remove(s)" title="Delete">&times;</button>
-        </div>
-      </div>
-      <div class="adm-empty" *ngIf="slides.length === 0">No slides uploaded &mdash; using default hero background.</div>
-    </div>
-  `
+  templateUrl: './tab-sliders.component.html'
 })
 export class TabSlidersComponent implements OnInit {
   private api = inject(ApiService);
@@ -44,7 +23,9 @@ export class TabSlidersComponent implements OnInit {
       next: r => this.slides = (r?.success && r.data) ? r.data : [],
       error: () => this.slides = []
     });
+      console.log('Loaded sliders:', this.slides);
   }
+
 
   resolveUrl(u: string) {
     return u.startsWith('http') ? u : `${environment.apiBaseUrl.replace('/api','')}${u}`;
@@ -64,6 +45,7 @@ export class TabSlidersComponent implements OnInit {
         if (r?.success && r.data) {
           this.slides = [...this.slides, r.data];
           this.toast.show('Image uploaded.');
+          console.log('Uploaded slider:', r.data);
         }
       },
       error: err => this.toast.show(err?.error?.message || 'Upload failed.', 'err')

@@ -1,0 +1,211 @@
+:host {
+  display: block;
+  background-color: #111827;
+  color: #f3f4f6;
+
+  /* Dark-theme tokens — none of these duplicate global :root values */
+  --bg-main: #111827;
+  --bg-card: #1f2937;
+  --gold-light: rgba(240, 217, 122, 0.15);
+  --gold-text: #f0d97a;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-hover: rgba(240, 217, 122, 0.3);
+}
+
+.container {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: clamp(40px, 5vw, 60px) 24px;
+}
+
+/* ── Section header ── */
+.s-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(30px, 4vw, 44px);
+}
+
+
+.s-title {
+  margin: 0 0 8px;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.s-sub {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.5;
+  max-width: 52ch;
+}
+
+/* ── Flexible card grid ── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+/* ── Card structure ── */
+.tcard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.4s ease,
+              border-color 0.4s ease;
+}
+
+.tcard:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-hover);
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Photo frame ── */
+.ph {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #111827;
+}
+
+.ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.tcard:hover .ph img {
+  transform: scale(1.03);
+}
+
+.badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--gold-text);
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* ── Card body ── */
+.info {
+  padding: 20px;
+}
+
+.info h3 {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.role {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #9ca3af;
+  font-size: 13px;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.row svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ── Action links ── */
+.acts {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  gap: 8px;
+}
+
+.acts a {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.acts a:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.acts a.linkedin-btn {
+  flex: 0 0 38px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.1);
+}
+
+.acts a.linkedin-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+/* ── Dark-theme skeleton shimmer ── */
+@keyframes team-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skel {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: team-shimmer 1.4s ease-in-out infinite;
+}
+
+/* Skeleton photo placeholder — reuses .ph's aspect-ratio and overflow */
+.tcard--skel .ph {
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: team-shimmer 1.4s ease-in-out infinite;
+}
+
+.skel-name      { height: 20px; width: 65%; margin-bottom: 8px; }
+.skel-role      { height: 14px; width: 45%; margin-bottom: 20px; }
+.skel-row-item  { height: 13px; width: 88%; margin-bottom: 10px; }
+.skel-acts-bar  { height: 34px; width: 100%; margin-top: 20px; border-radius: 6px; }

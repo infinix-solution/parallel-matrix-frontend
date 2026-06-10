@@ -1,0 +1,24 @@
+/* Preserves section spacing while the skeleton is displayed */
+.contact-skel-section {
+  padding: 70px 0;
+  background: linear-gradient(180deg, var(--bg), #eef2f9);
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skel {
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e8ecf4 25%, #d8dfe9 50%, #e8ecf4 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skel-eyebrow { width: 110px; height: 22px; border-radius: 999px; margin: 0 auto 20px; }
+.skel-title   { height: 36px; width: 55%;   margin: 0 auto 12px; }
+.skel-sub     { height: 18px; width: 70%;   margin: 0 auto 50px; }
+.skel-map     { height: 380px; border-radius: 24px; }
+.skel-addr    { height: 380px; border-radius: 24px; }

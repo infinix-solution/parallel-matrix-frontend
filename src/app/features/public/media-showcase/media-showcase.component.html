@@ -1,0 +1,27 @@
+    <section class="ms-section" #sectionRef>
+      <div class="ms-header-block">
+        <span class="eyebrow-tag">Our Work &amp; Culture</span>
+      </div>
+
+      <!-- Skeleton: shown until the images signal populates -->
+      <div class="ms-skeleton-track" *ngIf="!images().length">
+        <div class="ms-skel-slide" *ngFor="let _ of [1,2,3,4,5,6,7]"></div>
+      </div>
+
+      <div class="ms-track-wrapper" *ngIf="images().length">
+        <div class="ms-track">
+
+          <div class="ms-slide" *ngFor="let img of images()">
+            <img [src]="img" alt="Showcase Image" loading="lazy">
+          </div>
+
+          <div class="ms-slide" *ngFor="let img of images()" aria-hidden="true">
+            <img [src]="img" alt="Showcase Image Duplicate" loading="lazy">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ms-fade-mask ms-fade-left"></div>
+      <div class="ms-fade-mask ms-fade-right"></div>
+    </section>

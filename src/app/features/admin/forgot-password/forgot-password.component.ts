@@ -10,41 +10,7 @@ import { ToastHostComponent } from '../../../shared/toast-host/toast-host.compon
   selector: 'app-admin-forgot-password',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, ToastHostComponent],
-  template: `
-    <div class="adm-login">
-      <div class="card">
-        <h2>Forgot Password</h2>
-        <p>Enter your admin email and we'll send a reset link.</p>
-
-        <div *ngIf="!sent">
-          <form [formGroup]="form" (ngSubmit)="submit()">
-            <div class="field">
-              <label>Email</label>
-              <input type="email" formControlName="email" placeholder="admin@parallelmatrixcorp.com">
-              <div class="err" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Valid email required.</div>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" [disabled]="loading">
-              {{ loading ? 'Sending...' : 'Send Reset Link' }}
-            </button>
-          </form>
-        </div>
-
-        <div *ngIf="sent" style="text-align:center;padding:20px 0">
-          <div style="font-size:48px;margin-bottom:12px">📧</div>
-          <h3 style="color:var(--navy);margin-bottom:8px">Check your email</h3>
-          <p style="color:var(--mute);font-size:14px">
-            If <strong>{{ submittedEmail }}</strong> matches an admin account, you'll receive a reset link within a few minutes.
-            <br><br>The link will expire in 1 hour.
-          </p>
-        </div>
-
-        <div style="text-align:center;margin-top:18px">
-          <a routerLink="/admin/login" style="color:var(--blue2);font-weight:600;font-size:13.5px">&larr; Back to login</a>
-        </div>
-      </div>
-    </div>
-    <app-toast-host></app-toast-host>
-  `
+  templateUrl: './forgot-password.component.html'
 })
 export class ForgotPasswordComponent {
   private fb = inject(FormBuilder);

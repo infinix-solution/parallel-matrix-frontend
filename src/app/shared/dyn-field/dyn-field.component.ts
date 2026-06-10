@@ -7,59 +7,7 @@ import { DynamicFormField } from '../../core/models';
   selector: 'app-dyn-field',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <div class="field" [formGroup]="group">
-      <label *ngIf="showLabel">
-        {{ field.label }}
-        <span *ngIf="field.required" style="color:#dc2626">*</span>
-      </label>
-
-      <ng-container [ngSwitch]="field.type">
-        <textarea *ngSwitchCase="'textarea'"
-                  [formControlName]="field.id"
-                  [placeholder]="field.placeholder || field.label"
-                  rows="4"></textarea>
-
-        <select *ngSwitchCase="'dropdown'" [formControlName]="field.id">
-          <option value="" disabled>{{ field.placeholder || ('Select ' + field.label) }}</option>
-          <option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</option>
-        </select>
-
-        <div *ngSwitchCase="'file'">
-          <input type="file"
-                 [accept]="field.accept || '*'"
-                 (change)="onFileChange($event)">
-          <div *ngIf="fileName" style="margin-top:6px;font-size:12.5px;color:var(--mute)">
-            📎 {{ fileName }} <span *ngIf="fileSizeKb">({{ fileSizeKb }} KB)</span>
-          </div>
-          <div *ngIf="field.accept" style="font-size:11.5px;color:var(--mute);margin-top:4px">
-            Accepted: {{ field.accept }}<span *ngIf="field.maxFileSizeKb"> · Max {{ formatSize(field.maxFileSizeKb) }}</span>
-          </div>
-        </div>
-
-        <input *ngSwitchDefault
-               [type]="field.type"
-               [formControlName]="field.id"
-               [placeholder]="field.placeholder || field.label"
-               [attr.maxlength]="field.maxLength || null"
-               [attr.minlength]="field.minLength || null"
-               [attr.min]="field.min ?? null"
-               [attr.max]="field.max ?? null">
-      </ng-container>
-
-      <div class="err" *ngIf="ctrl && ctrl.touched && ctrl.errors as e">
-        <ng-container *ngIf="e['required']">{{ field.label }} is required.</ng-container>
-        <ng-container *ngIf="e['email']">Please enter a valid email address.</ng-container>
-        <ng-container *ngIf="e['minlength']">Minimum {{ e['minlength'].requiredLength }} characters required.</ng-container>
-        <ng-container *ngIf="e['maxlength']">Maximum {{ e['maxlength'].requiredLength }} characters allowed.</ng-container>
-        <ng-container *ngIf="e['min']">Value must be at least {{ e['min'].min }}.</ng-container>
-        <ng-container *ngIf="e['max']">Value must be at most {{ e['max'].max }}.</ng-container>
-        <ng-container *ngIf="e['pattern']">{{ field.patternMessage || 'Invalid format.' }}</ng-container>
-        <ng-container *ngIf="e['fileType']">File must be one of: {{ field.accept }}</ng-container>
-        <ng-container *ngIf="e['fileSize']">File too large. Max {{ formatSize(field.maxFileSizeKb!) }}.</ng-container>
-      </div>
-    </div>
-  `
+  templateUrl: './dyn-field.component.html'
 })
 export class DynFieldComponent {
   @Input({ required: true }) field!: DynamicFormField;

@@ -1,0 +1,20 @@
+    <section class="hero" id="home">
+      <div class="hero-slides" *ngIf="slides().length > 1">
+        <div *ngFor="let s of slides(); let i = index"
+             class="slide"
+             [class.active]="i === current()"
+             [style.background-image]="'url(' + s + ')'"></div>
+      </div>
+      <div class="container hero-inner">
+        <span class="pill"><span class="dot"></span> Parallel Matrix Promise</span>
+        <h1>Talent you can Trust,<br><span class="grad">Growth you can Measure.</span></h1>
+        <p>End-to-end recruitment, staffing, immigration &amp; manpower supply &mdash; built on trust, powered by precision, delivered with care.</p>
+        <div class="tags">
+          <span>Recruitment</span><span>Staffing</span><span>Immigration</span><span>Manpower Supply</span>
+        </div>
+        <div class="hero-cta">
+          <a (click)="scroll('services')" class="btn btn-primary" style="cursor:pointer">Explore Services &rarr;</a>
+          <a (click)="scroll('contact')" class="btn btn-ghost" style="cursor:pointer">Talk to Us</a>
+        </div>
+      </div>
+    </section>

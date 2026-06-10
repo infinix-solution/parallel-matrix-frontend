@@ -1,0 +1,7 @@
+    <div *ngFor="let t of toasts.toasts(); let i = index"
+         class="toast"
+         [class.err]="t.type === 'err'"
+         [style.top.px]="20 + i * 64">
+      {{ t.text }}
+    </div>
+  

@@ -1,0 +1,118 @@
+    <section class="trajectory-section" id="growth-slider">
+      <div class="trajectory-shell">
+        <div class="trajectory-grid">
+          
+          <div class="trajectory-copy">
+            <div class="trajectory-pill">Your Trajectory</div>
+
+            <h2 class="trajectory-title">
+              Growth in <span>Parallel Matrix</span>
+            </h2>
+
+            <p class="trajectory-description">
+              From day one to leadership — see the paths our people walk.
+            </p>
+
+            <div class="trajectory-insights">
+              <article class="trajectory-insight">
+                <span class="eyebrow">Stage 01</span>
+                <h3>Onboard with clarity</h3>
+                <p>Fast starts with clear direction, support, and early momentum.</p>
+              </article>
+              <article class="trajectory-insight">
+                <span class="eyebrow">Stage 02</span>
+                <h3>Build visible impact</h3>
+                <p>Real work, measurable progress, and a path that keeps expanding.</p>
+              </article>
+              <article class="trajectory-insight">
+                <span class="eyebrow">Stage 03</span>
+                <h3>Move into leadership</h3>
+                <p>Own outcomes, influence decisions, and shape what comes next.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="trajectory-board" *ngIf="images().length > 0">
+            <div class="trajectory-board-shell">
+              
+              <div class="trajectory-board-top">
+                <div>
+                  <span class="trajectory-board-label">Growth graph</span>
+                  <span class="trajectory-board-title">Trajectory track in motion</span>
+                </div>
+                <div class="trajectory-board-count">
+                  {{ current() + 1 }} / {{ images().length }}
+                </div>
+              </div>
+
+              <div class="trajectory-canvas">
+                
+                <div class="trajectory-track" *ngIf="images().length > 1">
+                  <button
+                    *ngFor="let img of images(); let i = index"
+                    type="button"
+                    class="trajectory-node"
+                    [class.active]="current() === i"
+                    (click)="goTo(i)"
+                    [attr.aria-label]="'Go to stage ' + (i + 1)">
+                    <span class="trajectory-node-dot"></span>
+                    <span class="trajectory-node-content">
+                      <span class="trajectory-node-eyebrow">Stage {{ i + 1 }}</span>
+                      <span class="trajectory-node-title">{{ img.caption || ('Growth path ' + (i + 1)) }}</span>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="trajectory-stage" [style.background-image]="'url(' + images()[current()]?.url + ')'">
+                  <div class="trajectory-stage-meta">
+                    <span class="trajectory-stage-badge">Leadership path</span>
+                    <h3>{{ images()[current()]?.caption || 'Parallel growth' }}</h3>
+                    
+                    <p>{{ MILESTONE_MESSAGES[current()] }}</p>
+
+                    <div class="trajectory-stage-foot">
+                      <div class="trajectory-progress" [attr.aria-label]="'Progress ' + (current() + 1) + ' of ' + images().length">
+                        <span [style.width.%]="((current() + 1) / images().length) * 100"></span>
+                      </div>
+                      <div class="trajectory-board-count">
+                        {{ current() + 1 }} / {{ images().length }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="trajectory-controls" *ngIf="images().length > 1">
+                <div class="trajectory-nav">
+                  <button class="trajectory-arrow" type="button" (click)="prev()" aria-label="Previous stage">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+                  <button class="trajectory-arrow" type="button" (click)="next()" aria-label="Next stage">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="9 18 13 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="trajectory-dots">
+                  <button
+                    *ngFor="let img of images(); let i = index"
+                    type="button"
+                    class="trajectory-dot-btn"
+                    [class.active]="current() === i"
+                    (click)="goTo(i)"
+                    [attr.aria-label]="'Go to stage ' + (i + 1)">
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  

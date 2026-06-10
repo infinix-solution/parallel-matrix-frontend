@@ -10,31 +10,7 @@ import { ToastHostComponent } from '../../../shared/toast-host/toast-host.compon
   selector: 'app-admin-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, ToastHostComponent],
-  template: `
-    <div class="adm-login">
-      <div class="card">
-        <h2>Admin Login</h2>
-        <p>Restricted area &mdash; authorized personnel only.</p>
-        <form [formGroup]="form" (ngSubmit)="submit()">
-          <div class="field">
-            <label>Email</label>
-            <input type="email" formControlName="email" placeholder="admin@parallelmatrixcorp.com">
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <input type="password" formControlName="password" placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" [disabled]="loading">
-            {{ loading ? 'Signing in...' : 'Sign In →' }}
-          </button>
-          <div style="text-align:center;margin-top:18px">
-            <a routerLink="/admin/forgot-password" style="color:var(--blue2);font-weight:600;font-size:13.5px;cursor:pointer">Forgot password?</a>
-          </div>
-        </form>
-      </div>
-    </div>
-    <app-toast-host></app-toast-host>
-  `
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);

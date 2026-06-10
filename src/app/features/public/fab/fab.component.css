@@ -1,0 +1,117 @@
+    .pm-fab-wrapper {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      bottom: calc(22px + env(safe-area-inset-bottom));
+      z-index: 90;
+      width: 60px;
+      height: 60px;
+    }
+
+    .pm-fab-toggle { position: absolute; opacity: 0; pointer-events: none; }
+
+    .pm-fab-main {
+      position: absolute;
+      inset: 0;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1857c4, #3b82f6);
+      box-shadow: 0 12px 30px -6px rgba(24, 87, 196, 0.5);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition:
+        background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 3;
+    }
+    .pm-fab-main:hover { transform: scale(1.06); }
+
+    .pm-fab-main::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid #3b82f6;
+      opacity: 0.4;
+      animation: pmFabPulse 2s ease-out infinite;
+    }
+    @keyframes pmFabPulse {
+      0%   { transform: scale(0.8); opacity: 0.6; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    .pm-fab-line {
+      position: absolute;
+      width: 22px;
+      height: 3px;
+      background: #fff;
+      border-radius: 3px;
+      transition: transform 0.45s cubic-bezier(0.65, -0.25, 0.35, 1.25);
+    }
+    .pm-fab-line:nth-child(1) { transform: rotate(0deg); }
+    .pm-fab-line:nth-child(2) { transform: rotate(90deg); }
+
+    .pm-fab-sub {
+      position: absolute;
+      top: 0; left: 0;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #fff;
+      color: #0a1f44;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px -4px rgba(10, 31, 68, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(0, 0) scale(0.4);
+      transition:
+        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        background 0.25s ease,
+        color 0.25s ease;
+      z-index: 1;
+    }
+
+    .pm-fab-wa:hover { background: #25D366; color: #fff; }
+    .pm-fab-fb:hover { background: #0a66c2; color: #fff; }
+
+    .pm-fab-toggle:checked ~ .pm-fab-main {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      box-shadow: 0 12px 30px -6px rgba(220, 38, 38, 0.5);
+    }
+    .pm-fab-toggle:checked ~ .pm-fab-main::after { animation: none; opacity: 0; }
+    .pm-fab-toggle:checked ~ .pm-fab-main .pm-fab-line:nth-child(1) { transform: rotate(45deg); }
+    .pm-fab-toggle:checked ~ .pm-fab-main .pm-fab-line:nth-child(2) { transform: rotate(-45deg); }
+
+    .pm-fab-toggle:checked ~ .pm-fab-sub {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-wa { transform: translate(-70px, -70px) scale(1); }
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-fb { transform: translate(0, -85px) scale(1); }
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-wa:hover { transform: translate(-70px, -70px) scale(1.12); }
+    .expand-left .pm-fab-toggle:checked ~ .pm-fab-fb:hover { transform: translate(0, -85px) scale(1.12); }
+
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-wa { transform: translate(70px, -70px) scale(1); }
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-fb { transform: translate(0, -85px) scale(1); }
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-wa:hover { transform: translate(70px, -70px) scale(1.12); }
+    .expand-right .pm-fab-toggle:checked ~ .pm-fab-fb:hover { transform: translate(0, -85px) scale(1.12); }
+
+    .pm-fab-toggle:checked ~ .pm-fab-fb { transition-delay: 0.05s; }
+    .pm-fab-toggle:checked ~ .pm-fab-wa { transition-delay: 0.12s; }
+
+    @media (max-width: 560px) {
+      .pm-fab-wrapper { right: 16px; bottom: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pm-fab-main, .pm-fab-line, .pm-fab-sub { transition-duration: 0.001ms; }
+      .pm-fab-main::after { animation: none; }
+    }
+  

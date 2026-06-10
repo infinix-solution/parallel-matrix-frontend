@@ -9,35 +9,7 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-tab-category-sliders',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="adm-panel">
-      <h3>{{ label }} Image Carousel</h3>
-      <p class="help">
-        Upload up to 8 images (max 300KB each) for the <strong>{{ label }}</strong> section.
-        These appear in the carousel on the public site. If none are uploaded, high-quality
-        default images are shown automatically.
-        <span style="display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,#d4a84c,#f5cb6f);color:#0a1f44;font-size:10px;font-weight:700;letter-spacing:.08em;vertical-align:middle">SUPER</span>
-      </p>
-
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <label class="adm-btn primary" style="cursor:pointer">
-          + Upload Image
-          <input type="file" accept="image/*" hidden (change)="upload($event)">
-        </label>
-        <span style="color:var(--mute);font-size:13px">{{ slides.length }} / 8 uploaded</span>
-      </div>
-
-      <div class="adm-slider-grid" *ngIf="slides.length > 0" style="margin-top:16px">
-        <div *ngFor="let s of slides" class="s">
-          <img [src]="resolveUrl(s.url)" [alt]="s.filename || ''">
-          <button (click)="remove(s)" title="Delete">&times;</button>
-        </div>
-      </div>
-      <div class="adm-empty" *ngIf="slides.length === 0" style="margin-top:16px">
-        No images uploaded — default stock photos are shown on the site.
-      </div>
-    </div>
-  `
+  templateUrl: './tab-category-sliders.component.html'
 })
 export class TabCategorySlidersComponent implements OnInit {
   @Input() category: SliderCategory = 'career';
@@ -47,13 +19,16 @@ export class TabCategorySlidersComponent implements OnInit {
   private toast = inject(ToastService);
   slides: SliderImage[] = [];
 
-  ngOnInit() { this.load(); }
+  ngOnInit() {
+    console.log(`Initializing ${this.category} sliders tab...`);
+    this.load(); }
 
   load() {
     this.api.getCategorySliders(this.category).subscribe({
       next: r => this.slides = (r?.success && r.data) ? r.data : [],
       error: () => this.slides = []
     });
+    console.log(`Loaded ${this.category} sliders:`, this.slides);
   }
 
   resolveUrl(u: string) {
@@ -74,6 +49,7 @@ export class TabCategorySlidersComponent implements OnInit {
         if (r?.success && r.data) {
           this.slides = [...this.slides, r.data];
           this.toast.show('Image uploaded.');
+          console.log(`Uploaded ${this.category} slider:`, r.data);
         }
       },
       error: err => this.toast.show(err?.error?.message || 'Upload failed.', 'err')

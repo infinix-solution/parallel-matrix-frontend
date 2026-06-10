@@ -1,0 +1,536 @@
+      :host {
+        display: block;
+        --mute: #64748b;
+        --gold-dark: #927314;
+        --grad2: linear-gradient(135deg, #1857c4 0%, #0a1f44 100%);
+      }
+
+      .trajectory-section {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(56px, 8vw, 104px) 0;
+        background:
+          radial-gradient(900px 520px at 12% 0%, rgba(24, 87, 196, .14), transparent 55%),
+          radial-gradient(760px 460px at 100% 20%, rgba(201, 162, 39, .14), transparent 52%),
+          linear-gradient(180deg, #f7f9fd 0%, #edf3fb 100%);
+      }
+
+      .trajectory-section::before {
+        content: '';
+        position: absolute;
+        inset: auto -120px -200px auto;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(59, 130, 246, .16), transparent 68%);
+        pointer-events: none;
+        filter: blur(4px);
+      }
+
+      .trajectory-shell {
+        width: min(100%, 1280px);
+        margin: 0 auto;
+        padding: 0 clamp(16px, 3vw, 32px);
+        position: relative;
+        z-index: 1;
+      }
+
+      .trajectory-grid {
+        display: grid;
+        grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+        gap: clamp(28px, 5vw, 64px);
+        align-items: center;
+      }
+
+      .trajectory-copy {
+        min-width: 0;
+      }
+
+      .trajectory-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(140, 110, 10, .25);
+        background: rgba(201, 162, 39, .12);
+        color: var(--gold-dark);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .24em;
+        text-transform: uppercase;
+        width: fit-content;
+        margin-bottom: 22px;
+        box-shadow: 0 10px 26px -16px rgba(140, 110, 10, .5);
+      }
+
+      .trajectory-title {
+        margin: 0;
+        max-width: 15ch;
+        color: var(--navy);
+        font-family: 'Sora', sans-serif;
+        font-size: clamp(2.1rem, 4.5vw, 4.6rem);
+        font-weight: 800;
+        line-height: .98;
+        letter-spacing: -.04em;
+      }
+
+      .trajectory-title span {
+        display: inline-block;
+        background: linear-gradient(90deg, var(--blue2), var(--gold));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .trajectory-description {
+        margin: 18px 0 0;
+        max-width: 34rem;
+        color: var(--mute);
+        font-size: clamp(0.98rem, 1.35vw, 1.08rem);
+        line-height: 1.7;
+      }
+
+      .trajectory-insights {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 32px;
+      }
+
+      .trajectory-insight {
+        min-width: 0;
+        padding: 18px 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(10, 31, 68, .08);
+        background: rgba(255, 255, 255, .76);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 18px 36px -20px rgba(10, 31, 68, .28);
+      }
+
+      .trajectory-insight .eyebrow {
+        display: block;
+        margin: 0 0 10px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        color: var(--gold-dark);
+      }
+
+      .trajectory-insight h3 {
+        margin: 0 0 6px;
+        color: var(--navy);
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .trajectory-insight p {
+        margin: 0;
+        color: var(--mute);
+        font-size: 13.5px;
+        line-height: 1.55;
+      }
+
+      .trajectory-board {
+        min-width: 0;
+      }
+
+      .trajectory-board-shell {
+        position: relative;
+        border-radius: 30px;
+        padding: 18px;
+        background: rgba(10, 31, 68, .04);
+        border: 1px solid rgba(10, 31, 68, .08);
+        box-shadow: 0 34px 80px -28px rgba(10, 31, 68, .3);
+        backdrop-filter: blur(18px);
+      }
+
+      .trajectory-board-shell::before {
+        content: '';
+        position: absolute;
+        inset: 12px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, .58);
+        pointer-events: none;
+      }
+
+      .trajectory-board-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 6px 6px 16px;
+      }
+
+      .trajectory-board-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--gold-dark);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .22em;
+        text-transform: uppercase;
+      }
+
+      .trajectory-board-title {
+        display: block;
+        margin-top: 4px;
+        color: var(--navy);
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .trajectory-board-count {
+        flex-shrink: 0;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .82);
+        border: 1px solid rgba(10, 31, 68, .08);
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+
+      .trajectory-canvas {
+        display: grid;
+        grid-template-columns: minmax(190px, .85fr) minmax(0, 1.15fr);
+        gap: 16px;
+        align-items: stretch;
+      }
+
+      .trajectory-track {
+        position: relative;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 4px;
+      }
+
+      .trajectory-track::before {
+        content: '';
+        position: absolute;
+        left: 25px;
+        top: 18px;
+        bottom: 18px;
+        width: 2px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(24, 87, 196, .12), rgba(201, 162, 39, .5), rgba(24, 87, 196, .12));
+      }
+
+      .trajectory-node {
+        position: relative;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1fr);
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px 12px 0;
+        border: 0;
+        border-radius: 18px;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        text-align: left;
+        transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+      }
+
+      .trajectory-node:hover {
+        transform: translateX(4px);
+        background: rgba(255, 255, 255, .5);
+      }
+
+      .trajectory-node.active {
+        background: rgba(255, 255, 255, .82);
+        box-shadow: 0 14px 30px -22px rgba(10, 31, 68, .35);
+      }
+
+      .trajectory-node-dot {
+        position: relative;
+        z-index: 1;
+        width: 18px;
+        height: 18px;
+        margin-left: 16px;
+        border-radius: 50%;
+        border: 2px solid rgba(24, 87, 196, .18);
+        background: #fff;
+        box-shadow: 0 0 0 6px rgba(24, 87, 196, .05);
+        flex-shrink: 0;
+        transition: all .25s ease;
+      }
+
+      .trajectory-node.active .trajectory-node-dot {
+        background: var(--grad2);
+        border-color: #fff;
+        box-shadow: 0 0 0 8px rgba(24, 87, 196, .14), 0 12px 24px -12px rgba(24, 87, 196, .75);
+        transform: scale(1.04);
+      }
+
+      .trajectory-node-content {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .trajectory-node-eyebrow {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: var(--gold-dark);
+      }
+
+      .trajectory-node-title {
+        color: var(--navy);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.35;
+        word-break: break-word;
+      }
+
+      .trajectory-stage {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+        min-height: clamp(340px, 42vw, 460px);
+        border-radius: 26px;
+        background-color: #0a1f44;
+        background-position: center;
+        background-size: cover;
+        box-shadow: 0 24px 60px -20px rgba(10, 31, 68, .42);
+        isolation: isolate;
+        transition: background-image 0.4s ease-in-out;
+      }
+
+      .trajectory-stage::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(10, 18, 38, .1) 0%, rgba(10, 18, 38, .4) 45%, rgba(10, 18, 38, .88) 100%);
+        z-index: 0;
+      }
+
+      .trajectory-stage-meta {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        padding: 24px;
+        color: #fff;
+      }
+
+      .trajectory-stage-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .14);
+        border: 1px solid rgba(255, 255, 255, .2);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        backdrop-filter: blur(10px);
+      }
+
+      .trajectory-stage-meta h3 {
+        margin: 12px 0 8px;
+        font-size: clamp(1.2rem, 2.35vw, 1.8rem);
+        line-height: 1.1;
+        letter-spacing: -.03em;
+      }
+
+      .trajectory-stage-meta p {
+        margin: 0;
+        max-width: 38ch;
+        color: #d7e2fb;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .trajectory-stage-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .trajectory-progress {
+        height: 6px;
+        flex: 1 1 180px;
+        min-width: 120px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .14);
+        overflow: hidden;
+      }
+
+      .trajectory-progress span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--gold), #fff);
+        transition: width .35s ease;
+      }
+
+      .trajectory-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 6px 6px;
+        flex-wrap: wrap;
+      }
+
+      .trajectory-nav {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .trajectory-arrow {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        border-radius: 50%;
+        border: 1px solid rgba(10, 31, 68, .08);
+        background: rgba(255, 255, 255, .9);
+        color: var(--navy);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 24px -16px rgba(10, 31, 68, .4);
+        cursor: pointer;
+        transition: all .2s ease;
+      }
+
+      .trajectory-arrow:hover {
+        transform: translateY(-2px);
+        background: #fff;
+        box-shadow: 0 16px 28px -16px rgba(10, 31, 68, .45);
+      }
+
+      .trajectory-dots {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .trajectory-dot-btn {
+        width: 9px;
+        height: 9px;
+        min-width: 9px;
+        min-height: 9px;
+        padding: 0;
+        border: none;
+        border-radius: 999px;
+        background: rgba(10, 31, 68, .18);
+        cursor: pointer;
+        transition: width .25s ease, background .25s ease;
+      }
+
+      .trajectory-dot-btn.active {
+        width: 28px;
+        background: var(--grad2);
+      }
+
+      /* ─────────────────────────────────────────────────────────
+         ── REBUILT HIGH-PERFORMANCE RESPONSIVE INFRASTRUCTURE ──
+         ───────────────────────────────────────────────────────── */
+      @media (max-width: 1140px) {
+        .trajectory-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .trajectory-title {
+          max-width: 100%;
+        }
+        .trajectory-description {
+          max-width: 100%;
+        }
+      }
+
+      /* Clean Responsive Breakpoint Layer */
+      @media (max-width: 860px) {
+        .trajectory-canvas {
+          grid-template-columns: 1fr; /* Stack into neat mobile cards */
+          gap: 20px;
+        }
+
+        /* FIX: Hide the sidebar stage track completely on small views */
+        .trajectory-track {
+          display: none !important;
+        }
+
+        .trajectory-insights {
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .trajectory-section {
+          padding: 44px 0;
+        }
+
+        .trajectory-shell {
+          padding: 0 16px;
+        }
+
+        .trajectory-board-shell {
+          border-radius: 24px;
+          padding: 14px;
+        }
+
+        .trajectory-stage {
+          min-height: 280px;
+          border-radius: 20px;
+        }
+
+        .trajectory-stage-meta {
+          padding: 20px;
+        }
+
+        .trajectory-stage-meta p {
+          font-size: 13.5px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .trajectory-insights {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        
+        .trajectory-board-top {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+        
+        .trajectory-board-count {
+          align-self: flex-end;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .trajectory-node,
+        .trajectory-arrow,
+        .trajectory-dot-btn,
+        .trajectory-progress span {
+          transition: none !important;
+        }
+      }
+    

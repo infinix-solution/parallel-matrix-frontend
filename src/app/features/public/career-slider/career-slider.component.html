@@ -1,0 +1,63 @@
+    <section class="career-section" id="career-slider">
+      <div class="career-container">
+        <div class="career-grid">
+          
+          <div class="career-content">
+            <div class="career-eyebrow">Life at Parallel Matrix</div>
+            <h2 class="career-title">Career in <span>Parallel Matrix</span></h2>
+            <p class="career-description">
+              Join a team that grows together. See what a career at Parallel Matrix looks like.
+            </p>
+
+            <div class="career-steps" *ngIf="images().length > 1">
+              <button 
+                *ngFor="let img of images(); let i = index"
+                type="button"
+                class="career-step-pill"
+                [class.active]="current() === i"
+                (click)="goTo(i)">
+                Workspace {{ i + 1 }}
+              </button>
+            </div>
+          </div>
+
+          <div class="career-visual-wrapper" *ngIf="images().length > 0">
+            <div class="career-display-frame">
+              <div *ngFor="let img of images(); let i = index"
+                   class="career-img-layer"
+                   [class.active]="current() === i"
+                   [style.background-image]="'url(' + img.url + ')'">
+              </div>
+
+              <div class="career-glass-card" *ngIf="images()[current()]?.caption">
+                <span class="career-glass-tag">Corporate Environment</span>
+                <span class="career-glass-text">{{ images()[current()].caption }}</span>
+              </div>
+            </div>
+
+            <div class="career-action-controls" *ngIf="images().length > 1">
+              <div class="career-arrows-row">
+                <button class="career-nav-btn" (click)="prev()" aria-label="Previous slide">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                </button>
+                <button class="career-nav-btn" (click)="next()" aria-label="Next slide">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="career-counter">
+                {{ current() + 1 }} &nbsp;/&nbsp; {{ images().length }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  

@@ -1,0 +1,50 @@
+<!-- Skeleton: visible while ContentService awaits the API response -->
+<section id="contact" class="contact-skel-section" *ngIf="isLoading(); else contactContent">
+  <div class="container">
+    <div class="s-head">
+      <div class="skel skel-eyebrow"></div>
+      <div class="skel skel-title"></div>
+      <div class="skel skel-sub"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="skel skel-map"></div>
+      <div class="skel skel-addr"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Resolved content -->
+<ng-template #contactContent>
+  <section id="contact" style="background:linear-gradient(180deg,var(--bg),#eef2f9)" *ngIf="data() as d">
+    <div class="container">
+      <div class="s-head reveal in">
+        <span class="eyebrow-tag">{{ d.eyebrow }}</span>
+        <h2 class="s-title">{{ d.title }}</h2>
+        <p class="s-sub">{{ d.sub }}</p>
+      </div>
+      <div class="contact-grid">
+        <div class="map-wrap reveal in">
+          <iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
+            [src]="mapUrl(d)"></iframe>
+        </div>
+        <div class="addr-card reveal in">
+          <h3>Office Address</h3>
+          <div class="addr-row" *ngIf="d.address">
+            <div class="ic">📍</div>
+            <div><div class="t">Address</div><div class="v">{{ d.address }}</div></div>
+          </div>
+          <div class="addr-row" *ngIf="d.phone">
+            <div class="ic">📞</div>
+            <div><div class="t">Office Contact</div><div class="v">{{ d.phone }}</div></div>
+          </div>
+          <div class="addr-row" *ngIf="d.email">
+            <div class="ic">✉</div>
+            <div><div class="t">Email</div><div class="v">{{ d.email }}</div></div>
+          </div>
+          <a class="btn btn-ghost" target="_blank" rel="noopener"
+             [href]="d.directionsUrl || 'https://maps.google.com'">Open in Google Maps →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-template>

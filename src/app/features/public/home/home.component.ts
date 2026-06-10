@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { HeroComponent } from '../hero/hero.component';
 import { MediaShowcaseComponent } from '../media-showcase/media-showcase.component';
 import { AboutComponent } from '../about/about.component';
@@ -16,25 +16,13 @@ import { ContentService } from '../../../core/services/content.service';
 @Component({
   selector: 'app-home',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     HeroComponent, MediaShowcaseComponent, AboutComponent, ServicesComponent,
     CareerComponent, CareerSliderComponent, GrowthSliderComponent,
     TeamComponent, VisionMissionComponent, PolicyComponent, FormsComponent, ContactComponent
   ],
-  template: `
-    <app-hero></app-hero>
-    <app-about></app-about>
-    <app-media-showcase></app-media-showcase>
-    <app-services></app-services>
-    <app-career></app-career>
-    <app-career-slider></app-career-slider>
-    <app-growth-slider></app-growth-slider>
-    <app-team></app-team>
-    <app-vision-mission></app-vision-mission>
-    <app-policy></app-policy>
-    <app-forms></app-forms>
-    <app-contact></app-contact>
-  `
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
   private content = inject(ContentService);

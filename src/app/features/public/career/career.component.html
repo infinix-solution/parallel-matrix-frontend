@@ -1,0 +1,58 @@
+<!-- Skeleton: shown while ContentService awaits the first API response -->
+<section id="career" *ngIf="isLoading(); else careerContent">
+  <div class="container">
+    <div class="career-skel-wrapper">
+      <div class="skel skel-eyebrow"></div>
+      <div class="skel skel-title"></div>
+      <div class="skel skel-sub"></div>
+      <div class="career-skel-stats">
+        <div class="skel skel-stat" *ngFor="let _ of [1,2,3,4]"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Resolved content -->
+<ng-template #careerContent>
+  <section id="career" *ngIf="data() as d">
+    <div class="container">
+
+      <div #careerBlock class="career-showcase-wrapper">
+        <div class="shimmer-mask" *ngIf="!graphLoaded() && !graphError()"></div>
+
+        <div class="showcase-bg-canvas" *ngIf="!graphError()">
+          <img
+            [src]="gifUrl()"
+            alt="Background growth metrics graph"
+            (load)="graphLoaded.set(true)"
+            (error)="graphError.set(true)"
+            [style.opacity]="graphLoaded() ? '0.22' : '0'"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="career-fallback-canvas" *ngIf="graphError()">
+          <div class="fallback-bar" style="height: 25%"></div>
+          <div class="fallback-bar" style="height: 45%"></div>
+          <div class="fallback-bar" style="height: 65%"></div>
+          <div class="fallback-bar accent" style="height: 90%"></div>
+        </div>
+
+        <div class="career-foreground-panel">
+          <span class="eyebrow">{{ d.eyebrow }}</span>
+          <h2>{{ d.title }}</h2>
+          <p class="lead">{{ d.lead }}</p>
+
+          <div class="stats">
+            <div *ngFor="let label of statLabels(); let i = index" class="stat">
+              <div class="n">{{ displayStats()[i] || '0' }}</div>
+              <div class="l">{{ label }}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</ng-template>

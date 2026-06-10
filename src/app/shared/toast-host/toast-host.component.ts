@@ -6,14 +6,7 @@ import { ToastService } from '../../core/services/toast.service';
   selector: 'app-toast-host',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div *ngFor="let t of toasts.toasts(); let i = index"
-         class="toast"
-         [class.err]="t.type === 'err'"
-         [style.top.px]="20 + i * 64">
-      {{ t.text }}
-    </div>
-  `
+  templateUrl: './toast-host.component.html'
 })
 export class ToastHostComponent {
   toasts = inject(ToastService);

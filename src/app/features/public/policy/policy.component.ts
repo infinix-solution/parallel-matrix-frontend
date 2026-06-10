@@ -14,46 +14,8 @@ interface PolWithState {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FaIconPipe],
-  template: `
-    <section id="policy" style="background:linear-gradient(180deg,#eef2f9,var(--bg))" *ngIf="data() as d">
-      <div class="container">
-          <div class="s-head reveal in" style="margin-bottom:40px; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <span class="eyebrow-tag">{{ d.eyebrow }}</span>
-          <h2 class="s-title">{{ d.title }}</h2>
-        </div>
-        <div class="pol-grid">
-          <div *ngFor="let p of items" class="pol reveal in">
-            <h4>
-              <span *ngIf="p.icon" [innerHTML]="p.icon | faIcon" style="margin-right:8px"></span>{{ p.title }}
-            </h4>
-            <p>
-              {{ truncated(p) }}
-              <a *ngIf="needsToggle(p)" (click)="p.expanded = !p.expanded"
-                 style="display:inline-block;margin-left:4px;color:var(--blue2);font-weight:700;cursor:pointer">
-                {{ p.expanded ? 'Read less' : 'Read more' }}
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  `,
-  styles: [`
-    .eyebrow-tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: rgba(240, 217, 122, 0.15);
-      color: #eab308;
-      font-size: clamp(10px, 1vw, 11px);
-      font-weight: 800;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      width: fit-content;
-      margin-bottom: 20px;
-    }
-    `]
+  templateUrl: './policy.component.html',
+  styleUrls: ['./policy.component.css']
 
 })
 export class PolicyComponent implements OnInit {

@@ -1,0 +1,98 @@
+    <section id="forms">
+      <div class="container">
+        <div class="s-head reveal in">
+          <span class="eyebrow-tag">{{ header.eyebrow }}</span>
+          <h2 class="s-title">{{ header.title }}</h2>
+          <p class="s-sub">{{ header.sub }}</p>
+        </div>
+
+        <div *ngIf="loadError" style="text-align:center;padding:20px;background:#fee2e2;border-radius:12px;margin-bottom:20px;color:#b91c1c">
+          ⚠ Could not load form configuration. Configure it under <a href="/admin" style="font-weight:700">/admin</a> → Page Builder.
+        </div>
+
+        <div *ngIf="!loading">
+          <!-- ── Tab selector ── -->
+          <div class="form-tabs">
+            <button class="form-tab"
+                    [class.active]="activeTab === 'hr'"
+                    (click)="selectTab('hr')"
+                    *ngIf="hrSection && hrSection.fields.length > 0">
+              <span class="tab-ic">{{ hrSection.icon || '🏢' }}</span>
+              {{ hrSection.title || 'HR Enquiry' }}
+            </button>
+            <button class="form-tab"
+                    [class.active]="activeTab === 'candidate'"
+                    (click)="selectTab('candidate')"
+                    *ngIf="candSection && candSection.fields.length > 0">
+              <span class="tab-ic">{{ candSection.icon || '🎓' }}</span>
+              {{ candSection.title || 'Candidate Application' }}
+            </button>
+          </div>
+
+          <!-- ── Prompt before selection ── -->
+          <div class="form-prompt reveal in" *ngIf="!activeTab">
+            <div class="prompt-icon">👆</div>
+            <h3>Select a tab to get started</h3>
+            <p>Choose <strong>HR Enquiry</strong> if you're hiring, or <strong>Candidate Application</strong> if you're looking for opportunities. We'll respond within 24 hours.</p>
+          </div>
+
+          <!-- ── HR Form ── -->
+          <form class="form-card form-enter"
+                [formGroup]="hrForm"
+                (ngSubmit)="submitHr()"
+                *ngIf="activeTab === 'hr' && hrSection">
+            <div class="top">
+              <div class="ic">{{ hrSection.icon || '🏢' }}</div>
+              <div>
+                <h3>{{ hrSection.title }}</h3>
+                <div class="lead">{{ hrSection.subtitle }}</div>
+              </div>
+            </div>
+            <app-dyn-field *ngFor="let f of hrSection.fields"
+                           [field]="f"
+                           [group]="hrForm"
+                           [showLabel]="true"></app-dyn-field>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" [disabled]="hrLoading">
+              {{ hrLoading ? 'Sending...' : (hrSection.submitLabel || 'Send Enquiry') + ' →' }}
+            </button>
+          </form>
+
+          <!-- ── Candidate Form ── -->
+          <form class="form-card form-enter"
+                [formGroup]="candForm"
+                (ngSubmit)="submitCand()"
+                *ngIf="activeTab === 'candidate' && candSection">
+            <div class="top">
+              <div class="ic">{{ candSection.icon || '🎓' }}</div>
+              <div>
+                <h3>{{ candSection.title }}</h3>
+                <div class="lead">{{ candSection.subtitle }}</div>
+              </div>
+            </div>
+            <app-dyn-field *ngFor="let f of candSection.fields"
+                           [field]="f"
+                           [group]="candForm"
+                           [showLabel]="true"></app-dyn-field>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" [disabled]="candLoading">
+              {{ candLoading ? 'Submitting...' : (candSection.submitLabel || 'Apply Now') + ' →' }}
+            </button>
+          </form>
+        </div>
+
+        <!-- Skeleton: shown while form config loads -->
+        <div *ngIf="loading" class="forms-skel">
+          <div class="forms-skel-tabs">
+            <div class="skel skel-tab"></div>
+            <div class="skel skel-tab"></div>
+          </div>
+          <div class="forms-skel-card">
+            <div class="skel skel-card-icon"></div>
+            <div class="skel skel-card-title"></div>
+            <div class="skel skel-card-line"></div>
+            <div class="skel skel-card-line skel-card-line--short"></div>
+            <div class="skel skel-card-btn"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  

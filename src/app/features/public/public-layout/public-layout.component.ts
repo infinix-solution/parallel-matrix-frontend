@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -10,15 +10,9 @@ import { ToastHostComponent } from '../../../shared/toast-host/toast-host.compon
 @Component({
   selector: 'app-public-layout',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent, IntroLoaderComponent, FabComponent, ToastHostComponent],
-  template: `
-    <app-intro-loader></app-intro-loader>
-    <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
-    <app-footer></app-footer>
-    <app-fab></app-fab>
-    <app-toast-host></app-toast-host>
-  `
+  templateUrl: './public-layout.component.html'
 })
 export class PublicLayoutComponent implements OnInit {
   ngOnInit() {
