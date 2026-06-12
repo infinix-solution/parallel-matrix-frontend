@@ -63,10 +63,12 @@
                   </button>
                 </div>
 
-                <div class="trajectory-stage" [style.background-image]="'url(' + images()[current()]?.url + ')'">
+                <div class="trajectory-stage" [style.background-image]="'url(' + images()[current()].url + ')'">
+
                   <div class="trajectory-stage-meta">
                     <span class="trajectory-stage-badge">Leadership path</span>
-                    <h3>{{ images()[current()]?.caption || 'Parallel growth' }}</h3>
+                    <h3>{{ images()[current()].caption || 'Parallel growth' }}</h3>
+
                     
                     <p>{{ MILESTONE_MESSAGES[current()] }}</p>
 
