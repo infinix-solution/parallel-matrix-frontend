@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ContentService } from '../../../core/services/content.service';
@@ -9,6 +9,7 @@ type SubTab = 'about' | 'services' | 'career' | 'sister' | 'policy' | 'contact';
 @Component({
   selector: 'app-tab-site-content',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tab-site-content.component.html'
 })
@@ -16,6 +17,7 @@ export class TabSiteContentComponent implements OnInit {
   private fb = inject(FormBuilder);
   private cnt = inject(ContentService);
   private toast = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   sub: SubTab = 'about';
   loading = false;
@@ -50,7 +52,8 @@ export class TabSiteContentComponent implements OnInit {
       eyebrow: [''], title: [''], sub: [''],
       address: [''], phone: [''], email: [''],
       mapQuery: [''], directionsUrl: [''],
-      whatsapp: [''], linkdnUrl: ['']
+      whatsapp: [''], linkdnUrl: [''],
+      branches: this.fb.array([])
     })
   });
 
@@ -60,6 +63,7 @@ export class TabSiteContentComponent implements OnInit {
   get sisterCards(): FormArray { return this.form.get('sisterCompany.serviceCards') as FormArray; }
   get industries(): FormArray { return this.form.get('sisterCompany.industries') as FormArray; }
   get policyItems(): FormArray { return this.form.get('policySection.items') as FormArray; }
+  get contactBranches(): FormArray { return this.form.get('contactSection.branches') as FormArray; }
 
   ngOnInit() {
     this.cnt.get().subscribe({
@@ -72,6 +76,9 @@ export class TabSiteContentComponent implements OnInit {
           this.patchSection('sisterCompany', d.sisterCompany);
           this.patchSection('policySection', d.policySection);
           this.patchSection('contactSection', d.contactSection);
+          // With OnPush, async HTTP callbacks don't automatically mark the view
+          // dirty — tell Angular to re-check this component's template now.
+          this.cdr.markForCheck();
         }
       }
     });
@@ -113,6 +120,10 @@ export class TabSiteContentComponent implements OnInit {
       this.policyItems.clear();
       data.items.forEach((p: any) => this.policyItems.push(this.policyGroup(p)));
     }
+    if (name === 'contactSection' && Array.isArray(data.branches)) {
+      this.contactBranches.clear();
+      data.branches.forEach((b: any) => this.contactBranches.push(this.branchGroup(b)));
+    }
   }
 
   highlightGroup(h: any = {}): FormGroup {
@@ -134,6 +145,10 @@ export class TabSiteContentComponent implements OnInit {
     });
   }
 
+  branchGroup(b: any = {}): FormGroup {
+    return this.fb.group({ name: [b.name || ''], phone: [b.phone || ''] });
+  }
+
   addHighlight() { this.aboutHighlights.push(this.highlightGroup()); }
   removeHighlight(i: number) { if (confirm('Delete?')) this.aboutHighlights.removeAt(i); }
   addService() { this.services.push(this.serviceGroup()); }
@@ -146,6 +161,8 @@ export class TabSiteContentComponent implements OnInit {
   removeIndustry(i: number) { this.industries.removeAt(i); }
   addPolicy() { this.policyItems.push(this.policyGroup()); }
   removePolicy(i: number) { if (confirm('Delete?')) this.policyItems.removeAt(i); }
+  addBranch() { this.contactBranches.push(this.branchGroup()); }
+  removeBranch(i: number) { if (confirm('Delete branch?')) this.contactBranches.removeAt(i); }
 
   bulletText(g: any): string {
     const items = g.get('items')?.value || [];

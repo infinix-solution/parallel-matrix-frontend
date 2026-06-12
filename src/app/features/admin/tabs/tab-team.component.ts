@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
@@ -9,6 +9,7 @@ import { TeamMember } from '../../../core/models';
 @Component({
   selector: 'app-tab-team',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tab-team.component.html'
 })
@@ -17,6 +18,7 @@ export class TabTeamComponent implements OnInit {
   private api = inject(ApiService);
   private cnt = inject(ContentService);
   private toast = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   form: FormGroup = this.fb.group({ members: this.fb.array([]) });
 
@@ -29,6 +31,7 @@ export class TabTeamComponent implements OnInit {
       next: r => {
         this.members.clear();
         (r?.data || []).forEach(m => this.members.push(this.toGroup(m)));
+        this.cdr.markForCheck();
       }
     });
   }
@@ -60,6 +63,7 @@ export class TabTeamComponent implements OnInit {
         if (r?.success && r.data) {
           (this.members.at(i) as FormGroup).patchValue({ photoUrl: r.data.url });
           this.toast.show('Photo uploaded.');
+          this.cdr.markForCheck();
         }
       },
       error: err => this.toast.show(err?.error?.message || 'Upload failed.', 'err')
@@ -79,13 +83,13 @@ export class TabTeamComponent implements OnInit {
     if (!v.linkedin) v.linkedin = '#';
     if (v._id) {
       this.api.updateTeam(v._id, v).subscribe({
-        next: () => this.toast.show('Updated.'),
-        error: () => this.toast.show('Update failed.', 'err')
+        next: () => { this.toast.show('Updated.'); this.cdr.markForCheck(); },
+        error: () => { this.toast.show('Update failed.', 'err'); this.cdr.markForCheck(); }
       });
     } else {
       this.api.createTeam(v).subscribe({
-        next: r => { if (r?.data?._id) g.patchValue({ _id: r.data._id }); this.toast.show('Created.'); },
-        error: () => this.toast.show('Create failed.', 'err')
+        next: r => { if (r?.data?._id) g.patchValue({ _id: r.data._id }); this.toast.show('Created.'); this.cdr.markForCheck(); },
+        error: () => { this.toast.show('Create failed.', 'err'); this.cdr.markForCheck(); }
       });
     }
   }
@@ -96,8 +100,8 @@ export class TabTeamComponent implements OnInit {
     if (!id) { this.members.removeAt(i); return; }
     if (!confirm('Delete this member?')) return;
     this.api.deleteTeam(id).subscribe({
-      next: () => { this.members.removeAt(i); this.toast.show('Deleted.'); },
-      error: () => this.toast.show('Delete failed.', 'err')
+      next: () => { this.members.removeAt(i); this.toast.show('Deleted.'); this.cdr.markForCheck(); },
+      error: () => { this.toast.show('Delete failed.', 'err'); this.cdr.markForCheck(); }
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../core/services/api.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -8,22 +8,23 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-tab-sliders',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   templateUrl: './tab-sliders.component.html'
 })
 export class TabSlidersComponent implements OnInit {
   private api = inject(ApiService);
   private toast = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
   slides: SliderImage[] = [];
 
   ngOnInit() { this.load(); }
 
   load() {
     this.api.getSliders().subscribe({
-      next: r => this.slides = (r?.success && r.data) ? r.data : [],
-      error: () => this.slides = []
+      next: r => { this.slides = (r?.success && r.data) ? r.data : []; this.cdr.markForCheck(); },
+      error: () => { this.slides = []; this.cdr.markForCheck(); }
     });
-      console.log('Loaded sliders:', this.slides);
   }
 
 
@@ -45,7 +46,7 @@ export class TabSlidersComponent implements OnInit {
         if (r?.success && r.data) {
           this.slides = [...this.slides, r.data];
           this.toast.show('Image uploaded.');
-          console.log('Uploaded slider:', r.data);
+          this.cdr.markForCheck();
         }
       },
       error: err => this.toast.show(err?.error?.message || 'Upload failed.', 'err')
@@ -56,7 +57,7 @@ export class TabSlidersComponent implements OnInit {
     if (!s._id) return;
     if (!confirm('Delete this slide?')) return;
     this.api.deleteSlider(s._id).subscribe({
-      next: () => { this.slides = this.slides.filter(x => x._id !== s._id); this.toast.show('Deleted.'); },
+      next: () => { this.slides = this.slides.filter(x => x._id !== s._id); this.toast.show('Deleted.'); this.cdr.markForCheck(); },
       error: () => this.toast.show('Delete failed.', 'err')
     });
   }

@@ -301,6 +301,36 @@
             <div class="field"><label>Map Query (for Google Maps embed)</label><input formControlName="mapQuery"></div>
             <div class="field"><label>Directions URL</label><input formControlName="directionsUrl"></div>
           </div>
+
+          <div class="adm-card" style="margin-top:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <strong style="color:var(--navy)">Branch Offices ({{ contactBranches.length }})</strong>
+              <button type="button" class="adm-btn primary" (click)="addBranch()">+ Add Branch</button>
+            </div>
+            <p style="color:#6b7a99;font-size:13px;margin:0 0 12px">
+              Add additional office locations shown on the public contact page. Leave empty to hide the section.
+            </p>
+            <div formArrayName="branches">
+              <div *ngFor="let b of contactBranches.controls; let i = index" [formGroupName]="i"
+                   class="adm-card" style="background:#fff;border:1.5px solid #e5ecf6;margin-bottom:10px">
+                <div class="grid2">
+                  <div class="field">
+                    <label>Location Name</label>
+                    <input formControlName="name" placeholder="e.g. Mumbai Branch Office">
+                  </div>
+                  <div class="field">
+                    <label>Contact Number</label>
+                    <input formControlName="phone" placeholder="+91 98765 43210">
+                  </div>
+                </div>
+                <button type="button" class="adm-btn danger" (click)="removeBranch(i)" style="margin-top:4px">Delete Branch</button>
+              </div>
+              <div *ngIf="contactBranches.length === 0"
+                   style="text-align:center;padding:20px 0;color:#9aa5be;font-size:13px;border:1.5px dashed #d8e0ef;border-radius:12px">
+                No branch offices added yet. Click "+ Add Branch" to get started.
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="adm-actions" style="margin-top:18px;position:sticky;bottom:0;background:#fff;padding:14px;border-radius:12px;box-shadow:0 -8px 20px -10px rgba(10,31,68,.15);z-index:5">

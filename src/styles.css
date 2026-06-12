@@ -259,6 +259,12 @@ section{padding:70px 0;position:relative}
 .foot .socials a{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;transition:.25s}
 .foot .socials a:hover{background:var(--grad2);transform:translateY(-2px)}
 .foot-bot{margin-top:50px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#7c8aab;flex-wrap:wrap;gap:12px}
+/* ── Footer contact rows ── */
+.foot-contact-row{display:flex;gap:10px;margin:8px 0}
+.foot-contact-row--top{align-items:flex-start}
+.foot-contact-icon{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:16px;height:16px;min-width:16px;line-height:0}
+.foot-contact-icon svg{display:block;width:16px;height:16px;overflow:visible}
+.foot-contact-row a,.foot-contact-row span{display:block;line-height:1.4;color:inherit}
 
 /* ===== FAB ===== */
 .fab{position:fixed;right:22px;bottom:22px;bottom:calc(22px + env(safe-area-inset-bottom));z-index:90;display:flex;flex-direction:column;gap:12px}

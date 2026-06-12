@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
@@ -8,12 +8,14 @@ import { SmtpConfig, SmtpConfigPayload } from '../../../core/models';
 @Component({
   selector: 'app-tab-smtp',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   templateUrl: './tab-smtp.component.html'
 })
 export class TabSmtpComponent implements OnInit {
   private api   = inject(ApiService);
   private toast = inject(ToastService);
+  private cdr   = inject(ChangeDetectorRef);
 
   loading = signal(true);
   saving  = signal(false);
@@ -37,6 +39,8 @@ export class TabSmtpComponent implements OnInit {
           const d = res.data;
           this.currentConfig.set(d);
           this.hasExistingPassword = !!d.hasPassword;
+          // Plain object replacement — not tracked by Angular's signal graph.
+          // markForCheck() ensures the OnPush view re-evaluates the ngModel bindings.
           this.form = {
             host:     d.host,
             port:     d.port,
@@ -46,11 +50,13 @@ export class TabSmtpComponent implements OnInit {
             mailTo:   d.mailTo,
             pass:     ''
           };
+          this.cdr.markForCheck();
         }
       },
       error: () => {
         this.loading.set(false);
         this.toast.show('Could not load SMTP configuration.', 'err');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -69,15 +75,17 @@ export class TabSmtpComponent implements OnInit {
           this.toast.show('SMTP configuration saved.');
           this.hasExistingPassword = !!this.form.pass || this.hasExistingPassword;
           this.form.pass = '';
-          // Re-load to confirm
+          this.cdr.markForCheck();
           this.ngOnInit();
         } else {
           this.toast.show(res?.message || 'Save failed.', 'err');
+          this.cdr.markForCheck();
         }
       },
       error: err => {
         this.saving.set(false);
         this.toast.show(err?.error?.message || 'Save failed.', 'err');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -93,11 +101,13 @@ export class TabSmtpComponent implements OnInit {
           this.currentConfig.set(null);
           this.hasExistingPassword = false;
           this.form = { host: '', port: 587, secure: false, user: '', pass: '', mailFrom: '', mailTo: '' };
+          this.cdr.markForCheck();
         }
       },
       error: () => {
         this.saving.set(false);
         this.toast.show('Could not clear configuration.', 'err');
+        this.cdr.markForCheck();
       }
     });
   }

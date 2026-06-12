@@ -184,6 +184,11 @@ export interface PolicySection {
   items: PolicyItem[];
 }
 
+export interface ContactBranch {
+  name: string;
+  phone: string;
+}
+
 export interface ContactSection {
   eyebrow: string;
   title: string;
@@ -195,6 +200,7 @@ export interface ContactSection {
   directionsUrl: string;
   linkdnUrl: string;
   whatsapp: string;
+  branches?: ContactBranch[];
 }
 
 export interface SiteContent {

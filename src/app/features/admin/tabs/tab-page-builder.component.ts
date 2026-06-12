@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
@@ -10,6 +10,7 @@ type SubTab = 'header' | 'hr' | 'candidate' | 'layout';
 @Component({
   selector: 'app-tab-page-builder',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tab-page-builder.component.html'
 })
@@ -17,6 +18,7 @@ export class TabPageBuilderComponent implements OnInit {
   private fb = inject(FormBuilder);
   private api = inject(ApiService);
   private toast = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   sub: SubTab = 'hr';
   loading = false;
@@ -66,9 +68,9 @@ export class TabPageBuilderComponent implements OnInit {
             this.candFields.clear();
             (d.candidateForm.fields || []).forEach(f => this.candFields.push(this.toFieldGroup(f)));
           }
-        }
-      },
-      error: () => this.toast.show('Could not load configuration.', 'err')
+          this.cdr.markForCheck();
+      }},
+      error: () => { this.toast.show('Could not load configuration.', 'err'); this.cdr.markForCheck(); }
     });
   }
 
@@ -166,8 +168,8 @@ export class TabPageBuilderComponent implements OnInit {
 
     this.loading = true;
     this.api.updatePageConfig(this.form.value as any).subscribe({
-      next: () => { this.toast.show('Configuration saved.'); this.loading = false; },
-      error: err => { this.toast.show(err?.error?.message || 'Save failed.', 'err'); this.loading = false; }
+      next: () => { this.toast.show('Configuration saved.'); this.loading = false; this.cdr.markForCheck(); },
+      error: err => { this.toast.show(err?.error?.message || 'Save failed.', 'err'); this.loading = false; this.cdr.markForCheck(); }
     });
   }
 }

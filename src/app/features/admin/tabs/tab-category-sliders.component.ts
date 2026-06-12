@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../core/services/api.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-tab-category-sliders',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   templateUrl: './tab-category-sliders.component.html'
 })
@@ -17,18 +18,16 @@ export class TabCategorySlidersComponent implements OnInit {
 
   private api = inject(ApiService);
   private toast = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
   slides: SliderImage[] = [];
 
-  ngOnInit() {
-    console.log(`Initializing ${this.category} sliders tab...`);
-    this.load(); }
+  ngOnInit() { this.load(); }
 
   load() {
     this.api.getCategorySliders(this.category).subscribe({
-      next: r => this.slides = (r?.success && r.data) ? r.data : [],
-      error: () => this.slides = []
+      next: r => { this.slides = (r?.success && r.data) ? r.data : []; this.cdr.markForCheck(); },
+      error: () => { this.slides = []; this.cdr.markForCheck(); }
     });
-    console.log(`Loaded ${this.category} sliders:`, this.slides);
   }
 
   resolveUrl(u: string) {
@@ -49,7 +48,7 @@ export class TabCategorySlidersComponent implements OnInit {
         if (r?.success && r.data) {
           this.slides = [...this.slides, r.data];
           this.toast.show('Image uploaded.');
-          console.log(`Uploaded ${this.category} slider:`, r.data);
+          this.cdr.markForCheck();
         }
       },
       error: err => this.toast.show(err?.error?.message || 'Upload failed.', 'err')
@@ -60,7 +59,7 @@ export class TabCategorySlidersComponent implements OnInit {
     if (!s._id) return;
     if (!confirm('Delete this image?')) return;
     this.api.deleteSlider(s._id).subscribe({
-      next: () => { this.slides = this.slides.filter(x => x._id !== s._id); this.toast.show('Deleted.'); },
+      next: () => { this.slides = this.slides.filter(x => x._id !== s._id); this.toast.show('Deleted.'); this.cdr.markForCheck(); },
       error: () => this.toast.show('Delete failed.', 'err')
     });
   }

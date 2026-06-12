@@ -35,14 +35,27 @@
           </div>
           <div class="addr-row" *ngIf="d.phone">
             <div class="ic">📞</div>
-            <div><div class="t">Office Contact</div><div class="v">{{ d.phone }}</div></div>
+            <div><div class="t">Office Contact</div><div class="v"><a href="tel:{{ d.phone }}" target="_blank" rel="noopener">{{ d.phone }}</a></div></div>
           </div>
           <div class="addr-row" *ngIf="d.email">
             <div class="ic">✉</div>
-            <div><div class="t">Email</div><div class="v">{{ d.email }}</div></div>
+            <div><div class="t">Email</div><div class="v"><a href="mailto:{{ d.email }}" target="_blank" rel="noopener">{{ d.email }}</a></div></div>
           </div>
           <a class="btn btn-ghost" target="_blank" rel="noopener"
              [href]="d.directionsUrl || 'https://maps.google.com'">Open in Google Maps →</a>
+        </div>
+      </div>
+
+      <div class="branches-wrap reveal in" *ngIf="d.branches && d.branches.length">
+        <h3 class="branches-title">Branch Offices</h3>
+        <div class="branches-grid">
+          <div class="branch-card" *ngFor="let b of d.branches">
+            <div class="branch-ic">📍</div>
+            <div class="branch-body">
+              <div class="branch-name">{{ b.name }}</div>
+              <div class="branch-phone"><a href="tel:{{ b.phone }}" target="_blank" rel="noopener">{{ b.phone }}</a></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
