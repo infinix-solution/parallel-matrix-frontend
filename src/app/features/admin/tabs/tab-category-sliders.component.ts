@@ -40,7 +40,7 @@ export class TabCategorySlidersComponent implements OnInit {
     const f = input.files?.[0];
     input.value = '';
     if (!f) return;
-    if (this.slides.length >= 8) { this.toast.show('Maximum of 8 images allowed.', 'err'); return; }
+    if (this.slides.length >= 4) { this.toast.show('Maximum of 4 images allowed.', 'err'); return; }
     if (f.size > 300 * 1024) { this.toast.show('File too large (max 300KB).', 'err'); return; }
     if (!f.type.startsWith('image/')) { this.toast.show('Please upload an image file.', 'err'); return; }
 

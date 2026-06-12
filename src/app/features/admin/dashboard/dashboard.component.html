@@ -33,14 +33,12 @@
             <i class="fa-solid fa-puzzle-piece" style="margin-right:6px"></i>Page Builder
           </button>
 
-          <!-- Super Admin only tabs -->
-          <button *ngIf="auth.isSuperAdmin()" [class.active]="tab==='career-slider'" (click)="tab='career-slider'">
+          <!-- Career & Growth tabs — accessible to all admins -->
+          <button [class.active]="tab==='career-slider'" (click)="tab='career-slider'">
             <i class="fa-solid fa-camera" style="margin-right:6px"></i>Career Photos
-            <span style="font-size:9px;background:linear-gradient(135deg,#d4a84c,#f5cb6f);color:#0a1f44;padding:1px 6px;border-radius:999px;margin-left:4px;vertical-align:middle">SUPER</span>
           </button>
-          <button *ngIf="auth.isSuperAdmin()" [class.active]="tab==='growth-slider'" (click)="tab='growth-slider'">
+          <button [class.active]="tab==='growth-slider'" (click)="tab='growth-slider'">
             <i class="fa-solid fa-chart-line" style="margin-right:6px"></i>Growth Photos
-            <span style="font-size:9px;background:linear-gradient(135deg,#d4a84c,#f5cb6f);color:#0a1f44;padding:1px 6px;border-radius:999px;margin-left:4px;vertical-align:middle">SUPER</span>
           </button>
           <button *ngIf="auth.isSuperAdmin()" [class.active]="tab==='content'" (click)="tab='content'">
             <i class="fa-solid fa-palette" style="margin-right:6px"></i>Site Content
@@ -60,13 +58,13 @@
         <app-tab-page-builder *ngIf="tab==='builder'"></app-tab-page-builder>
 
         <app-tab-category-sliders
-          *ngIf="tab==='career-slider' && auth.isSuperAdmin()"
+          *ngIf="tab==='career-slider'"
           [category]="'career'"
           [label]="'Career in Parallel Matrix'">
         </app-tab-category-sliders>
 
         <app-tab-category-sliders
-          *ngIf="tab==='growth-slider' && auth.isSuperAdmin()"
+          *ngIf="tab==='growth-slider'"
           [category]="'growth'"
           [label]="'Growth in Parallel Matrix'">
         </app-tab-category-sliders>

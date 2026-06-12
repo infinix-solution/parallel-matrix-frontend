@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { ContentService } from '../../../core/services/content.service';
 import { CareerSection } from '../../../core/models';
 
-// ─── MATHEMATICAL & PARSING UTILITIES ───
 interface ParsedStat { 
   numeric: number; 
   suffix: string; 
@@ -34,7 +33,6 @@ function easeOutQuart(t: number): number {
 export class CareerComponent implements OnInit, OnDestroy {
   private content = inject(ContentService);
 
-  // Capitalized ViewChild setter supports multi-version structural bindings safely
   @ViewChild('careerBlock', { static: false }) set careerBlockContent(content: ElementRef<HTMLElement>) {
     if (content) {
       this.attachIntersectionObserver(content.nativeElement);
@@ -50,9 +48,6 @@ export class CareerComponent implements OnInit, OnDestroy {
 
   displayStats = signal<string[]>([]);
   statLabels   = signal<string[]>([]);
-  graphLoaded  = signal(false);
-  graphError   = signal(false);
-  gifUrl       = signal<string>('assets/career-growth.gif');
 
   private observer?: IntersectionObserver;
   private isCounting = false;
@@ -65,9 +60,6 @@ export class CareerComponent implements OnInit, OnDestroy {
       untracked(() => {
         this.statLabels.set(currentData.stats.map(s => s.label));
         this.displayStats.set(this.parsedStats().map(p => p.prefix + '0' + p.suffix));
-        
-        // Cache buster enforces fresh asset rendering frames on router changes
-        this.gifUrl.set(`assets/career-growth.gif?t=${Date.now()}`);
       });
     });
   }

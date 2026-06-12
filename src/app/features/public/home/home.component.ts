@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { HeroComponent } from '../hero/hero.component';
-import { MediaShowcaseComponent } from '../media-showcase/media-showcase.component';
 import { AboutComponent } from '../about/about.component';
 import { ServicesComponent } from '../services/services.component';
 import { CareerComponent } from '../career/career.component';
@@ -18,7 +17,7 @@ import { ContentService } from '../../../core/services/content.service';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    HeroComponent, MediaShowcaseComponent, AboutComponent, ServicesComponent,
+    HeroComponent, AboutComponent, ServicesComponent,
     CareerComponent, CareerSliderComponent, GrowthSliderComponent,
     TeamComponent, VisionMissionComponent, PolicyComponent, FormsComponent, ContactComponent
   ],

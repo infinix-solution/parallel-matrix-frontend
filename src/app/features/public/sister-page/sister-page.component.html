@@ -12,7 +12,7 @@
             <i class="fa-solid fa-building" aria-hidden="true"></i>&nbsp;Sister Concern
           </div>
           <h1 class="me-hero-title" style="color: #ffffff;">
-            Parallel Matrix Ventures —<br>
+            Matrix Enterprises Ventures —<br>
             <em style="color: #38bdf8; font-style: normal;">Scale with Certainty.</em>
           </h1>
           <p class="me-hero-desc" style="color: #cbd5e1;">
@@ -32,21 +32,21 @@
                 <i class="fa-solid fa-hard-hat" aria-hidden="true"></i>
               </div>
               <div>
-                <div class="me-glass-name">Parallel Matrix Ventures</div>
+                <div class="me-glass-name">Matrix Enterprises Ventures</div>
                 <div class="me-glass-sub">Infrastructure &amp; Enterprise Services</div>
               </div>
             </div>
             <div class="me-mini-stats">
               <div class="me-mini-stat">
-                <div class="me-mini-num">10+</div>
+                <div class="me-mini-num">{{ statProjects() }}</div>
                 <div class="me-mini-lbl">Projects</div>
               </div>
               <div class="me-mini-stat">
-                <div class="me-mini-num">5+</div>
+                <div class="me-mini-num">{{ statYears() }}</div>
                 <div class="me-mini-lbl">Years</div>
               </div>
               <div class="me-mini-stat">
-                <div class="me-mini-num">100%</div>
+                <div class="me-mini-num">{{ statCommitted() }}</div>
                 <div class="me-mini-lbl">Committed</div>
               </div>
             </div>
@@ -173,6 +173,17 @@
           <div class="me-contact-lbl">Locations</div>
           <div class="me-contact-val">{{ d.locations }}</div>
         </div>
+        <div *ngIf="d.branches && d.branches.length" style="margin-top:20px">
+          <div class="me-contact-lbl">Branch Offices</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:10px">
+            <div *ngFor="let branch of d.branches"
+                 style="background:rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px;border:1px solid rgba(255,255,255,0.1)">
+              <div style="font-weight:600;font-size:14px;margin-bottom:4px">{{ branch.city }}</div>
+              <div *ngIf="branch.address" style="font-size:12px;color:#94a3b8;margin-bottom:6px">{{ branch.address }}</div>
+              <a [href]="'tel:' + branch.phone" style="font-size:13px;color:#38bdf8;font-weight:500">{{ branch.phone }}</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -185,7 +196,7 @@
       <div style="font-size:32px;margin-bottom:12px">
         <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
       </div>
-      <p style="font-size:15px;font-weight:500">Loading Parallel Matrix Ventures…</p>
+      <p style="font-size:15px;font-weight:500">Loading Matrix Enterprises Ventures…</p>
     </div>
   </div>
 </ng-template>

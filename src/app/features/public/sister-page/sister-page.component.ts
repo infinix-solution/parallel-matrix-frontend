@@ -1,6 +1,6 @@
 import {
   Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy,
-  computed, inject, ElementRef
+  computed, inject, signal, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -21,13 +21,18 @@ export class SisterPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   data = computed<SisterCompanySection | null>(() => this.content.content()?.sisterCompany ?? null);
 
+  statProjects  = signal('0+');
+  statYears     = signal('0+');
+  statCommitted = signal('0%');
+
   private observer?: IntersectionObserver;
+  private statsObserver?: IntersectionObserver;
   private revealSetup = false;
+  private hasCounted  = false;
 
   ngOnInit() {
     this.content.ensureLoaded().subscribe({
       next: () => {
-        // Content loaded — if view is already rendered, set up reveals now.
         if (this.el.nativeElement.isConnected && !this.revealSetup) {
           setTimeout(() => this.setupReveal(), 32);
         }
@@ -36,14 +41,15 @@ export class SisterPageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // Give *ngIf one tick to render, then set up reveals.
     setTimeout(() => {
       if (!this.revealSetup) this.setupReveal();
+      this.setupCounters();
     }, 80);
   }
 
   ngOnDestroy() {
     this.observer?.disconnect();
+    this.statsObserver?.disconnect();
   }
 
   scrollToContact() {
@@ -70,5 +76,42 @@ export class SisterPageComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     els.forEach(el => this.observer!.observe(el));
+  }
+
+  private setupCounters() {
+    const host = this.el.nativeElement as HTMLElement;
+    const statsEl = host.querySelector<HTMLElement>('.me-mini-stats');
+    if (!statsEl) return;
+
+    this.statsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !this.hasCounted) {
+          this.hasCounted = true;
+          this.runCounters();
+          this.statsObserver?.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    this.statsObserver.observe(statsEl);
+  }
+
+  private runCounters() {
+    const DURATION = 1600;
+    const targets = [
+      { target: 10,  suffix: '+', set: (v: string) => this.statProjects.set(v)  },
+      { target: 5,   suffix: '+', set: (v: string) => this.statYears.set(v)     },
+      { target: 100, suffix: '%', set: (v: string) => this.statCommitted.set(v) }
+    ];
+    const startTime = performance.now();
+
+    const frame = (now: number) => {
+      const elapsed = Math.min((now - startTime) / DURATION, 1);
+      const ease = 1 - Math.pow(1 - elapsed, 4);
+      targets.forEach(t => t.set(Math.round(t.target * ease) + t.suffix));
+      if (elapsed < 1) requestAnimationFrame(frame);
+    };
+
+    requestAnimationFrame(frame);
   }
 }

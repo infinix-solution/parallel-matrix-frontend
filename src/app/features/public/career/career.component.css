@@ -1,183 +1,152 @@
-    :host {
-      display: block;
-      background: #0a1f44;
-      color: #ffffff;
-    }
+:host {
+  display: block;
+  background: #0a1f44;
+  color: #ffffff;
+}
 
-    /* ── Dark skeleton for the career section ── */
-    @keyframes career-shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+@keyframes career-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
-    .career-skel-wrapper {
-      background: rgba(255,255,255,0.04);
-      border-radius: 32px;
-      padding: 60px;
-      margin: 0 24px;
-    }
+.career-skel-wrapper {
+  background: rgba(255,255,255,0.04);
+  border-radius: 32px;
+  padding: 60px;
+  margin: 0 24px;
+}
 
-    .skel {
-      border-radius: 8px;
-      background: linear-gradient(90deg, #0d2a5e 25%, #1a3a7a 50%, #0d2a5e 75%);
-      background-size: 200% 100%;
-      animation: career-shimmer 1.4s ease-in-out infinite;
-    }
+.skel {
+  border-radius: 8px;
+  background: linear-gradient(90deg, #0d2a5e 25%, #1a3a7a 50%, #0d2a5e 75%);
+  background-size: 200% 100%;
+  animation: career-shimmer 1.4s ease-in-out infinite;
+}
 
-    .skel-eyebrow { width: 80px;  height: 14px; border-radius: 999px; margin-bottom: 16px; }
-    .skel-title   { height: 36px; width: 60%;   margin-bottom: 12px; }
-    .skel-sub     { height: 16px; width: 75%;   margin-bottom: 36px; }
+.skel-eyebrow { width: 80px;  height: 14px; border-radius: 999px; margin-bottom: 16px; }
+.skel-title   { height: 36px; width: 60%;   margin-bottom: 12px; }
+.skel-sub     { height: 16px; width: 75%;   margin-bottom: 36px; }
 
-    .career-skel-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
+.career-skel-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
 
-    .skel-stat { height: 90px; border-radius: 18px; }
+.skel-stat { height: 90px; border-radius: 18px; }
 
-    .container {
-      width: min(100%, 1280px);
-      margin: 0 auto;
-      padding: clamp(40px, 6vw, 80px) 20px;
-    }
+.container {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 80px) 20px;
+}
 
-    /* ── DUAL LAYER SHOWCASE BACKDROP ── */
-    .career-showcase-wrapper {
-      position: relative;
-      border-radius: 24px;
-      overflow: hidden;
-      background: #0e254e;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 40px 90px -30px rgba(4, 12, 30, 0.5);
-      min-height: 380px;
-      display: grid;
-      align-items: center;
-    }
+.career-showcase-wrapper {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #091a36; 
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 40px 90px -30px rgba(4, 12, 30, 0.5);
+  min-height: 380px;
+  display: grid;
+  align-items: center;
+}
 
-    /* Layer 1: Animated Asset Backdrop Canvas */
-    .showcase-bg-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-    }
+/* ── STEP-CHART CANVAS ENGINE ── */
+.showcase-bg-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
 
-    .showcase-bg-canvas img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.22; /* Retains clarity of the graph trend without over-powering typography */
-      filter: saturate(1.2) contrast(1.1);
-      transition: opacity 0.4s ease;
-    }
+.showcase-bg-canvas svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
-    /* Gradient Mask creating deep contrast for overlapping foreground copy text */
-    .showcase-bg-canvas::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #0a1f44 30%, rgba(10, 31, 68, 0.85) 70%, rgba(20, 50, 110, 0.4) 100%);
-      z-index: 2;
-    }
+.step-path {
+  stroke: url(#stepGrad);
+  stroke-width: 3.5;
+  fill: none;
+  stroke-linejoin: round;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: stepDraw 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
 
-    /* Layer 2: Transparent Foreground Interface Panel */
-    .career-foreground-panel {
-      position: relative;
-      z-index: 3;
-      padding: clamp(24px, 5vw, 56px);
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-    }
+/* Contrast adjustment mask for premium typography readability */
+.showcase-bg-canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0a1f44 25%, rgba(10, 31, 68, 0.65) 65%, rgba(20, 50, 110, 0.25) 100%);
+  z-index: 2;
+}
 
-    .eyebrow {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: #bcd0ff;
-      margin-bottom: 12px;
-    }
+.career-foreground-panel {
+  position: relative;
+  z-index: 3;
+  padding: clamp(24px, 5vw, 56px);
+}
 
-    h2 {
-      margin: 0 0 16px;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
-      line-height: 1.15;
-      color: #ffffff;
-    }
+.eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #bcd0ff;
+  margin-bottom: 12px;
+}
 
-    .lead {
-      margin: 0 0 36px;
-      color: #94a3b8;
-      font-size: clamp(15px, 1.2vw, 17px);
-      line-height: 1.6;
-      max-width: 54ch;
-    }
+h2 {
+  margin: 0 0 16px;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+}
 
-    /* ── STATS TRACK ── */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 24px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 28px;
-    }
+.lead {
+  margin: 0 0 36px;
+  color: #b9c7dd;
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.6;
+  max-width: 54ch;
+}
 
-    .stat .n {
-      font-size: clamp(2rem, 3.5vw, 3.2rem);
-      font-weight: 800;
-      color: #f0d97a;
-      line-height: 1;
-      margin-bottom: 4px;
-      font-feature-settings: "tnum";
-    }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 28px;
+}
 
-    .stat .l {
-      font-size: 12px;
-      font-weight: 600;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+.stat .n {
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-weight: 800;
+  color: #f0d97a;
+  line-height: 1;
+  margin-bottom: 4px;
+  font-feature-settings: "tnum";
+}
 
-    /* ── SHIMMER ENGINE ── */
-    .shimmer-mask {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      background: linear-gradient(90deg, rgba(14,37,78,0) 0%, rgba(255,255,255,0.04) 50%, rgba(14,37,78,0) 100%);
-      background-size: 200% 100%;
-      animation: moveShimmer 1.5s infinite linear;
-    }
+.stat .l {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
 
-    @keyframes moveShimmer { to { background-position: -200% 0; } }
-
-    /* ── FALLBACK BACKUP TIMELINE CHART ── */
-    .career-fallback-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 40px;
-      opacity: 0.07;
-      pointer-events: none;
-    }
-
-    .fallback-bar {
-      flex: 1;
-      background: #ffffff;
-      border-radius: 4px 4px 0 0;
-      transform-origin: bottom;
-      animation: graphGrow 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    
-    .fallback-bar.accent { background: #f0d97a; }
-
-    @keyframes graphGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-  
+/* ── STEP-DRAW ANIMATION KEYFRAME ── */
+@keyframes stepDraw {
+  0% { stroke-dashoffset: 1200; opacity: 0.2; }
+  60% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}

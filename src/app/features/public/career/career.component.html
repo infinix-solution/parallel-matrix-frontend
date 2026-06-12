@@ -1,4 +1,3 @@
-<!-- Skeleton: shown while ContentService awaits the first API response -->
 <section id="career" *ngIf="isLoading(); else careerContent">
   <div class="container">
     <div class="career-skel-wrapper">
@@ -12,30 +11,28 @@
   </div>
 </section>
 
-<!-- Resolved content -->
 <ng-template #careerContent>
   <section id="career" *ngIf="data() as d">
     <div class="container">
 
       <div #careerBlock class="career-showcase-wrapper">
-        <div class="shimmer-mask" *ngIf="!graphLoaded() && !graphError()"></div>
-
-        <div class="showcase-bg-canvas" *ngIf="!graphError()">
-          <img
-            [src]="gifUrl()"
-            alt="Background growth metrics graph"
-            (load)="graphLoaded.set(true)"
-            (error)="graphError.set(true)"
-            [style.opacity]="graphLoaded() ? '0.22' : '0'"
-            loading="lazy"
-          />
-        </div>
-
-        <div class="career-fallback-canvas" *ngIf="graphError()">
-          <div class="fallback-bar" style="height: 25%"></div>
-          <div class="fallback-bar" style="height: 45%"></div>
-          <div class="fallback-bar" style="height: 65%"></div>
-          <div class="fallback-bar accent" style="height: 90%"></div>
+        
+        <div class="showcase-bg-canvas">
+          
+         <svg  viewBox="0 0 500 300" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="stepGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#22d3ee" />
+                  <stop offset="80%" stop-color="#3b82f6" />
+                  <stop offset="100%" stop-color="#818cf8" />
+                </linearGradient>
+              </defs>
+              <path class="step-path" d="M 15 250 L 65 250 L 65 210 L 125 210 L 125 165 L 185 165 L 185 120 L 245 120 L 245 80 L 305 80 L 305 50 L 365 50 L 365 30 L 430 30 L 430 25 L 490 25" />
+              <circle cx="65" cy="210" r="3" fill="#7dd3fc" />
+              <circle cx="185" cy="120" r="3" fill="#7dd3fc" />
+              <circle cx="305" cy="50" r="3" fill="#7dd3fc" />
+              <circle cx="430" cy="25" r="3" fill="#7dd3fc" />
+            </svg>
         </div>
 
         <div class="career-foreground-panel">

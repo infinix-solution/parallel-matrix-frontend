@@ -17,7 +17,7 @@ export class IntroLoaderComponent implements OnInit {
   }> = [];
 
   ngOnInit() {
-    const rawText = 'Parallel Matrix MANAGEMENT SERVICES';
+    const rawText = 'Parallel Matrix Management Services';
     const rawWords = rawText.split(' ');
     
     let currentGlobalCount = 0;

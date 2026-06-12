@@ -148,6 +148,12 @@ export interface CareerSection {
   stats: StatItem[];
 }
 
+export interface BranchOffice {
+  city: string;
+  phone: string;
+  address?: string;
+}
+
 export interface SisterCompanySection {
   eyebrow: string;
   title: string;
@@ -169,6 +175,7 @@ export interface SisterCompanySection {
   email: string;
   phone: string;
   locations: string;
+  branches?: BranchOffice[];
 }
 
 export interface PolicySection {
